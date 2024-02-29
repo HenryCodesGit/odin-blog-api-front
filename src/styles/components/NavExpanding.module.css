@@ -1,0 +1,34 @@
+@import "../colors.module.css";
+
+.nav {
+    & a {
+        text-decoration: none;
+        color: var(--darkGrey);
+    }
+}
+
+.ul {
+    composes: color;
+
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: var(--white);
+
+    display: flex;
+    justify-content: end;
+    align-items: center;
+
+    border: 1px solid red;
+
+    & li {
+        margin: .25rem;
+        text-align: end;
+        text-wrap: nowrap;
+    }
+
+    & li:hover {
+        text-decoration: underline;
+        background-color: #DDD;
+    }
+}

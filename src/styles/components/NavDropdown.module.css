@@ -1,0 +1,94 @@
+@import "../colors.module.css";
+
+/* Button styling reset */
+.button {
+    -webkit-appearance: none;
+    border-radius: 0;
+    text-align: inherit;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    color: inherit;
+    font: inherit;
+}
+
+/* ************************************* */
+/* ************************************* */
+/* ************************************* */
+
+* {
+    --buttonHeight: 24px;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.ul {
+    composes: color;
+
+    outline: 1px solid var(--grey);
+    outline-offset: -1px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background-color: var(--white);
+    transform: translateY(var(--buttonHeight));
+
+    & li {
+        margin: .25rem;
+        text-align: end;
+    }
+
+    & li:hover {
+        text-decoration: underline;
+        background-color: var(--lightGrey);
+    }
+}
+
+a {
+    text-decoration: none;
+    color: var(--darkGrey);
+}
+
+.button {
+    composes: color;
+
+    height: var(--buttonHeight);
+    display: flex;
+    align-items: center;
+}
+
+/* Behaviour on interaction */
+.button:hover {
+    background: var(--lightGrey);
+}
+
+.button:focus {
+    outline: 1px solid var(--grey);
+    outline-offset: -2px;
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+/* Visually hiding */
+
+.visuallyHidden {
+    position: absolute;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0,0,0,0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}

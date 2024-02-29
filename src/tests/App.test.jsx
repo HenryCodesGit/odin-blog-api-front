@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, it as test, expect} from 'vitest';
 
-import App from './App';
+import App from '../pages/App'
 
 describe("App component", ()=>{
 
