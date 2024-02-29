@@ -19,12 +19,12 @@ function Index() {
 
   const makeLink = (id, title, url) => {return {id, title, url}};
   const linkArray = [
-    makeLink(1,'Home','/'),
-    makeLink(2,'Blog','/'),
-    makeLink(3,'Portfolio','/'),
-    makeLink(4,'About Me','/'),
-    makeLink(5,'Contact','/'),
-    makeLink(6,'Really long list element','/')
+    makeLink(1,'Home','/1'),
+    makeLink(2,'Blog','/2'),
+    makeLink(3,'Portfolio','/3'),
+    makeLink(4,'About Me','/4'),
+    makeLink(5,'Contact','/5'),
+    makeLink(6,'Really long list element','/6')
   ];
   return (<>
     <header className='nav-container'>

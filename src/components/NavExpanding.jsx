@@ -1,17 +1,15 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 
 import style from '../styles/components/NavExpanding.module.css'
 
 import NavDropdown from '../components/NavDropdown'
 
-//import debounce from '../utilities/debounce'
+import debounce from '../utilities/debounce'
 
 
-// TODO: 
-// Bar expands horizontally with items when there is space. 
-//As space runs out, things get hidden and hamburger menu is shown with hidden items, until everything is hidden
+// TODO: Nav bar currently requires serial ids starting from 1. Refactor with object reference instead of array reference for listItemsHTML and iterate through collection
 
 Component.propTypes = {
     links: // Array of links to be generated into the nav bar
@@ -27,106 +25,76 @@ Component.defaultProps = {
   };
 
 function Component({ links }){
-    const listHTML = useRef(null);
+
+    // useRef to get HTML components
     const buttonHTML = useRef();
+    const listItemsHTML = useRef([]);
+    const navHTML = useRef(null);
 
-    const listHTMLChildren = useRef([]); //Ref needed for the useEffect, calculating component width
+    // State for what items belong in the dropdown menu
+    const [dropdownItems, setDropdownItems] = useState([]);
 
-    const listComponents = links;
-    
-    const [expanding, setExpanding] = useState(listComponents);
-    const [lastKnownWidths, setLastKnownWidths] = useState({}); //Keep track of last known width of the object before de-rendering
-
-    function debounce(func, interval){
-        let timer;
-        return (params) => {
-            if(timer) clearTimeout(timer);
-            timer = setTimeout(func, interval, params);
-        }
-    }
-
-    // Check size of window and see if need to re-render the elements. Debounce is used as a low-pass filter to prevent many function calls in succession
-    // Note: Suppressing the eslint rule below, but only because I tested it with inline and there were no warnings.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const resizeCheck = useCallback(debounce(()=>{
-        console.log('Running resize check');
-        console.log(listComponents);
-        console.log(expanding);
-        console.log(lastKnownWidths);
-
-        // Iterate through array and populate 'newExpanding' array for items that do not overflow
-        const newExpanding = [];
-        const newLastknownWidth = {...lastKnownWidths};
-        const navWidth = listHTML.current.scrollWidth;
-        let itemWidths = listHTMLChildren.current.reduce((sum,item)=> {
-            const itemWidth = item.clientWidth + parseInt(getComputedStyle(item).marginLeft) + parseInt(getComputedStyle(item).marginRight);
-            const currentSum = sum + itemWidth;
-
-
-            if(currentSum * (1.10) < navWidth - buttonHTML.current.clientWidth){             // Extra 10% to be sure
-                const foundEntry = expanding.find((entry)=>entry.id.toString()===item.dataset.key);
-                if(foundEntry) newExpanding.push(foundEntry)
-            } else {
-                newLastknownWidth[item.dataset.key] = itemWidth;
-            }
-            return currentSum;
-        },0);
-
-        let isDifferentArrays = !(newExpanding.length === expanding.length && newExpanding.every((element, index) =>  element === expanding[index]))
-        if(isDifferentArrays) {
-            listHTMLChildren.current = []; // Reset the listHTMLChildren array (it is repopulated by the render)
-            setExpanding(newExpanding);
-            setLastKnownWidths(newLastknownWidth);
-            return;
-        }
-
-        // If it gets this far, then instead of shrinking, the window might be expanding, check to see if we can put one of the items back in
-        // Iterate through the lastKnownWidth array and see if we can put back the elements
-        for(const item in newLastknownWidth){
-            const newItemWidth = newLastknownWidth[item] + itemWidths;
-            const canFitInsideNavBar = newItemWidth * (1.10) < navWidth; //Extra 10% to be sure
-            if(!canFitInsideNavBar) break;
+    // Function to check size of window and see if need to re-render the elements. 
+    const resizeCheck = useMemo( // useMemo needed to cache function definition between renders
+        () => debounce(()=>{ // debounce neede as a low-pass filter and prevent calling a million times when window is resized.
             
-            itemWidths = newItemWidth;
-
-            const foundEntry = listComponents.find((entry)=>entry.id.toString()===item)
-            if(foundEntry){ 
-                delete newLastknownWidth[item];
-                newExpanding.push(foundEntry) 
+            // Get total width of Nav
+            const navWidth = navHTML.current.scrollWidth;
+    
+            // Iterate through the hidden elements setting each to visibility: visible, until possible overflow
+            const {elementsShown} = listItemsHTML.current.reduce(
+                ({initialValue, elementsShown},item) => {
+                    let currentSum = initialValue + item.clientWidth + parseInt(getComputedStyle(item).marginLeft) + parseInt(getComputedStyle(item).marginRight);
+                    if(currentSum <= navWidth){
+                        item.style.visibility = 'visible'
+                        item.style.position = 'static'
+                        elementsShown += 1;
+                    }
+                    return {initialValue: currentSum, elementsShown};
+                }, //Reducing function
+                {initialValue: buttonHTML.current.clientWidth, elementsShown: 0} //Initial width is set to be width of the button (the only component that is always visible)
+            );
+        
+            // The remaining elements will overflow, so we hide them and set position to absolute to remove from document flow
+            const dropdown = [];
+            for(let i = elementsShown; i < listItemsHTML.current.length; i+=1){
+                listItemsHTML.current[i].style.visibility = 'hidden';
+                listItemsHTML.current[i].style.position = 'absolute';
+    
+                dropdown.push(links[i]);
             }
-        }
+    
+            //Set button visibility depending on if there are items, and then update state to populate the navbar
+            buttonHTML.current.style.visibility = dropdown.length ? 'visible' : 'hidden'
+            buttonHTML.current.style.position = dropdown.length ? 'static' : 'absolute'
+            setDropdownItems(dropdown);
 
-        isDifferentArrays = !(newExpanding.length === expanding.length && newExpanding.every((element, index) =>  element === expanding[index]))
-        if(isDifferentArrays) {
-            listHTMLChildren.current = []; // Reset the listHTMLChildren array (it is repopulated by the render)
-            setExpanding(newExpanding);
-            setLastKnownWidths(newLastknownWidth);
-            return;
-        }
-
-    },100),[expanding, lastKnownWidths, listComponents]);
+        },30), //Debounce called with interval 30ms delay before firing
+        [links]
+    )
 
 
     useEffect(()=>{
 
-        window.addEventListener('resize', resizeCheck);
-
+        // Upon mounting, run the resizecheck to see which elements can fit
+        // Also add an event listener to check whenever the window is resized or calls a resize event
         resizeCheck();
+        window.addEventListener('resize', resizeCheck);
+        
 
         // Cleanup
         return ()=>{
-            console.log('Cleaning up useEffect because re-render is triggered')
             window.removeEventListener('resize', resizeCheck)
         }
     }, [resizeCheck])
 
     return(
         <nav className = {style.nav}>
-            <ul className = {style.ul} ref={listHTML}>
-                {expanding.map(({id, title, url}) => (<li key={ id } ref={(e) => { 
-                    if(e) listHTMLChildren.current.push(e);
-                }} data-key={ id }><Link key= {id} to={url}>{title}</Link></li>))}
-                <NavDropdown links={links} ref={buttonHTML}/>
+            <ul className = {style.ul} ref={navHTML}>
+                {links.map(({id, title, url}) => (<li key={ id } ref={(e) => { 
+                    if(e) listItemsHTML.current[id-1] = e; //TODO: Currently expanding nav only accepts serial increasing ids starting from 1.
+                }} data-key={ id } style={{visibility: 'hidden', position: 'absolute'}}><Link key= {id} to={url}>{title}</Link></li>))}
+                <NavDropdown links={dropdownItems} ref={buttonHTML}/>
             </ul> 
         </nav>
     );

@@ -5,6 +5,7 @@
         text-decoration: none;
         color: var(--darkGrey);
     }
+    overflow: hidden;
 }
 
 .ul {
@@ -20,6 +21,7 @@
     align-items: center;
 
     border: 1px solid red;
+
 
     & li {
         margin: .25rem;
