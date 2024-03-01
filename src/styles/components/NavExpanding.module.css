@@ -1,36 +1,53 @@
-@import "../colors.module.css";
+@import url('../fonts.module.css');
 
 .nav {
+    padding: 0.5rem;
+    composes: fontFrederickaTheGreat;
+    
     & a {
         text-decoration: none;
-        color: var(--darkGrey);
+        color: var(--white);
     }
     overflow: hidden;
 }
 
 .ul {
-    composes: color;
-
     list-style-type: none;
     padding: 0;
     margin: 0;
-    background-color: var(--white);
-
+    
     display: flex;
     justify-content: end;
     align-items: center;
 
-    border: 1px solid red;
+    background-color: var(--green);
+}
 
+.li {
+    margin: .5rem;
+    text-decoration: underline;
+    text-align: end;
+    text-wrap: nowrap;
+    color: var(--white);
 
-    & li {
-        margin: .25rem;
-        text-align: end;
-        text-wrap: nowrap;
+    & a {
+        color: var(--lightGrey);
     }
+}
 
-    & li:hover {
-        text-decoration: underline;
-        background-color: #DDD;
+.li:hover {
+    background-color: #DDD;
+    color: var(--darkGrey);
+
+    & a {
+        color: var(--darkGrey);
+    }
+}
+
+.li:active{
+    background-color: var(--black);
+    color: var(--white);
+    & a {
+        color: var(--lightGrey);
     }
 }

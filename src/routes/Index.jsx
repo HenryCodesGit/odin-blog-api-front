@@ -1,36 +1,42 @@
-import css from '../styles/index.module.css'
-
-import { useState } from "react";
-import { useParams } from "react-router-dom"; // Parameters from page query
+import styles from '../styles/index.module.css'
 
 import NavExpanding from '../components/NavExpanding';
-import NavDropDown from '../components/NavDropdown';
+
+import heroImage from '../assets/img/table-top/andrej-lisakov-3A4XZUopCJA-unsplash.jpg'
 
 function Index() {
-  const [heading, setHeading] = useState("Magnificient monkeys d");
-  const params = useParams()
-
-  const clickHandler = () => {setHeading("Radical Rhinos");}
-
-  // return (<>
-  //   <h1>{heading}</h1>
-  //   <button type="button" onClick={clickHandler}>Click me</button>
-  // </>);
 
   const makeLink = (id, title, url) => {return {id, title, url}};
   const linkArray = [
-    makeLink(1,'Home','/1'),
-    makeLink(2,'Blog','/2'),
-    makeLink(3,'Portfolio','/3'),
-    makeLink(4,'About Me','/4'),
-    makeLink(5,'Contact','/5'),
-    makeLink(6,'Really long list element','/6')
+    makeLink(1,'HOME','/1'),
+    makeLink(2,'BLOG','/2'),
+    makeLink(3,'PORTFOLIO','/3'),
+    makeLink(4,'CONTACT','/4'),
+    makeLink(5,'PICTURES OF MY DOG','/5'),
+    makeLink(6,'SHOP?','/6'),
+    makeLink(7,'GAMES','/7'),
+    makeLink(8,'A REALLY LONG TEXT THAT IS ABSURDLY LONG AND MIGHT NOT FIT ON THE PAGE','/8'),
   ];
+
   return (<>
-    <header className='nav-container'>
-      {/* <div className='logo'>Logo Here</div> */}
-      <NavExpanding links = {linkArray}></NavExpanding>
+    <header className={styles.header}>
+      {/* <div className= {styles.logo}></div> */}
+      <div className={styles.flexElement}>
+        <NavExpanding className={styles.navExpanding} links = {linkArray}></NavExpanding>
+      </div>
     </header>
+    <main>
+      <div className={styles.hero}>
+        <div className={styles.bgImage}></div>
+        <div className={styles.box}>
+          <div className={styles.profile}>
+              <p className={styles.title}>Henry Ma</p>
+              <p className={styles.description}>This is where I normally put flavor-text, but I just wanted to mention that I love my dog</p>
+          </div>
+        </div>
+        
+      </div>
+    </main>
   </>)
 }
 

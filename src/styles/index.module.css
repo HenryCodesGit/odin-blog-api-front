@@ -1,5 +1,165 @@
+@import url('./fonts.module.css');
+@import url('./colors.module.css');
+
+/* ***************************** */
+
+/* Copied from stackoverflow to generate border only at corners */
+/* https://stackoverflow.com/questions/14387690/how-can-i-show-only-corner-borders */
+.box {
+  
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  --b: max(0.5rem, 1vw);   /* thickness of the border */
+  --c: var(--darkGrey);   /* color of the border */
+  --w: max(3rem, 7vw);;  /* width of border */
+  
+
+  border: var(--b) solid rgba(8, 82, 8, 0.1); /* space for the border */
+  --_g: #0000 90deg,var(--c) 0;
+  --_p: var(--w) var(--w) border-box no-repeat;
+  background:
+    conic-gradient(from 90deg  at top    var(--b) left  var(--b),var(--_g)) 0    0    / var(--_p),
+    /* conic-gradient(from 180deg at top    var(--b) right var(--b),var(--_g)) 100% 0    / var(--_p),
+    conic-gradient(from 0deg   at bottom var(--b) left  var(--b),var(--_g)) 0    100% / var(--_p),*/
+    conic-gradient(from -90deg at bottom var(--b) right var(--b),var(--_g)) 100% 100% / var(--_p);
+}
+/* *********************************************/
+
+
+
+
+* {
+  box-sizing: border-box;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 }
+
+body {
+  background-color: var(--beige);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+
+  background-color: var(--green);
+}
+
+.logo {
+  composes: fontFrederickaTheGreat;
+
+  
+  flex: initial;
+
+  margin: 5px;
+  padding: 0;
+  width: 6rem;
+  display: flex;
+  justify-content: center;
+
+  &::after{
+    content: 'HM';
+    letter-spacing: -0.8rem;
+    font-weight: 100;
+    line-height: 3rem;
+    font-style:italic;
+    font-size: 3rem;
+    color: var(--white);
+
+    transform: translateX(-0.8rem);
+  }
+}
+
+.flexElement {
+  flex: 1;
+  min-width: 0;
+}
+
+.navExpanding {
+  font-size: 1.5rem;
+  background-color: var(--green);
+  z-index: 999;
+}
+
+.hero {
+  border: 5px solid var(--green);
+  position: relative;
+}
+
+.profile {
+  color: var(--darkGrey);
+  text-align: center;
+  padding: 0 4rem;
+
+  background-color: rgba(8, 82, 8, 0.295);
+  /* background: #0004; */
+}
+
+.title{
+  composes: fontFrederickaTheGreat;
+  text-wrap: nowrap;
+  font-size: max(3rem, 7vw);
+  margin: 0;
+}
+
+.description{
+  composes: fontRobotoCondensed;
+  font-size: max(1rem, 2vw);
+  line-height: 1.25;
+  margin: 0;
+  font-weight: 400;
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+.bgImage {
+  background-image: url('../assets/img/table-top/andrej-lisakov-3A4XZUopCJA-unsplash.jpg');
+  background-size: cover;
+  background-position-y: bottom;
+  background-position-x: left;
+  filter: blur(2px) brightness(90%) contrast(90%);
+
+  z-index: -1;
+}
+
+/* ******************************************* */
+
+@media (max-width: 720px){
+
+  :root{
+    min-width: 480px;
+  }
+
+  .header {
+    height: 4rem;
+  }
+  
+  .bgImage {
+    height: calc(100svh - 5rem);
+    max-width: 100%;
+  }
+
+}
+
+@media (min-width: 721px){
+
+  .header {
+    height: 4rem;
+  }
+  
+  .bgImage {
+    height: calc(100svh - 5rem);
+    max-width: 100%;
+  }
+  
+}
+
+
+

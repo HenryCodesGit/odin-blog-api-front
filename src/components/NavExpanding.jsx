@@ -18,13 +18,18 @@ Component.propTypes = {
             title: PropTypes.string.isRequired,
             url: PropTypes.string,
         })),
+        className: PropTypes.string,
 };
 
 Component.defaultProps = {
     links: [],
+    className: ''
   };
 
-function Component({ links }){
+function Component({ links, className }){
+
+    // Factor of safety
+    const FOS = 1.10;
 
     // useRef to get HTML components
     const buttonHTML = useRef();
@@ -37,7 +42,7 @@ function Component({ links }){
     // Function to check size of window and see if need to re-render the elements. 
     const resizeCheck = useMemo( // useMemo needed to cache function definition between renders
         () => debounce(()=>{ // debounce neede as a low-pass filter and prevent calling a million times when window is resized.
-            
+            console.log('Calling resize');
             // Get total width of Nav
             const navWidth = navHTML.current.scrollWidth;
     
@@ -45,10 +50,13 @@ function Component({ links }){
             const {elementsShown} = listItemsHTML.current.reduce(
                 ({initialValue, elementsShown},item) => {
                     let currentSum = initialValue + item.clientWidth + parseInt(getComputedStyle(item).marginLeft) + parseInt(getComputedStyle(item).marginRight);
-                    if(currentSum <= navWidth){
+                    if(currentSum * FOS <= navWidth){
                         item.style.visibility = 'visible'
                         item.style.position = 'static'
                         elementsShown += 1;
+                        console.log(item.querySelector('a').textContent, item.clientWidth,currentSum,navWidth, 'Can show');
+                    } else {
+                        console.log(item.querySelector('a').textContent, item.clientWidth,currentSum,navWidth);
                     }
                     return {initialValue: currentSum, elementsShown};
                 }, //Reducing function
@@ -61,6 +69,7 @@ function Component({ links }){
                 listItemsHTML.current[i].style.visibility = 'hidden';
                 listItemsHTML.current[i].style.position = 'absolute';
     
+                console.log('Hiding item');
                 dropdown.push(links[i]);
             }
     
@@ -75,7 +84,6 @@ function Component({ links }){
 
 
     useEffect(()=>{
-
         // Upon mounting, run the resizecheck to see which elements can fit
         // Also add an event listener to check whenever the window is resized or calls a resize event
         resizeCheck();
@@ -89,11 +97,11 @@ function Component({ links }){
     }, [resizeCheck])
 
     return(
-        <nav className = {style.nav}>
+        <nav className = {`${style.nav} ${className}`}>
             <ul className = {style.ul} ref={navHTML}>
-                {links.map(({id, title, url}) => (<li key={ id } ref={(e) => { 
+                {links.map(({id, title, url}) => (<><li className = {style.li} key={ id } ref={(e) => { 
                     if(e) listItemsHTML.current[id-1] = e; //TODO: Currently expanding nav only accepts serial increasing ids starting from 1.
-                }} data-key={ id } style={{visibility: 'hidden', position: 'absolute'}}><Link key= {id} to={url}>{title}</Link></li>))}
+                }} data-key={ id } style={{visibility: 'hidden', position: 'absolute'}}><Link key= {id} to={url}>{title}</Link></li></>))}
                 <NavDropdown links={dropdownItems} ref={buttonHTML}/>
             </ul> 
         </nav>

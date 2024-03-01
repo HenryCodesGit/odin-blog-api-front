@@ -9,6 +9,7 @@ import style from '../styles/components/NavDropdown.module.css'
 // npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
 import MenuIcon from '@mui/icons-material/Menu';
 
+// TODO: Dropdown hides if button loses focus
 const Component = forwardRef(function Component({ links }, ref){
     // State to keep track of the menu items and when they are shown.
     const [isMenuShown, setMenuShown] = useState(false);
@@ -24,9 +25,8 @@ const Component = forwardRef(function Component({ links }, ref){
     </nav></div>);
 })
 
-// TODO: Hamburger menu that displays a dropdown when clicked
 Component.propTypes = {
-    links: // Array of links to be generated into the nav bar
+    links: // Array of links to be generated into the nav bar 
         PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.number.isRequired,
             title: PropTypes.string.isRequired,

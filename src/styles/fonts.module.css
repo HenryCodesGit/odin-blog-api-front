@@ -1,0 +1,57 @@
+@font-face{
+    font-family: "JetbrainsMono";
+    src: url('../assets/font/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf') format('opentype');
+    font-weight: 100 800;
+    font-style: normal;
+  }
+.fontMono {
+    font-family: 'JetbrainsMono', 'Courier New', 'Courier New', Courier, monospace;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+/* **************************************************************************** */
+
+@font-face{
+    font-family: "RobotoCondensed";
+    src: url('../assets/font/Roboto_Condensed/RobotoCondensed-VariableFont_wght.ttf') format('opentype');
+    font-weight: 100 900;
+    font-style:normal
+  }
+
+  @font-face{
+    font-family: "RobotoCondensed";
+    src: url('../assets/font/Roboto_Condensed/RobotoCondensed-Italic-VariableFont_wght.ttf') format('opentype');
+    font-weight: 100 900;
+    font-style: italic;
+  }
+.fontRobotoCondensed {
+    font-family: 'RobotoCondensed', 'Arial Black', 'Arial Bold', sans-serif;
+}
+
+
+/* **************************************************************************** */
+
+@font-face{
+    font-family: "FrederickaTheGreat";
+    src: url('../assets/font/Fredericka_the_Great/FrederickatheGreat-Regular.ttf') format('opentype');
+    font-weight: 400;
+    font-style:normal;
+}
+
+.fontFrederickaTheGreat {
+    font-family: 'FrederickaTheGreat', 'Arial Black', 'Arial Bold', sans-serif;
+}
+
+/* **************************************************************************** */
+
+@font-face{
+    font-family: "Quicksand";
+    src: url('../assets/font/Quicksand/Quicksand-VariableFont_wght.ttf') format('opentype');
+    font-weight: 100 900;
+    font-style:normal;
+}
+
+.fontQuicksand {
+    font-family: 'Quicksand', 'Cambria', 'Helvetica', sans-serif;
+}

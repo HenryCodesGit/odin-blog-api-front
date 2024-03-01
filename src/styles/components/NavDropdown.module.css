@@ -1,5 +1,3 @@
-@import "../colors.module.css";
-
 /* Button styling reset */
 .button {
     -webkit-appearance: none;
@@ -29,37 +27,40 @@
 }
 
 .ul {
-    composes: color;
-
-    outline: 1px solid var(--grey);
+    outline: 1px solid var(--white);
     outline-offset: -1px;
     list-style-type: none;
     padding: 0;
     margin: 0;
     position: absolute;
-    background-color: var(--white);
+    background-color: var(--green);
     transform: translateY(var(--buttonHeight));
+
+    z-index: 100;
 
     & li {
         margin: .25rem;
+        text-decoration: underline;
         text-align: end;
+        color: var(--white);
     }
 
     & li:hover {
-        text-decoration: underline;
         background-color: var(--lightGrey);
+        color: var(--darkGrey)
+    }
+
+    & li:active {
+        background-color: var(--darkGrey);
+        color: var(--lightGrey);
     }
 }
 
-a {
-    text-decoration: none;
-    color: var(--darkGrey);
-}
+
 
 .button {
-    composes: color;
-
     height: var(--buttonHeight);
+    color: var(--lightGrey);
     display: flex;
     align-items: center;
 }
@@ -67,6 +68,7 @@ a {
 /* Behaviour on interaction */
 .button:hover {
     background: var(--lightGrey);
+    color: var(--darkGrey);
 }
 
 .button:focus {
@@ -76,6 +78,8 @@ a {
 
 .button:active {
     transform: scale(0.95);
+    background: var(--black);
+    color: var(--lightGrey);
 }
 
 /* Visually hiding */
