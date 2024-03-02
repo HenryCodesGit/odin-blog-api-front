@@ -1,0 +1,81 @@
+@import url('../fonts.module.css');
+@import url('../colors.module.css');
+
+.card {
+    position: relative;
+    
+    margin: max(1.5rem, 2.5svw);
+    width: max(15rem, 25svw);
+    aspect-ratio: 1;
+
+    --b: max(0.25rem, 0.5vw);   /* thickness of the border */
+    --c: var(--lightGrey);   /* color of the border */
+    --w: max(3rem, 7vw);;  /* width of border */
+    
+    border: var(--b) solid #0000; /* space for the border */
+    --_g: #0000 90deg,var(--c) 0;
+    --_p: var(--w) var(--w) border-box no-repeat;
+    background:
+      conic-gradient(from 90deg  at top    var(--b) left  var(--b),var(--_g)) 0    0    / var(--_p),
+      /* conic-gradient(from 180deg at top    var(--b) right var(--b),var(--_g)) 100% 0    / var(--_p),
+      conic-gradient(from 0deg   at bottom var(--b) left  var(--b),var(--_g)) 0    100% / var(--_p),*/
+      conic-gradient(from -90deg at bottom var(--b) right var(--b),var(--_g)) 100% 100% / var(--_p);
+
+    text-align: center;
+}
+
+.backgroundVignette{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #AAA1;
+    filter: blur(30px);
+    width: 100%;
+    height: 100%;
+}
+
+.image{
+    z-index: 0;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    --blurAmount: 10px;
+
+    background-size: contain;
+    filter: blur(var(--blurAmount)) brightness(60%);
+    width: calc(100% - 2*var(--blurAmount));
+    height: calc(100% - 2*var(--blurAmount));
+
+    transition: height 0.25s, width 0.25s, filter 0.5s;
+}
+
+.description{
+    composes: fontMono;
+    font-style: italic;
+
+    font-size: max(1.5rem, 1.5vw);
+    text-decoration:solid;
+    color: var(--lightGrey);
+    
+    position: absolute;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - max(1.5rem, 1.5vw)));
+    z-index: 1;
+
+    transition: color .75s, filter .75s;
+}
+
+.blurImage{
+    --blurAmount: 0px;
+    filter: blur(var(--blurAmount)) brightness(100%);
+}
+
+.blurText{
+    color: #0000;
+    filter: blur(10px);
+}

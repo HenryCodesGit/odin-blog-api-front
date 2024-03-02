@@ -1,0 +1,49 @@
+@import url('../fonts.module.css');
+
+.container {
+    padding: 1rem;
+}
+
+.tabs {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+}
+
+.tab {
+    composes: fontMono;
+
+    font-size: 2rem;
+    font-weight: 700;
+
+    padding: 0.5rem 1rem 0.5rem 1rem; /* Top right bottom left */
+    margin: 0;
+    flex: 1;
+
+    /* CSS code to chamfer the edges */
+    /* Inspiration from here: https://stackoverflow.com/questions/14770312/how-to-achieve-chamfered-css-border-corners-rather-than-rounded-corners */
+    --chamfer-depth: 7px;
+    --chamfer-depth-inverse: calc(100% - var(--chamfer-depth));
+
+    /* Specify vertices, origin is top left corner*/
+    /* Polygon describes what WILL be shown. Everything else in the element will be cropped out*/
+    --polygon: polygon(
+        0% 100%,
+        100% 100%,
+        var(--chamfer-depth-inverse) 0%,
+        var(--chamfer-depth) 0%
+    );
+    
+    -webkit-clip-path: var(--polygon);
+    clip-path: var(--polygon);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    min-height: 400px; /* TODO: min height passed in as a parameter */
+}

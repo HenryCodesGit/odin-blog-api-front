@@ -6,4 +6,15 @@
     --beige: #D9C5B2;
     --white: #F3F3F4;
     --green: #3B6D45;
+
+    /* Tab colors */
+    --manilaFolderBeige: #f5e1c4;
+    --dividerRed: #d32f2f;
+    --dividerBlue: #4A90E2;
+    --dividerGreen: #008000;
+    --dividerPurple: #904ae2;
+    --dividerOrange: #FFA500;
+
+    /* Background */
+    --backgroundGrey: #333333;
 }

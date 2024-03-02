@@ -17,13 +17,19 @@
 /* ************************************* */
 
 * {
-    --buttonHeight: 24px;
+    --buttonHeight: max(2.5rem, 2.5vw);
+}
+
+/* size of the menu icon */
+.button > svg{
+    font-size: var(--buttonHeight);
 }
 
 .nav {
     display: flex;
     flex-direction: column;
     align-items: end;
+    height: inherit;
 }
 
 .ul {
@@ -33,7 +39,7 @@
     padding: 0;
     margin: 0;
     position: absolute;
-    background-color: var(--green);
+    background-color: var(--darkGrey);
     transform: translateY(var(--buttonHeight));
 
     z-index: 100;
@@ -51,15 +57,12 @@
     }
 
     & li:active {
-        background-color: var(--darkGrey);
+        background-color: var(--green);
         color: var(--lightGrey);
     }
 }
 
-
-
 .button {
-    height: var(--buttonHeight);
     color: var(--lightGrey);
     display: flex;
     align-items: center;

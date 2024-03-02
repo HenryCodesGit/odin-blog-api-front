@@ -3,21 +3,15 @@
 
 /* ***************************** */
 
-/* Copied from stackoverflow to generate border only at corners */
+/* Copied from stackoverflow to generate a border only at corners */
 /* https://stackoverflow.com/questions/14387690/how-can-i-show-only-corner-borders */
-.box {
-  
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-
-  --b: max(0.5rem, 1vw);   /* thickness of the border */
-  --c: var(--darkGrey);   /* color of the border */
-  --w: max(3rem, 7vw);;  /* width of border */
+.cornerBorderBox {
+  --b: max(0.25rem, 0.5vw);   /* thickness of the border */
+  --c: var(--lightGrey);   /* color of the border */
+  --w: max(1.5rem, 3.5vw);;  /* width of border */
   
 
-  border: var(--b) solid rgba(8, 82, 8, 0.1); /* space for the border */
+  border: var(--b) solid #0000; /* space for the border */
   --_g: #0000 90deg,var(--c) 0;
   --_p: var(--w) var(--w) border-box no-repeat;
   background:
@@ -27,8 +21,6 @@
     conic-gradient(from -90deg at bottom var(--b) right var(--b),var(--_g)) 100% 100% / var(--_p);
 }
 /* *********************************************/
-
-
 
 
 * {
@@ -42,39 +34,26 @@
 }
 
 body {
-  background-color: var(--beige);
+  background-color: #333333;
+  padding: calc(0.25rem);
 }
+
+/* **************************************************************************************** */
 
 .header {
+  margin: 0 calc(0.5rem + 0.25rem); /* Body margin and padding */
+
+  background-color: #333333;
+  position:fixed;
+  right: 0;
+  top: 0;
+  width: calc(100svw - 0.5rem - 0.25rem - 0.5rem - 0.25rem); /* Accounts for body padding + margin, twice */
   display: flex;
   align-items: center;
-
-  background-color: var(--green);
-}
-
-.logo {
-  composes: fontFrederickaTheGreat;
-
   
-  flex: initial;
+  border: 1px solid var(--white);
 
-  margin: 5px;
-  padding: 0;
-  width: 6rem;
-  display: flex;
-  justify-content: center;
-
-  &::after{
-    content: 'HM';
-    letter-spacing: -0.8rem;
-    font-weight: 100;
-    line-height: 3rem;
-    font-style:italic;
-    font-size: 3rem;
-    color: var(--white);
-
-    transform: translateX(-0.8rem);
-  }
+  z-index: 800;
 }
 
 .flexElement {
@@ -83,81 +62,70 @@ body {
 }
 
 .navExpanding {
-  font-size: 1.5rem;
-  background-color: var(--green);
-  z-index: 999;
+  font-size:max(1.5rem, 1.5vw);
+  z-index: 900;
 }
 
-.hero {
-  border: 5px solid var(--green);
+/* **************************************************************************************** */
+
+.section {
+  /*Every section must be at least one screen height large*/
+  min-height: calc(100svh - 0.5rem); /* hardcoded. Remove body margin */
+  border: 1px solid white;
+}
+
+.hero { 
   position: relative;
 }
 
 .profile {
-  color: var(--darkGrey);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  color: var(--lightGrey);
   text-align: center;
   padding: 0 4rem;
-
-  background-color: rgba(8, 82, 8, 0.295);
-  /* background: #0004; */
 }
 
 .title{
   composes: fontFrederickaTheGreat;
+  
   text-wrap: nowrap;
-  font-size: max(3rem, 7vw);
+  font-size: max(2.25rem, 7vw);
   margin: 0;
+  padding: 1rem;
 }
 
 .description{
-  composes: fontRobotoCondensed;
-  font-size: max(1rem, 2vw);
+  composes: fontMono;
+  
+  font-size: max(0.75rem, 1.5vw);
   line-height: 1.25;
-  margin: 0;
   font-weight: 400;
   font-style: italic;
-  margin-top: 0.25rem;
+  margin-top: 2rem;
 }
 
-.bgImage {
-  background-image: url('../assets/img/table-top/andrej-lisakov-3A4XZUopCJA-unsplash.jpg');
-  background-size: cover;
-  background-position-y: bottom;
-  background-position-x: left;
-  filter: blur(2px) brightness(90%) contrast(90%);
+.header1 {
+  composes: fontFrederickaTheGreat;
+  font-weight: 100;
+  font-size: max(2rem, 4vw);
+  text-align: center;
 
-  z-index: -1;
+  color: var(--lightGrey);
 }
 
 /* ******************************************* */
 
 @media (max-width: 720px){
 
-  :root{
-    min-width: 480px;
-  }
-
-  .header {
-    height: 4rem;
-  }
   
-  .bgImage {
-    height: calc(100svh - 5rem);
-    max-width: 100%;
-  }
 
 }
 
 @media (min-width: 721px){
-
-  .header {
-    height: 4rem;
-  }
-  
-  .bgImage {
-    height: calc(100svh - 5rem);
-    max-width: 100%;
-  }
   
 }
 

@@ -1,6 +1,7 @@
 import styles from '../styles/index.module.css'
 
 import NavExpanding from '../components/NavExpanding';
+import CardCarousel from '../components/CardCarousel';
 
 import heroImage from '../assets/img/table-top/andrej-lisakov-3A4XZUopCJA-unsplash.jpg'
 
@@ -26,15 +27,17 @@ function Index() {
       </div>
     </header>
     <main>
-      <div className={styles.hero}>
-        <div className={styles.bgImage}></div>
-        <div className={styles.box}>
+      <div className={`${styles.hero} ${styles.section}`}>
           <div className={styles.profile}>
-              <p className={styles.title}>Henry Ma</p>
+              <p className={`${styles.title} ${styles.cornerBorderBox}`}>Henry Ma</p>
               <p className={styles.description}>This is where I normally put flavor-text, but I just wanted to mention that I love my dog</p>
           </div>
+      </div>
+      <div className={styles.section}>
+        <h1 className={`${styles.title} ${styles.header1}`}>Portfolio</h1>
+        <div className={styles.container}>
+            <CardCarousel />
         </div>
-        
       </div>
     </main>
   </>)

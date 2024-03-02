@@ -1,0 +1,12 @@
+@import url('../fonts.module.css');
+@import url('../colors.module.css');
+
+.container {
+    list-style-type: none;
+    padding: 0 1rem;
+
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+}

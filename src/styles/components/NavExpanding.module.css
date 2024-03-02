@@ -1,8 +1,11 @@
 @import url('../fonts.module.css');
 
 .nav {
+    composes: fontMono;
+    font-style: italic;
+
     padding: 0.5rem;
-    composes: fontFrederickaTheGreat;
+    font-weight: 400;
     
     & a {
         text-decoration: none;
@@ -19,8 +22,8 @@
     display: flex;
     justify-content: end;
     align-items: center;
-
-    background-color: var(--green);
+/* 
+    background-color: var(--green); */
 }
 
 .li {
@@ -45,7 +48,7 @@
 }
 
 .li:active{
-    background-color: var(--black);
+    background-color: var(--green);
     color: var(--white);
     & a {
         color: var(--lightGrey);
