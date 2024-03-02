@@ -30,11 +30,33 @@ function Index() {
       <div className={`${styles.hero} ${styles.section}`}>
           <div className={styles.profile}>
               <p className={`${styles.title} ${styles.cornerBorderBox}`}>Henry Ma</p>
-              <p className={styles.description}>This is where I normally put flavor-text, but I just wanted to mention that I love my dog</p>
+              <p className={styles.description}>MOTIVATED // DILIGENT // VERSATILE // COLLABORATIVE // ..ALSO LOVES DOGS</p>
           </div>
       </div>
       <div className={styles.section}>
         <h1 className={`${styles.title} ${styles.header1}`}>Portfolio</h1>
+        <div className={styles.container}>
+            <CardCarousel />
+        </div>
+      </div>
+      <div className={styles.section}>
+        <h1 className={`${styles.title} ${styles.header1}`}>Skills</h1>
+        <div className={styles.container}>
+
+        </div>
+      </div>
+      <div className={styles.section}>
+        <h1 className={`${styles.title} ${styles.header1}`}>Hobbies</h1>
+        <div className={styles.container}>
+        </div>
+      </div>
+      <div className={styles.section}>
+        <h1 className={`${styles.title} ${styles.header1}`}>Contact Me</h1>
+        <div className={styles.container}>
+        </div>
+      </div>
+      <div className={styles.section}>
+        <h1 className={`${styles.title} ${styles.header1}`}>Pictures of my dog</h1>
         <div className={styles.container}>
             <CardCarousel />
         </div>
