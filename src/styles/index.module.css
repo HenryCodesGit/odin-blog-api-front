@@ -98,7 +98,7 @@ body {
 .title{
   composes: fontFrederickaTheGreat;
   
-  text-wrap: nowrap;
+  text-wrap: pretty;
   font-size: max(3.5rem, 7vw);
   margin: 0;
   padding: 1rem;
@@ -112,8 +112,7 @@ body {
   font-weight: 400;
   font-style: italic;
   margin-top: 2rem;
-  text-wrap: nowrap;
-  white-space: nowrap;
+  text-wrap: pretty;
 }
 
 .header1 {
