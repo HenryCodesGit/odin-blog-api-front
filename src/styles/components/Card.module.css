@@ -28,7 +28,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    background-color: #AAA1;
+    background-color: #EEE1;
     filter: blur(30px);
     width: 100%;
     height: 100%;
@@ -55,6 +55,7 @@
 .description{
     composes: fontMono;
     font-style: italic;
+    font-weight: 800;
 
     font-size: max(1.5rem, 1.5vw);
     text-decoration:solid;

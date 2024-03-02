@@ -5,10 +5,11 @@ import style from '../styles/components/Card.module.css'
 
 Component.propTypes = {
     imgURL: PropTypes.string,
-    description: PropTypes.string
+    description: PropTypes.string,
+    link: PropTypes.string
 }
 
-function Component({imgURL, description}){
+function Component({imgURL, description, link}){
 
     const imageRef = useRef(null);
     const textRef = useRef(null);
@@ -42,7 +43,7 @@ function Component({imgURL, description}){
 
     return(
         <li className={style.card}>
-            <a href="google.ca">
+            <a href={link}>
                 <div className={style.backgroundVignette}></div>
                 <div ref={imageRef} className={style.image} role="img" style={{backgroundImage: `url(${imgURL})`}} aria-label={description}></div>
                 <p ref={textRef} className={style.description}>{description}</p>
