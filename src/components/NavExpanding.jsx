@@ -42,7 +42,6 @@ function Component({ links, className }){
     // Function to check size of window and see if need to re-render the elements. 
     const resizeCheck = useMemo( // useMemo needed to cache function definition between renders
         () => debounce(()=>{ // debounce neede as a low-pass filter and prevent calling a million times when window is resized.
-            console.log('Calling resize');
             // Get total width of Nav
             const navWidth = navHTML.current.scrollWidth;
     
@@ -54,9 +53,6 @@ function Component({ links, className }){
                         item.style.visibility = 'visible'
                         item.style.position = 'static'
                         elementsShown += 1;
-                        console.log(item.querySelector('a').textContent, item.clientWidth,currentSum,navWidth, 'Can show');
-                    } else {
-                        console.log(item.querySelector('a').textContent, item.clientWidth,currentSum,navWidth);
                     }
                     return {initialValue: currentSum, elementsShown};
                 }, //Reducing function
@@ -68,8 +64,6 @@ function Component({ links, className }){
             for(let i = elementsShown; i < listItemsHTML.current.length; i+=1){
                 listItemsHTML.current[i].style.visibility = 'hidden';
                 listItemsHTML.current[i].style.position = 'absolute';
-    
-                console.log('Hiding item');
                 dropdown.push(links[i]);
             }
     
