@@ -47,7 +47,7 @@ body {
   position:fixed;
   right: 0;
   top: 0;
-  width: calc(100svw - 0.5rem - 0.25rem - 0.5rem - 0.25rem); /* Accounts for body padding + margin, twice */
+  width: calc(100% - 0.5rem - 0.25rem - 0.5rem - 0.25rem); /* Accounts for body padding + margin, twice */
   display: flex;
   align-items: center;
   
@@ -78,6 +78,12 @@ body {
   position: relative;
 }
 
+/* TODO: Have a thing that says something and then disappears
+   TODO: Have it say something olike "Hello! Welcome to my personal portfolio website". 
+   TODO: And then have a little box that says "Click here to get in touch" that then disappears
+   TODO: Have the box grow into view with the border box thing.
+   TODO: Scrolling fast forwards the animiation. Animation does not repeat
+*/
 .profile {
   position: absolute;
   top: 50%;
@@ -93,7 +99,7 @@ body {
   composes: fontFrederickaTheGreat;
   
   text-wrap: nowrap;
-  font-size: max(2.25rem, 7vw);
+  font-size: max(3.5rem, 7vw);
   margin: 0;
   padding: 1rem;
 }
@@ -109,9 +115,8 @@ body {
 }
 
 .header1 {
-  composes: fontFrederickaTheGreat;
   font-weight: 100;
-  font-size: max(2rem, 4vw);
+  font-size: max(2.5rem, 4vw);
   text-align: center;
 
   color: var(--lightGrey);
