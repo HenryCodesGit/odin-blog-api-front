@@ -3,8 +3,6 @@ import styles from '../styles/index.module.css'
 import NavExpanding from '../components/NavExpanding';
 import CardCarousel from '../components/CardCarousel';
 
-import heroImage from '../assets/img/table-top/andrej-lisakov-3A4XZUopCJA-unsplash.jpg'
-
 function Index() {
 
   const makeLink = (id, title, url) => {return {id, title, url}};
@@ -16,7 +14,6 @@ function Index() {
     makeLink(5,'PICTURES OF MY DOG','/5'),
     makeLink(6,'SHOP?','/6'),
     makeLink(7,'GAMES','/7'),
-    makeLink(8,'A REALLY LONG TEXT THAT IS ABSURDLY LONG AND MIGHT NOT FIT ON THE PAGE','/8'),
   ];
 
   return (<>
@@ -30,7 +27,7 @@ function Index() {
       <div className={`${styles.hero} ${styles.section}`}>
           <div className={styles.profile}>
               <p className={`${styles.title} ${styles.cornerBorderBox}`}>Henry Ma</p>
-              <p className={styles.description}>MOTIVATED // DILIGENT // VERSATILE // COLLABORATIVE // ..ALSO LOVES DOGS</p>
+              <p className={styles.description}>MOTIVATED // DILIGENT // VERSATILE // ..ALSO LOVES DOGS</p>
           </div>
       </div>
       <div className={styles.section}>
