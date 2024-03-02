@@ -135,7 +135,7 @@ function Component(props){
         currRender.context = null;
         currRender.textures = {};
         window.removeEventListener('resize',resize);
-        Events.off();
+        Events.off(currEngine);
       }
     }, [])
   

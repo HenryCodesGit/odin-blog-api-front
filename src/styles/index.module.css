@@ -6,7 +6,7 @@
 /* Copied from stackoverflow to generate a border only at corners */
 /* https://stackoverflow.com/questions/14387690/how-can-i-show-only-corner-borders */
 .cornerBorderBox {
-  --b: max(0.25rem, 0.5vw);   /* thickness of the border */
+  --b: max(0.25rem, 0.25vw);   /* thickness of the border */
   --c: var(--lightGrey);   /* color of the border */
   --w: max(1.5rem, 3.5vw);;  /* width of border */
   

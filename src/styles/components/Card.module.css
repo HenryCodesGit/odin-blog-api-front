@@ -8,7 +8,7 @@
     width: max(15rem, 25svw);
     aspect-ratio: 1;
 
-    --b: max(0.25rem, 0.5vw);   /* thickness of the border */
+    --b: max(0.25rem, 0.25vw);   /* thickness of the border */
     --c: var(--lightGrey);   /* color of the border */
     --w: max(3rem, 7vw);;  /* width of border */
     
