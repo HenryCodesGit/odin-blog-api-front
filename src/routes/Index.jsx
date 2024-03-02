@@ -2,6 +2,7 @@ import styles from '../styles/index.module.css'
 
 import NavExpanding from '../components/NavExpanding';
 import CardCarousel from '../components/CardCarousel';
+import HeroCanvas from '../components/HeroCanvas'
 
 function Index() {
 
@@ -25,13 +26,14 @@ function Index() {
     </header>
     <main>
       <div className={`${styles.hero} ${styles.section}`}>
+          <HeroCanvas />
           <div className={styles.profile}>
               <p className={`${styles.title} ${styles.cornerBorderBox}`}>Henry Ma</p>
               <p className={styles.description}>MOTIVATED // DILIGENT // VERSATILE // ..ALSO LOVES DOGS</p>
           </div>
       </div>
       <div className={styles.section}>
-        <h1 className={`${styles.title} ${styles.header1}`}>Portfolio</h1>
+        <h1 className={`${styles.title} ${styles.header1}`}>Portfolio // Animal pictures</h1>
         <div className={styles.container}>
             <CardCarousel />
         </div>
@@ -50,12 +52,6 @@ function Index() {
       <div className={styles.section}>
         <h1 className={`${styles.title} ${styles.header1}`}>Contact Me</h1>
         <div className={styles.container}>
-        </div>
-      </div>
-      <div className={styles.section}>
-        <h1 className={`${styles.title} ${styles.header1}`}>Pictures of my dog</h1>
-        <div className={styles.container}>
-            <CardCarousel />
         </div>
       </div>
     </main>
