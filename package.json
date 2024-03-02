@@ -1,5 +1,5 @@
 {
-  "name": "odin-template-react",
+  "name": "odin-blog-api-front",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -36,5 +36,9 @@
     "prettier": "3.1.1",
     "vite": "^5.0.8",
     "vitest": "^1.2.1"
-  }
+  },
+  "description": "Odin Blog API Project",
+  "main": "vite.config.js",
+  "author": "",
+  "license": "ISC"
 }
