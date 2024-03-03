@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useState, useRef } from 'react';
 
 import style from '../styles/components/NavExpanding.module.css'
 
 import NavDropdown from '../components/NavDropdown'
 
-import debounce from '../utilities/debounce'
+import useResizeEffect from '../utilities/react-utils/useResizeEffect';
 
 
 // TODO: Nav bar currently requires serial ids starting from 1. Refactor with object reference instead of array reference for listItemsHTML and iterate through collection
@@ -39,9 +39,7 @@ function Component({ links, className }){
     // State for what items belong in the dropdown menu
     const [dropdownItems, setDropdownItems] = useState([]);
 
-    // Function to check size of window and see if need to re-render the elements. 
-    const resizeCheck = useMemo( // useMemo needed to cache function definition between renders
-        () => debounce(()=>{ // debounce neede as a low-pass filter and prevent calling a million times when window is resized.
+    useResizeEffect(()=>{
             // Get total width of Nav
             const navWidth = navHTML.current.scrollWidth;
     
@@ -55,8 +53,10 @@ function Component({ links, className }){
                         elementsShown += 1;
                     }
                     return {initialValue: currentSum, elementsShown};
-                }, //Reducing function
-                {initialValue: buttonHTML.current.clientWidth, elementsShown: 0} //Initial width is set to be width of the button (the only component that is always visible)
+            }, 
+            /* Initial width is set to be width of the button in case it is currently visible.
+            *  This also results in elements hiding slightly earlier if the button is not currently shown */
+            {initialValue: buttonHTML.current.clientWidth, elementsShown: 0} 
             );
         
             // The remaining elements will overflow, so we hide them and set position to absolute to remove from document flow
@@ -72,23 +72,7 @@ function Component({ links, className }){
             buttonHTML.current.style.position = dropdown.length ? 'static' : 'absolute'
             setDropdownItems(dropdown);
 
-        },30), //Debounce called with interval 30ms delay before firing
-        [links]
-    )
-
-
-    useEffect(()=>{
-        // Upon mounting, run the resizecheck to see which elements can fit
-        // Also add an event listener to check whenever the window is resized or calls a resize event
-        resizeCheck();
-        window.addEventListener('resize', resizeCheck);
-        
-
-        // Cleanup
-        return ()=>{
-            window.removeEventListener('resize', resizeCheck)
-        }
-    }, [resizeCheck])
+    }, [links],{debounce: 30})
 
     return(
         <nav className = {`${style.nav} ${className}`}>

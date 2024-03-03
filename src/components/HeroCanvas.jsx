@@ -22,6 +22,8 @@ import { Engine, Render, Runner, Bodies, Composite, World, Events } from 'matter
 
 import style from '../styles/components/HeroCanvas.module.css'
 
+import useResizeEffect from '../utilities/react-utils/useResizeEffect'
+
 import debounce from '../utilities/debounce'
 
 const COLORS = {
@@ -44,8 +46,22 @@ function Component(props){
     const timer = useRef(0);
 
     // Function to check size of window and see if need to re-render the elements. 
-    const resize = useMemo( // useMemo needed to cache function definition between renders
-        () => debounce(()=>{ 
+    // const resize = useMemo( // useMemo needed to cache function definition between renders
+    //     () => debounce(()=>{ 
+    //         const width = scene.current.parentNode.clientWidth;
+    //         const height = scene.current.parentNode.clientHeight;
+
+    //         render.current.bounds.max.x = width;
+    //         render.current.bounds.max.y = height;
+    //         render.current.options.width = width;
+    //         render.current.options.height = height;
+    //         render.current.canvas.width = width;
+    //         render.current.canvas.height = height;
+    //         Render.setPixelRatio(render.current, window.devicePixelRatio); // added this
+    //     },30),//Debounce called with interval 30ms delay before firing
+    //     []
+    // )
+    useResizeEffect(()=>{ 
             const width = scene.current.parentNode.clientWidth;
             const height = scene.current.parentNode.clientHeight;
 
@@ -56,9 +72,7 @@ function Component(props){
             render.current.canvas.width = width;
             render.current.canvas.height = height;
             Render.setPixelRatio(render.current, window.devicePixelRatio); // added this
-        },30),//Debounce called with interval 30ms delay before firing
-        []
-    )
+    }, [], {debounce: 30})
   
     useEffect(() => {
 
@@ -80,6 +94,23 @@ function Component(props){
         }});
       render.current = currRender;
   
+
+      Events.on(currEngine, 'afterUpdate',()=>{
+        if(!itemQueued.current){
+            const [x] = normPosition(currRender, Math.random(),Math.random())
+            const randomSize = Math.random()*10+2;
+            Composite.add(currEngine.world, Bodies.rectangle(x,0,randomSize,randomSize, {isStatic: false, render: {fillStyle: COLORS.grey}}));
+            itemQueued.current = true;
+        }
+        timer.current = timer.current+1;
+
+        if(timer.current >= 5){
+            itemQueued.current = false;
+            timer.current = 0;
+        }
+
+      })
+  
       //Create bodies
       const [x, y] = normPosition(currRender, 0.5,0.5);
       console.log(x,y);
@@ -90,21 +121,6 @@ function Component(props){
         // Bodies.rectangle(450,50,80,80, {isStatic: false, render: {fillStyle: 'white'}}), 
         // Bodies.rectangle(0,ch,cw*2,50, {isStatic: true, render: {fillStyle: 'white'}})
       ]
-
-      Events.on(currEngine, 'afterUpdate',()=>{
-        if(!itemQueued.current){
-            const [x] = normPosition(currRender, Math.random(),Math.random())
-            Composite.add(currEngine.world, Bodies.rectangle(x,0,15,15, {isStatic: false, render: {fillStyle: COLORS.grey}}));
-            itemQueued.current = true;
-        }
-        timer.current = timer.current+1;
-
-        if(timer.current === 30){
-            itemQueued.current = false;
-            timer.current = 0;
-        }
-
-      })
 
       //Add bodies to world
       Composite.add(currEngine.world, items);
@@ -121,9 +137,6 @@ function Component(props){
     //     Engine.update(currEngine,1000/60);
     //     requestAnimationFrame(update);
     //   }
-
-      /* Add event listener */
-      window.addEventListener('resize',resize)
   
       return () => {
         Render.stop(currRender);
@@ -134,7 +147,6 @@ function Component(props){
         currRender.canvas = null;
         currRender.context = null;
         currRender.textures = {};
-        window.removeEventListener('resize',resize);
         Events.off(currEngine);
       }
     }, [])
