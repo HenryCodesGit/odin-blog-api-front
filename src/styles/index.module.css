@@ -70,8 +70,16 @@ body {
 
 .section {
   /*Every section must be at least one screen height large*/
-  min-height: calc(100svh - 0.5rem); /* hardcoded. Remove body margin */
+  min-height: calc(100svh - 0.5rem - 0.25rem); /* hardcoded. Remove body margin */
   border: 1px solid white;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  position: relative;
+  flex: 1;
 }
 
 .hero { 
@@ -96,7 +104,10 @@ body {
 }
 
 .title{
-  composes: fontFrederickaTheGreat;
+  position: static;
+
+  /* composes: fontFrederickaTheGreat; */
+  font-family: 'Times New Roman', serif;
   
   text-wrap: pretty;
   font-size: max(3.5rem, 7vw);
