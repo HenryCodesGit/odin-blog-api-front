@@ -28,7 +28,7 @@ Component.defaultProps = {
 
 function Component({ links, className }){
 
-    // Factor of safety
+    // Factor of safety for when the elements start hiding. Makes elements hide slightly earlier than they actually would
     const FOS = 1.10;
 
     // useRef to get HTML components
@@ -40,37 +40,37 @@ function Component({ links, className }){
     const [dropdownItems, setDropdownItems] = useState([]);
 
     useResizeEffect(()=>{
-            // Get total width of Nav
-            const navWidth = navHTML.current.scrollWidth;
-    
-            // Iterate through the hidden elements setting each to visibility: visible, until possible overflow
-            const {elementsShown} = listItemsHTML.current.reduce(
-                ({initialValue, elementsShown},item) => {
-                    let currentSum = initialValue + item.clientWidth + parseInt(getComputedStyle(item).marginLeft) + parseInt(getComputedStyle(item).marginRight);
-                    if(currentSum * FOS <= navWidth){
-                        item.style.visibility = 'visible'
-                        item.style.position = 'static'
-                        elementsShown += 1;
-                    }
-                    return {initialValue: currentSum, elementsShown};
+        // Get total width of Nav
+        const navWidth = navHTML.current.scrollWidth;
+
+        // Iterate through the hidden elements setting each to visibility: visible, until possible overflow
+        const {elementsShown} = listItemsHTML.current.reduce(
+            ({initialValue, elementsShown},item) => {
+                let currentSum = initialValue + item.clientWidth + parseInt(getComputedStyle(item).marginLeft) + parseInt(getComputedStyle(item).marginRight);
+                if(currentSum * FOS <= navWidth){
+                    item.style.visibility = 'visible'
+                    item.style.position = 'static'
+                    elementsShown += 1;
+                }
+                return {initialValue: currentSum, elementsShown};
             }, 
             /* Initial width is set to be width of the button in case it is currently visible.
             *  This also results in elements hiding slightly earlier if the button is not currently shown */
             {initialValue: buttonHTML.current.clientWidth, elementsShown: 0} 
-            );
-        
-            // The remaining elements will overflow, so we hide them and set position to absolute to remove from document flow
-            const dropdown = [];
-            for(let i = elementsShown; i < listItemsHTML.current.length; i+=1){
-                listItemsHTML.current[i].style.visibility = 'hidden';
-                listItemsHTML.current[i].style.position = 'absolute';
-                dropdown.push(links[i]);
-            }
+        );
     
-            //Set button visibility depending on if there are items, and then update state to populate the navbar
-            buttonHTML.current.style.visibility = dropdown.length ? 'visible' : 'hidden'
-            buttonHTML.current.style.position = dropdown.length ? 'static' : 'absolute'
-            setDropdownItems(dropdown);
+        // The remaining elements will overflow, so we hide them and set position to absolute to remove from document flow
+        const dropdown = [];
+        for(let i = elementsShown; i < listItemsHTML.current.length; i+=1){
+            listItemsHTML.current[i].style.visibility = 'hidden';
+            listItemsHTML.current[i].style.position = 'absolute';
+            dropdown.push(links[i]);
+        }
+
+        //Set button visibility depending on if there are items, and then update state to populate the navbar
+        buttonHTML.current.style.visibility = dropdown.length ? 'visible' : 'hidden'
+        buttonHTML.current.style.position = dropdown.length ? 'static' : 'absolute'
+        setDropdownItems(dropdown);
 
     }, [links],{debounce: 30})
 

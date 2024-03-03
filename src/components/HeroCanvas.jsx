@@ -38,7 +38,7 @@ const COLORS = {
 
 function Component(props){
     const scene = useRef()
-    const engine = useRef(Engine.create({ gravity: { y: 0.25 } }))
+    const engine = useRef(Engine.create({ gravity: { y: 0.05 } }))
     const runner = useRef(Runner.create());
     const render = useRef(null)
     
@@ -62,16 +62,16 @@ function Component(props){
     //     []
     // )
     useResizeEffect(()=>{ 
-            const width = scene.current.parentNode.clientWidth;
-            const height = scene.current.parentNode.clientHeight;
-
-            render.current.bounds.max.x = width;
-            render.current.bounds.max.y = height;
-            render.current.options.width = width;
-            render.current.options.height = height;
-            render.current.canvas.width = width;
-            render.current.canvas.height = height;
-            Render.setPixelRatio(render.current, window.devicePixelRatio); // added this
+                const width = scene.current.parentNode.clientWidth;
+                const height = scene.current.parentNode.clientHeight;
+    
+                render.current.bounds.max.x = width;
+                render.current.bounds.max.y = height;
+                render.current.options.width = width;
+                render.current.options.height = height;
+                render.current.canvas.width = width;
+                render.current.canvas.height = height;
+                Render.setPixelRatio(render.current, window.devicePixelRatio); // added this
     }, [], {debounce: 30})
   
     useEffect(() => {
@@ -110,7 +110,7 @@ function Component(props){
         }
 
       })
-  
+
       //Create bodies
       const [x, y] = normPosition(currRender, 0.5,0.5);
       console.log(x,y);
