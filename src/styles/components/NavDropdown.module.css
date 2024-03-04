@@ -52,6 +52,10 @@
 
         text-wrap:pretty;
         white-space: nowrap;
+
+        & a {
+            display: block;
+        }
     }
 
     & li:hover {
@@ -88,9 +92,9 @@
     color: var(--lightGrey);
 }
 
-/* Visually hiding */
+/* Visually hiding, also hide via accessibility*/
 
-.visuallyHidden {
+.visuallyHidden, .visuallyHidden *{
     position: absolute;
     position: absolute !important;
     width: 1px !important;
@@ -101,4 +105,5 @@
     clip: rect(0,0,0,0) !important;
     white-space: nowrap !important;
     border: 0 !important;
+    pointer-events: none !important;
 }

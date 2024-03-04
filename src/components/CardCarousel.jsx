@@ -7,6 +7,12 @@ import chester from '../assets/img/pets/chester.png'
 
 import Card from '../components/Card'
 
+Component.propTypes = {
+};
+
+Component.defaultProps = {
+};
+
 // TODO: Simple carousel that shows a grid of cards
 function Component(){
 
@@ -21,11 +27,5 @@ function Component(){
         <Card/>
     </ul>);
 }
-
-Component.propTypes = {
-};
-
-Component.defaultProps = {
-};
 
 export default Component;
