@@ -1,6 +1,7 @@
 
 import MatterCanvas from '../utilities/matter-react-utils/MatterCanvas';
 import { normalizedPosition } from '../utilities/matter-react-utils/MatterCanvasUtils';
+import enableTouchScroll from '../utilities/enableTouchScroll';
 
 import { useRef, useEffect } from 'react';
 import { Engine, Runner, Mouse, MouseConstraint, Events, Bodies, Composite} from 'matter-js';
@@ -30,12 +31,14 @@ export default function SkillsCanvas(){
         const canvas = scene.current.querySelector('canvas')
         window.canvas = canvas;
 
-        //Mouse and its constraint has to initiate after the other refs are created
+        // Mouse and its constraint has to initiate after the other refs are created
         mouse.current = Mouse.create(canvas);
         mouseConstraint.current = MouseConstraint.create(engine.current, { mouse: mouse.current });
-        const currMouseConstraint = mouseConstraint.current; //Making it easier to type and paste the variable around
+        const currMouseConstraint = mouseConstraint.current; // Making it easier to type and paste the variable around
 
         // Creating the mouse prevents scroll events from occuring, so need to manually put it back in
+        canvas.onmousewheel = (event) => { window.scrollBy(event.deltaX, event.deltaY);} // Mouse wheel
+        const touchScroll = enableTouchScroll(canvas); // Touch events
         canvas.onmousewheel = (event) => {
           window.scrollBy(event.deltaX, event.deltaY);
         }
@@ -63,7 +66,7 @@ export default function SkillsCanvas(){
         return () => {
           Events.off(currMouseConstraint);
           canvas.removeEventListener('touchmove',scroll);
-          canvas.removeEventListener('touchstart', update);
+          touchScroll.cleanup();
         }
     },[]);
     return (<MatterCanvas engine={engine.current} runner={runner.current} ref={scene} backgroundColor='#444'/>)
