@@ -7,7 +7,7 @@ import style from './MatterCanvas.module.css';
 
 import { Engine, Runner, Render, World, Events} from 'matter-js'
 
-const Component = forwardRef(function Component({ engine, runner, useCustomRunner }, sceneRef) {
+const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCustomRunner }, sceneRef) {
 
   /* Keep state of matterJS Engine components between renders */
   const scene = sceneRef;
@@ -81,7 +81,7 @@ const Component = forwardRef(function Component({ engine, runner, useCustomRunne
   return <div ref={sceneRef} className={style.matterCanvas}/>
 })
 
-Component.propTypes = {
+MatterCanvas.propTypes = {
   engine: PropTypes.object.isRequired,
   useCustomRunner: PropTypes.bool,
   runner: function(props, propName, componentName){
@@ -95,7 +95,7 @@ Component.propTypes = {
   }
 };
 
-Component.defaultProps = {
+MatterCanvas.defaultProps = {
   runner: PropTypes.object,
   useCustomRunner: false,
 };
@@ -103,4 +103,4 @@ Component.defaultProps = {
 
 /* ********************************************************** */
 
-export default Component;
+export default MatterCanvas;

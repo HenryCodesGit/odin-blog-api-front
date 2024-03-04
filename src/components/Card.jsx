@@ -3,13 +3,13 @@ import { useEffect, useRef } from 'react';
 
 import style from '../styles/components/Card.module.css'
 
-Component.propTypes = {
+Card.propTypes = {
     imgURL: PropTypes.string,
     description: PropTypes.string,
     link: PropTypes.string
 }
 
-function Component({imgURL, description, link}){
+function Card({imgURL, description, link}){
 
     const imageRef = useRef(null);
     const textRef = useRef(null);
@@ -52,4 +52,4 @@ function Component({imgURL, description, link}){
     )
 }
 
-export default Component
+export default Card

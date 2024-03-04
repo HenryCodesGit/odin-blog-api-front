@@ -8,7 +8,7 @@ import style from '../styles/components/NavDropdown.module.css'
 // npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
 import MenuIcon from '@mui/icons-material/Menu';
 
-const Component = forwardRef(function Component({ links }, ref){
+const NavDropdown = forwardRef(function NavDropDownRef({ links }, ref){
     const [isMenuShown, setMenuShown] = useState(false);
     const toggleMenu = () => setMenuShown(!isMenuShown);
 
@@ -54,7 +54,7 @@ const Component = forwardRef(function Component({ links }, ref){
     );
 });
 
-Component.propTypes = {
+NavDropdown.propTypes = {
     links: // Array of links to be generated into the nav bar 
         PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.number.isRequired,
@@ -63,8 +63,8 @@ Component.propTypes = {
         })),
 };
 
-Component.defaultProps = {
+NavDropdown.defaultProps = {
     links: [],
   };
 
-export default Component;
+export default NavDropdown;

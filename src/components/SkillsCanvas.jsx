@@ -15,7 +15,7 @@ const COLORS = {
   green: '#3B6D45',
 }
 
-export default function HeroCanvas(){
+export default function SkillsCanvas(){
 
     const scene = useRef();
 

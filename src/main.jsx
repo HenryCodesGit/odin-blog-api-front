@@ -9,6 +9,7 @@ import Index from "./routes/Index"
 
 const router = createBrowserRouter([
   { path: '/', element: <Index /> },
+  { path: '/1', element: <Index /> },
 ])
 
 ReactDOM.createRoot(document.getElementById("root")).render(

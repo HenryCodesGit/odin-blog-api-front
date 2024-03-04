@@ -10,7 +10,7 @@ import useResizeEffect from '../utilities/react-utils/useResizeEffect';
 
 // TODO: Nav bar currently requires serial ids starting from 1.
 // Refactor with object reference instead of array reference for listItemsHTML and iterate through collection
-Component.propTypes = {
+NavExpanding.propTypes = {
     links: // Array of links to be generated into the nav bar
         PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.number.isRequired,
@@ -20,12 +20,12 @@ Component.propTypes = {
         className: PropTypes.string,
 };
 
-Component.defaultProps = {
+NavExpanding.defaultProps = {
     links: [],
     className: ''
   };
 
-function Component({ links, className }){
+function NavExpanding({ links, className }){
 
     // Factor of safety for when the elements start hiding. Makes elements hide slightly earlier than they actually would
     const FOS = 1.10;
@@ -103,4 +103,4 @@ function Component({ links, className }){
 }
 
 
-export default Component;
+export default NavExpanding;
