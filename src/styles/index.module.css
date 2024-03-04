@@ -41,13 +41,11 @@ body {
 /* **************************************************************************************** */
 
 .header {
-  margin: 0 calc(0.5rem + 0.25rem); /* Body margin and padding */
-
   background-color: #333333;
-  position:fixed;
-  right: 0;
+  position:sticky;
   top: 0;
-  width: calc(100% - 0.5rem - 0.25rem - 0.5rem - 0.25rem); /* Accounts for body padding + margin, twice */
+  width: calc(100%); /* Accounts for body padding + margin, twice */
+  max-height: fit-content;
   display: flex;
   align-items: center;
   
