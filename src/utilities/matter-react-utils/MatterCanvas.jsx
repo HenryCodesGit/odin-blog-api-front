@@ -1,33 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import useResizeEffect from '../react-utils/useResizeEffect'
 
 import style from './MatterCanvas.module.css';
 
-import { Engine, Runner, Render, World, Bodies, Composite} from 'matter-js'
+import { Engine, Runner, Render, World, Events} from 'matter-js'
 
-Component.propTypes = {
-  options: PropTypes.shape({
-    engine: PropTypes.object,
-    runner: PropTypes.object
-  })
-};
-
-const defaultOptions = {
-    engine: { gravity: { y: 0} },
-    runner: {}
-  };
-
-function Component({ options }) {
-
-  //Merging default options with provided options so that default values aren't lost, and the ones that are provided are updated
-  options = Object.assign(defaultOptions, options);
+const Component = forwardRef(function Component({ engine, runner, useCustomRunner }, sceneRef) {
 
   /* Keep state of matterJS Engine components between renders */
-  const scene = useRef();
-  const engine = useRef(Engine.create(options.engine))
-  const runner = useRef(Runner.create(options.runner));
+  const scene = sceneRef;
   const render = useRef(null); // Can't set on instantiation because it depends on the scene ref being initialized with a parent first
 
   // Ensure the canvas is always the same size as its parent
@@ -42,7 +25,9 @@ function Component({ options }) {
     render.current.canvas.width = width;
     render.current.canvas.height = height;
     Render.setPixelRatio(render.current, window.devicePixelRatio);
-  }, [],{debounce: 30})
+
+    //
+  },()=>{}, [scene, render],{debounce: 30})
 
   useEffect(() => {
 
@@ -50,7 +35,7 @@ function Component({ options }) {
     // TODO: Render options can be passed in?
     render.current = Render.create({
       element: scene.current,
-      engine: engine.current,
+      engine: engine,
       options: {
       width: scene.current.parentNode.clientWidth,
       height: scene.current.parentNode.clientHeight,
@@ -60,8 +45,6 @@ function Component({ options }) {
     }});
 
     // Setting shortcut references to the current mattrerJS variables
-    const currEngine = engine.current;
-    const currRunner = runner.current;
     const currRender = render.current;
 
     //Add bodies to world
@@ -71,7 +54,7 @@ function Component({ options }) {
     Render.run(currRender);
 
     //Run the Physics Engine /w matterJS default Runner
-    Runner.run(currRunner, currEngine);
+    if(!useCustomRunner) Runner.run(runner, engine);
 
     /* Custom Runner */
     //   update();
@@ -83,9 +66,9 @@ function Component({ options }) {
 
     return () => {
       Render.stop(currRender);
-      World.clear(currEngine.world);
-      Runner.stop(currRunner);
-      Engine.clear(currEngine);
+      World.clear(engine.world);
+      if(!useCustomRunner) Runner.stop(runner);
+      Engine.clear(engine);
       currRender.canvas.remove();
       currRender.canvas = null;
       currRender.context = null;
@@ -93,9 +76,31 @@ function Component({ options }) {
 
       render.current = null;
     }
-  }, [])
+  }, [scene, engine, runner, useCustomRunner])
 
-  return <div ref={scene} className={style.matterCanvas}/>
-}
+  return <div ref={sceneRef} className={style.matterCanvas}/>
+})
+
+Component.propTypes = {
+  engine: PropTypes.object.isRequired,
+  useCustomRunner: PropTypes.bool,
+  runner: function(props, propName, componentName){
+    //If custom runner is used, ignore this
+    if(!props.useCustomRunner) return;
+
+    // Must have the runner property supplied, and its property must be of the type 'object'
+    if (!Object.hasOwn(props, propName) || typeof props[propName] !== 'object'){
+      return new Error(`Invalid prop '${propName}' supplied to '${componentName}'. If the 'useCustomRunner' property is false (default) then an instance of a matterJS Runner must be supplied`);
+    }
+  }
+};
+
+Component.defaultProps = {
+  runner: PropTypes.object,
+  useCustomRunner: false,
+};
+
+
+/* ********************************************************** */
 
 export default Component;
