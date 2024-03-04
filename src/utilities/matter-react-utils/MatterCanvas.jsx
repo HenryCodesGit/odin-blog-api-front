@@ -7,7 +7,7 @@ import style from './MatterCanvas.module.css';
 
 import { Engine, Runner, Render, World, Events} from 'matter-js'
 
-const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCustomRunner }, sceneRef) {
+const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCustomRunner, backgroundColor }, sceneRef) {
 
   /* Keep state of matterJS Engine components between renders */
   const scene = sceneRef;
@@ -40,7 +40,7 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
       width: scene.current.parentNode.clientWidth,
       height: scene.current.parentNode.clientHeight,
       wireframes: false,
-      background: 'transparent',
+      background: backgroundColor,
       pixelRatio: window.devicePixelRatio,
     }});
 
@@ -76,13 +76,14 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
 
       render.current = null;
     }
-  }, [scene, engine, runner, useCustomRunner])
+  }, [scene, engine, runner, useCustomRunner, backgroundColor])
 
   return <div ref={sceneRef} className={style.matterCanvas}/>
 })
 
 MatterCanvas.propTypes = {
   engine: PropTypes.object.isRequired,
+  backgroundColor: PropTypes.string,
   useCustomRunner: PropTypes.bool,
   runner: function(props, propName, componentName){
     //If custom runner is used, ignore this
@@ -92,11 +93,11 @@ MatterCanvas.propTypes = {
     if (!Object.hasOwn(props, propName) || typeof props[propName] !== 'object'){
       return new Error(`Invalid prop '${propName}' supplied to '${componentName}'. If the 'useCustomRunner' property is false (default) then an instance of a matterJS Runner must be supplied`);
     }
-  }
+  },
 };
 
 MatterCanvas.defaultProps = {
-  runner: PropTypes.object,
+  backgroundColor: 'transparent',
   useCustomRunner: false,
 };
 

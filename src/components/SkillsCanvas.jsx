@@ -3,7 +3,7 @@ import MatterCanvas from '../utilities/matter-react-utils/MatterCanvas';
 import { normalizedPosition } from '../utilities/matter-react-utils/MatterCanvasUtils';
 
 import { useRef, useEffect } from 'react';
-import { Engine, Runner, Bodies, Composite, Events} from 'matter-js';
+import { Engine, Runner, Mouse, MouseConstraint, Events, Bodies, Composite} from 'matter-js';
 
 const COLORS = {
   black: '#14110F',
@@ -18,47 +18,54 @@ const COLORS = {
 export default function SkillsCanvas(){
 
     const scene = useRef();
-
-    const engine = useRef(Engine.create({ gravity: { y: 1 } }))
+    const engine = useRef(Engine.create({ gravity: { y: 0 } }))
     const runner = useRef(Runner.create());
-    const itemQueued = useRef(false);
-    const timer = useRef(0);
+
+    const mouse = useRef()
+    const mouseConstraint = useRef()
 
     useEffect(()=>{
-        const currEngine = engine.current;
+        console.log('Mounting SkillsCanvas');
 
-        // Add falling snow effect
-        const particlesActive = []
-        Events.on(currEngine, 'afterUpdate',()=>{
-          // Add particles
-          if(!itemQueued.current){
-            const [x] = normalizedPosition(scene.current, Math.random(),Math.random())
-            const randomSize = Math.random()*10+2;
-            const particle = Bodies.rectangle(x,-30,randomSize,randomSize, {isStatic: false, render: {fillStyle: COLORS.grey}});
-            particlesActive.push(particle);
+        const canvas = scene.current.querySelector('canvas')
+        window.canvas = canvas;
 
-            Composite.add(currEngine.world, particle);
-            itemQueued.current = true;
-          }
+        //Mouse and its constraint has to initiate after the other refs are created
+        mouse.current = Mouse.create(canvas);
+        mouseConstraint.current = MouseConstraint.create(engine.current, { mouse: mouse.current });
+        const currMouseConstraint = mouseConstraint.current; //Making it easier to type and paste the variable around
 
-            //Iterate through active particles and delete the ones that are no longer existing
-            for(let i = particlesActive.length-1; i>=0; i-=1){
-              if(particlesActive[i].position.y > scene.current.clientHeight){
-                Composite.remove(currEngine.world, particlesActive[i]);
-                particlesActive.splice(i,1);
-              }
-            }
-            timer.current += 1;
-            if(timer.current < 5) return;
+        // Creating the mouse prevents scroll events from occuring, so need to manually put it back in
+        canvas.onmousewheel = (event) => {
+          window.scrollBy(event.deltaX, event.deltaY);
+        }
+        
+        // Creating the mouse prevents touch drag from occurring, so need to manually put it back in
 
-            itemQueued.current = false;
-            timer.current = 0;
-        })
+        let lastY;
+        function scroll(touchEvent){
+          window.scrollBy({
+            top: lastY-touchEvent.changedTouches[0].pageY,
+            left: 0,
+            behaviour: 'smooth'
+          });
+          lastY = touchEvent.changedTouches[0].pageY;
+        }
+        function update(touchEvent){
+            lastY = touchEvent.changedTouches[0].pageY;
+        }
+
+        canvas.addEventListener('touchmove', scroll)
+        canvas.addEventListener('touchstart', update)
+
+
 
         return () => {
-          Events.off(currEngine);
+          Events.off(currMouseConstraint);
+          canvas.removeEventListener('touchmove',scroll);
+          canvas.removeEventListener('touchstart', update);
         }
     },[]);
-    return (<MatterCanvas engine={engine.current} runner={runner.current} ref={scene}/>)
+    return (<MatterCanvas engine={engine.current} runner={runner.current} ref={scene} backgroundColor='#444'/>)
 }
 

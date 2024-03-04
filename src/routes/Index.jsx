@@ -3,6 +3,7 @@ import styles from '../styles/index.module.css'
 import NavExpanding from '../components/NavExpanding';
 import CardCarousel from '../components/CardCarousel';
 import HeroCanvas from '../components/HeroCanvas'
+import SkillsCanvas from '../components/SkillsCanvas';
 
 function Index() {
 
@@ -41,6 +42,7 @@ function Index() {
       <div className={styles.section}>
         <h1 className={`${styles.title} ${styles.header1}`}>Skills</h1>
         <div className={styles.container}>
+          <SkillsCanvas />
         </div>
       </div>
       <div className={styles.section}>
