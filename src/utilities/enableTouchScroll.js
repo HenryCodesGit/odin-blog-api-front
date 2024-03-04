@@ -3,9 +3,7 @@ export default function enableTouchScroll(element){
     let touchStartY;
 
     function scroll(touchEvent){
-        touchEvent.preventDefault();
-        touchEvent.stopPropagation();
-        
+        touchEvent.preventDefault();        
         window.scrollBy({
         top: touchStartY-touchEvent.changedTouches[0].pageY,
         left: 0,
@@ -15,7 +13,6 @@ export default function enableTouchScroll(element){
 
     function update(touchEvent){
         touchEvent.preventDefault();
-        touchEvent.stopPropagation();
         touchStartY = touchEvent.changedTouches[0].pageY;
     }
     element.addEventListener('touchmove', scroll);

@@ -18,19 +18,18 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
     const width = scene.current.parentNode.clientWidth;
     const height = scene.current.parentNode.clientHeight;
 
-    render.current.bounds.max.x = width;
-    render.current.bounds.max.y = height;
     render.current.options.width = width;
-    render.current.options.height = height;
+    render.current.options.height = height
+    render.current.bounds.max.x = width;
+    render.current.bounds.max.y = height;;
     render.current.canvas.width = width;
     render.current.canvas.height = height;
-    Render.setPixelRatio(render.current, window.devicePixelRatio);
-
-    //
+    
+    Render.setPixelRatio(render.current, window.devicePixelRatio); //window.devicePixelRatio // Even though it's wrong, we must parseInt here because the Mouse module for matterJS imports incorrectly
   },()=>{}, [scene, render],{debounce: 30})
 
   useEffect(() => {
-
+  
     // On initial mount, need to create the renderer (Need to do it here because scene.current.parentNode does not exist yet)
     // TODO: Render options can be passed in?
     render.current = Render.create({
@@ -42,6 +41,7 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
       wireframes: false,
       background: backgroundColor,
       pixelRatio: window.devicePixelRatio,
+      hasBounds: true,
     }});
 
     // Setting shortcut references to the current mattrerJS variables
