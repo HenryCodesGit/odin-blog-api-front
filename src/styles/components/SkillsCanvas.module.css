@@ -3,6 +3,7 @@
 
     margin: 0;
     padding: 0;
+    z-index: 99;
 
     pointer-events: auto;
 
@@ -20,6 +21,22 @@
     justify-content: center;
     align-items: center;
 
+    overflow: hidden;
+
     z-index: 1; 
     pointer-events: none;
+}
+
+.floatingCircle {
+    width: 150px;
+    aspect-ratio: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    filter: drop-shadow(0px 0px 4px #FFF8) !important;
+
+    transition: transform 16ms; /* 16ms to maintain 60 frames per second sync with physics engine */
+
+    pointer-events: auto;
 }

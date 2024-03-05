@@ -10,6 +10,7 @@ import MatterAttractor from '../utilities/matter-utils/MatterAttractor';
 
 import style from '../styles/components/SkillsCanvas.module.css'
 
+import image from '../assets/icons/matter-logo.svg'
 
 // TODO: Skills will be arranged in this structure:
 /*
@@ -57,6 +58,8 @@ export default function SkillsCanvas(){
     const overlayRef = useRef();
     const buttonRef = useRef();
     const circleRef = useRef();
+    const imageRef = useRef();
+    
 
     //On resize, 
     useResizeEffect(
@@ -64,19 +67,19 @@ export default function SkillsCanvas(){
         console.log('Checking skills canvas');
         mouse.current.pixelRatio = window.devicePixelRatio; //Need to reset mouse pixel ratio as it might change (i.e. moving window between screens)
 
+        //Setting engine item relative to HTML
         const overlayBounds = overlayRef.current.getBoundingClientRect();
         const buttonBounds = buttonRef.current.getBoundingClientRect();
         const buttonX = buttonBounds.x - overlayBounds.x + buttonBounds.width/2;
         const buttonY = buttonBounds.y - overlayBounds.y + buttonBounds.height/2;
-
         Body.setPosition(circleRef.current, {x: buttonX, y:buttonY})
 
       },
       ()=>{}, // No cleanup needed
       [], // No dependencies 
-      {debounce: 200, runInitial: true} // Throttle the function call
+      {debounce: 100, runInitial: true} // Throttle the function call
     )
-
+    
     useEffect(()=>{
         const currEngine = engine.current;
         const world = currEngine.world;
@@ -107,17 +110,35 @@ export default function SkillsCanvas(){
         );
         MatterAttractor.addToWorld(world, circleRef.current);
 
+        let boundingRect = imageRef.current.getBoundingClientRect();
+        let newParticle = Bodies.circle(0, 0, boundingRect.width/2, {isStatic: false, render: {fillStyle: '#0000', strokeStyle: '#222', lineWidth: 2}, friction: 0, frictionAir: 0.005});
+        newParticle = MatterAttractor.create(newParticle,1,false);
+        MatterAttractor.addToWorld(world,newParticle, {length: boundingRect.width})
 
-        // {isStatic: false, render: {fillStyle: color}, friction: 0.5, slop: 0.01, frictionAir: 0.03});
-        const particleSize = 40;
-        Events.on(mouseConstraint.current,'mousedown',(event)=>{
-          const {x,y} = event.mouse.mousedownPosition
-          let newParticle = Bodies.circle(x, y, particleSize, {isStatic: false, render: {fillStyle: '#000', strokeStyle: '#222', lineWidth: 2}, friction: 0, frictionAir: 0.005});
-          newParticle = MatterAttractor.create(newParticle,1,false);
-          MatterAttractor.addToWorld(world,newParticle, {length: particleSize * 2})
-        });
+        // Move the image after every update
+        Events.on(currEngine,'afterUpdate',()=>{
+        
+          //Setting HTML item relative to engine
+          const bodyPosition = newParticle.position;
+          const imageBounds = imageRef.current.getBoundingClientRect();
+          const imageX = parseInt(bodyPosition.x - imageBounds.width/2,10);
+          const imageY = parseInt(bodyPosition.y - imageBounds.height/2,10);
+
+          imageRef.current.style.transform = `translate(${imageX}px, ${imageY}px)`;
+        })
+
+
+        // // {isStatic: false, render: {fillStyle: color}, friction: 0.5, slop: 0.01, frictionAir: 0.03});
+        // const particleSize = 40;
+        // Events.on(mouseConstraint.current,'mousedown',(event)=>{
+        //   const {x,y} = event.mouse.mousedownPosition
+        //   let newParticle = Bodies.circle(x, y, particleSize, {isStatic: false, render: {fillStyle: '#000', strokeStyle: '#222', lineWidth: 2}, friction: 0, frictionAir: 0.005});
+        //   newParticle = MatterAttractor.create(newParticle,1,false);
+        //   MatterAttractor.addToWorld(world,newParticle, {length: particleSize * 2})
+        // });
 
         return () => {
+          Events.off(currEngine);
           Events.off(mouseConstraint.current);
           World.clear(world); //Temporary delete after
           touchScroll.cleanup();
@@ -127,8 +148,12 @@ export default function SkillsCanvas(){
     return (<>
       <div className={style.overlay} ref={overlayRef}>
         <button className={style.test} ref={buttonRef}>Example skill here later</button>
+        <a className={style.floatingCircle} href="https://google.ca" ref={imageRef}>
+          <img src={image}/>
+        </a>
+        
       </div>
-      <MatterCanvas engine={engine.current} runner={runner.current} ref={scene} backgroundColor='#444'/>
+      <MatterCanvas engine={engine.current} runner={runner.current} ref={scene} backgroundColor='transparent'/>
     </>)
 }
 
