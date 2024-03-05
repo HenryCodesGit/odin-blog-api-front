@@ -19,7 +19,7 @@ export default function HeroCanvas(){
 
     const scene = useRef();
 
-    const engine = useRef(Engine.create({ gravity: { y: 1 } }))
+    const engine = useRef(Engine.create({ gravity: { y: 0.025 } }))
     const runner = useRef(Runner.create());
     const itemQueued = useRef(false);
     const timer = useRef(0);
@@ -34,7 +34,8 @@ export default function HeroCanvas(){
           if(!itemQueued.current){
             const [x] = normalizedPosition(scene.current, Math.random(),Math.random())
             const randomSize = Math.random()*10+2;
-            const particle = Bodies.rectangle(x,-30,randomSize,randomSize, {isStatic: false, render: {fillStyle: COLORS.grey}});
+            const particleSides = Math.random()*3+3;
+            const particle = Bodies.polygon(x,-30,particleSides,randomSize, {isStatic: false, render: {fillStyle: 'transparent', strokeStyle: COLORS.white, lineWidth: 1}, airFriction: 0.1});
             particlesActive.push(particle);
 
             Composite.add(currEngine.world, particle);
@@ -49,7 +50,7 @@ export default function HeroCanvas(){
               }
             }
             timer.current += 1;
-            if(timer.current < 5) return;
+            if(timer.current < 60) return;
 
             itemQueued.current = false;
             timer.current = 0;
