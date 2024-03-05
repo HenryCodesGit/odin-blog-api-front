@@ -1,4 +1,4 @@
-import { useEffect, useRef, forwardRef } from 'react';
+import { useEffect, useRef, forwardRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import useResizeEffect from '../react-utils/useResizeEffect'
@@ -11,26 +11,36 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
 
   /* Keep state of matterJS Engine components between renders */
   const scene = sceneRef;
-  const render = useRef(null); // Can't set on instantiation because it depends on the scene ref being initialized with a parent first
+  const render = useRef(null);
+
+  const checkPauseEngineRef = useCallback(function checkPauseEngine(){
+    const element = scene.current.getBoundingClientRect();
+    const elementTop = parseInt(element.top,10);
+    const elementBot = parseInt(elementTop + element.height,10);
+    const windowHeight = parseInt(window.innerHeight,10);
+
+    const isCanvasShown = !(elementTop > windowHeight || elementBot < 0)
+
+    runner.enabled = isCanvasShown;
+  }, [runner, scene])
 
   // Ensure the canvas is always the same size as its parent
   useResizeEffect(()=>{ 
-    console.log('Checking matter');
     const width = scene.current.parentNode.clientWidth;
     const height = scene.current.parentNode.clientHeight;
 
     render.current.options.width = width;
     render.current.options.height = height
     render.current.bounds.max.x = width;
-    render.current.bounds.max.y = height;;
+    render.current.bounds.max.y = height;
     render.current.canvas.width = width;
     render.current.canvas.height = height;
     
     Render.setPixelRatio(render.current, window.devicePixelRatio); //window.devicePixelRatio // Even though it's wrong, we must parseInt here because the Mouse module for matterJS imports incorrectly
+    checkPauseEngineRef();
   },()=>{}, [scene, render],{debounce: 100, runInitial: true})
 
   useEffect(() => {
-  
     // On initial mount, need to create the renderer (Need to do it here because scene.current.parentNode does not exist yet)
     // TODO: Render options can be passed in?
     render.current = Render.create({
@@ -48,22 +58,15 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
     // Setting shortcut references to the current mattrerJS variables
     const currRender = render.current;
 
-    //Add bodies to world
-    // Composite.add(currEngine.world, items);
-
     // Start the renderer
     Render.run(currRender);
 
     //Run the Physics Engine /w matterJS default Runner
     if(!useCustomRunner) Runner.run(runner, engine);
 
-    /* Custom Runner */
-    //   update();
-
-    //   function update(){
-    //     Engine.update(currEngine,1000/60);
-    //     requestAnimationFrame(update);
-    //   }
+    /* Add a listener to the window to pause the engine if we scroll past the canvas */
+    window.addEventListener('scroll', checkPauseEngineRef);
+    checkPauseEngineRef();
 
     return () => {
       Render.stop(currRender);
@@ -76,8 +79,9 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
       currRender.textures = {};
 
       render.current = null;
+      window.removeEventListener('scroll', checkPauseEngineRef);
     }
-  }, [scene, engine, runner, useCustomRunner, backgroundColor])
+  }, [scene, engine, runner, useCustomRunner, backgroundColor, checkPauseEngineRef])
 
   return <div ref={sceneRef} className={style.matterCanvas}/>
 })
