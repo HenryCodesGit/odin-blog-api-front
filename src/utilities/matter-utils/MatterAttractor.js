@@ -22,8 +22,6 @@ function addToWorld(world, attractor, constraintOptions = {}){
     world.bodies.forEach((body)=>{
         //Search conditions
         if(!(Object.hasOwn(body,'attractor') && body.attractor.isMain && body.attractor.id === attractor.attractor.id && body.id !== attractor.id)) return;
-
-        console.log('Adding constraint');
         
         // Overwrites any default body options in case it was set in error
         constraintOptions = Object.assign(constraintOptions, { bodyA: body, bodyB: attractor})

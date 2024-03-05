@@ -15,6 +15,7 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
 
   // Ensure the canvas is always the same size as its parent
   useResizeEffect(()=>{ 
+    console.log('Checking matter');
     const width = scene.current.parentNode.clientWidth;
     const height = scene.current.parentNode.clientHeight;
 

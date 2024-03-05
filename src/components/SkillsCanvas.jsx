@@ -61,6 +61,7 @@ export default function SkillsCanvas(){
     //On resize, 
     useResizeEffect(
       ()=> {
+        console.log('Checking skills canvas');
         mouse.current.pixelRatio = window.devicePixelRatio; //Need to reset mouse pixel ratio as it might change (i.e. moving window between screens)
 
         const overlayBounds = overlayRef.current.getBoundingClientRect();
