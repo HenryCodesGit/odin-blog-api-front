@@ -1,0 +1,25 @@
+.test{
+    position: relative;
+
+    margin: 0;
+    padding: 0;
+
+    pointer-events: auto;
+
+    background-color: #9999;
+}
+
+.overlay{
+    position: absolute;
+    min-width: 100%;
+    min-height: 100%;
+
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1; 
+    pointer-events: none;
+}

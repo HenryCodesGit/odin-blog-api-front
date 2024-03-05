@@ -8,15 +8,37 @@ import enableTouchScroll from '../utilities/enableTouchScroll';
 import useResizeEffect from '../utilities/react-utils/useResizeEffect';
 import MatterAttractor from '../utilities/matter-utils/MatterAttractor';
 
-const COLORS = {
-  black: '#14110F',
-  darkGrey: '#333333',
-  grey: '#7E7F83',
-  lightGrey: '#DDD',
-  beige: '#D9C5B2',
-  white: '#F3F3F4',
-  green: '#3B6D45',
-}
+import style from '../styles/components/SkillsCanvas.module.css'
+
+
+// TODO: Skills will be arranged in this structure:
+/*
+---WEB DEV
+- HTML, CSS, JS, REACT, EXPRESS, NODE, MONGO, POSTGRESQL, GIT
+
+-GAME PROGAMMING
+-UNITY (C#), matterJS?
+
+---ENGINEERING DESIGN
+AUTOCAD, SOLIDWORKS, MATLAB, COMSOL
+
+----HANDS ON
+-SCIENTIFIC INSTRUMENT OPERATION AND TROUBLESHOOTING, ELECTRONIC COMPONENT REPAIR, ADDITIVE MANUFACTURING DESIGN AND OPERATION
+
+---HOBBIES
+-ROCKCLIMBING, SNOWBOARDING, VIDEOGAMES, BOARD GAMES, ANIME
+
+*/
+
+// Headings will become static rigid bodies that will become linked to HTML elements above the canvas. 
+// If the HTML element moves because of flex or resizing, the rigid body moves as well
+// Purpose of this is so that it is accessible.
+// Or maybe isntead have accessible only html elements that are hidden from normal DOM?
+
+// Skills inside will become free floating rigid body elements inside the canvas, also linked to an HTML element, but instead it has position: absolute.
+
+//TODO: Size of hexagons will resize to fit canvas -> Canvas will resize to fit page due to its styling
+//TODO: Clicking and dragging the headings will momentarily change them to position:absolute and remove them from the default flow?
 
 export default function SkillsCanvas(){
 
@@ -31,6 +53,10 @@ export default function SkillsCanvas(){
 
     const mouse = useRef()
     const mouseConstraint = useRef()
+
+    const overlayRef = useRef();
+    const buttonRef = useRef();
+    const circleRef = useRef();
 
     //On resize, 
     useResizeEffect(
@@ -52,6 +78,7 @@ export default function SkillsCanvas(){
 
     useEffect(()=>{
         const currEngine = engine.current;
+        const world = currEngine.world;
         const canvas = scene.current.querySelector('canvas')
 
         // Mouse and its constraint has to initiate after the other refs are created
@@ -63,37 +90,44 @@ export default function SkillsCanvas(){
         canvas.onmousewheel = (event) => { window.scrollBy(event.deltaX, event.deltaY);} // Mouse wheel
         const touchScroll = enableTouchScroll(canvas); // Touch events
 
+        const overlayBounds = overlayRef.current.getBoundingClientRect();
+        const buttonBounds = buttonRef.current.getBoundingClientRect();
+
+        const buttonX = buttonBounds.x - overlayBounds.x + buttonBounds.width/2;
+        const buttonY = buttonBounds.y - overlayBounds.y + buttonBounds.height/2;
+
+        circleRef.current = MatterAttractor.create(
+          Bodies.circle(
+            buttonX,buttonY,25, //X, Y, Radius
+            { isStatic: true, render: { fillStyle: '#222'}}
+          ),
+          1, // Attractor id
+          true // Attracting body
+        );
+        MatterAttractor.addToWorld(world, circleRef.current);
+
+
+        // {isStatic: false, render: {fillStyle: color}, friction: 0.5, slop: 0.01, frictionAir: 0.03});
         const particleSize = 40;
         Events.on(mouseConstraint.current,'mousedown',(event)=>{
           const {x,y} = event.mouse.mousedownPosition
-          const type = Math.random() > 0.5 ? 1 : 2
-          const color = (type == 1) ? '#000' : '#FFF';
-          // {isStatic: false, render: {fillStyle: color}, friction: 0.5, slop: 0.01, frictionAir: 0.03});
-          
-          let newParticle = Bodies.polygon(x, y,6,particleSize, {isStatic: false, render: {fillStyle: color, strokeStyle: '#222', lineWidth: 2}, friction: 0, frictionAir: 0.005});
-          newParticle = MatterAttractor.create(newParticle,type,false);
-
-          MatterAttractor.addToWorld(currEngine.world,newParticle, {length: particleSize * 2})
+          let newParticle = Bodies.circle(x, y, particleSize, {isStatic: false, render: {fillStyle: '#000', strokeStyle: '#222', lineWidth: 2}, friction: 0, frictionAir: 0.005});
+          newParticle = MatterAttractor.create(newParticle,1,false);
+          MatterAttractor.addToWorld(world,newParticle, {length: particleSize * 2})
         });
-        
-        //Add a central attractor for black
-        let type = 1
-        let newParticle = Bodies.polygon(canvas.clientWidth/3, canvas.clientHeight/2, 6, particleSize, {isStatic: true, render: {fillStyle: '#000'}, friction: 0 });
-        newParticle = MatterAttractor.create(newParticle,type,true);
-        MatterAttractor.addToWorld(currEngine.world,newParticle);
-
-          //Add a central attractor for white
-        type = 2;
-        newParticle = Bodies.polygon( 2*canvas.clientWidth/3, canvas.clientHeight/2, 6, particleSize, {isStatic: true, render: {fillStyle: '#FFF'}, friction: 0 });
-        newParticle = MatterAttractor.create(newParticle,type,true);
-        MatterAttractor.addToWorld(currEngine.world,newParticle);
 
         return () => {
           Events.off(mouseConstraint.current);
-          World.clear(currEngine.world); //Temporary delete after
+          World.clear(world); //Temporary delete after
           touchScroll.cleanup();
         }
     },[]);
-    return (<MatterCanvas engine={engine.current} runner={runner.current} ref={scene} backgroundColor='#444'/>)
+
+    return (<>
+      <div className={style.overlay} ref={overlayRef}>
+        <button className={style.test} ref={buttonRef}>Example skill here later</button>
+      </div>
+      <MatterCanvas engine={engine.current} runner={runner.current} ref={scene} backgroundColor='#444'/>
+    </>)
 }
 
