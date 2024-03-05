@@ -5,7 +5,7 @@ import useResizeEffect from '../react-utils/useResizeEffect'
 
 import style from './MatterCanvas.module.css';
 
-import { Engine, Runner, Render, World, Events} from 'matter-js'
+import { Engine, Runner, Render, World} from 'matter-js'
 
 const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCustomRunner, backgroundColor }, sceneRef) {
 
@@ -26,7 +26,7 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
     render.current.canvas.height = height;
     
     Render.setPixelRatio(render.current, window.devicePixelRatio); //window.devicePixelRatio // Even though it's wrong, we must parseInt here because the Mouse module for matterJS imports incorrectly
-  },()=>{}, [scene, render],{debounce: 30})
+  },()=>{}, [scene, render],{debounce: 100, runInitial: true})
 
   useEffect(() => {
   

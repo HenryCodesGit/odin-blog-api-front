@@ -34,10 +34,20 @@ export default function SkillsCanvas(){
 
     //On resize, 
     useResizeEffect(
-      ()=> mouse.current.pixelRatio = window.devicePixelRatio, //Need to reset mouse pixel ratio as it might change (i.e. moving window between screens)
+      ()=> {
+        mouse.current.pixelRatio = window.devicePixelRatio; //Need to reset mouse pixel ratio as it might change (i.e. moving window between screens)
+
+        const overlayBounds = overlayRef.current.getBoundingClientRect();
+        const buttonBounds = buttonRef.current.getBoundingClientRect();
+        const buttonX = buttonBounds.x - overlayBounds.x + buttonBounds.width/2;
+        const buttonY = buttonBounds.y - overlayBounds.y + buttonBounds.height/2;
+
+        Body.setPosition(circleRef.current, {x: buttonX, y:buttonY})
+
+      },
       ()=>{}, // No cleanup needed
       [], // No dependencies 
-      {debounce: 30} // Throttle the function call
+      {debounce: 200, runInitial: true} // Throttle the function call
     )
 
     useEffect(()=>{
