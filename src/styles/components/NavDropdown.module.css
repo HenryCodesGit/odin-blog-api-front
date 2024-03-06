@@ -17,7 +17,7 @@
 /* ************************************* */
 
 * {
-    --buttonHeight: max(2.5rem, 2.5vw);
+    --buttonHeight: max(2.5rem, 2.5vh);
 }
 
 /* size of the menu icon */

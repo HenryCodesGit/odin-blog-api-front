@@ -43,6 +43,9 @@ AUTOCAD, SOLIDWORKS, MATLAB, COMSOL
 
 export default function SkillsCanvas(){
 
+    //Target frames per second of the CSS element update
+    const tickRate = 18; 
+
     const scene = useRef();
     const engine = useRef(Engine.create({ 
       gravity: { y: 0 },
@@ -50,7 +53,7 @@ export default function SkillsCanvas(){
       positionIterations: 6,
       velocityIterations: 4,
     }));
-    const runner = useRef(Runner.create());
+    const runner = useRef(Runner.create({}));
 
     const mouse = useRef()
     const mouseConstraint = useRef()
@@ -60,7 +63,6 @@ export default function SkillsCanvas(){
     const circleRef = useRef();
     const imageRef = useRef();
     
-
     //On resize, 
     useResizeEffect(
       ()=> {
@@ -116,15 +118,29 @@ export default function SkillsCanvas(){
         MatterAttractor.addToWorld(world,newParticle, {length: boundingRect.width})
 
         // Move the image after every update
+        let tick = 0; //Run only every other tick
         Events.on(currEngine,'afterUpdate',()=>{
-        
+
+          // Each Runner tick is 1/60 seconds.. sooo...
+          if(tick < (60 / tickRate)){
+            tick +=1; 
+            return;
+          }
+
           //Setting HTML item relative to engine
           const bodyPosition = newParticle.position;
           const imageBounds = imageRef.current.getBoundingClientRect();
           const imageX = parseInt(bodyPosition.x - imageBounds.width/2,10);
           const imageY = parseInt(bodyPosition.y - imageBounds.height/2,10);
 
+          //Calculate how fast transition must be to reach next spot in a single tick
+          const tickTiming = 1000/tickRate;
+          imageRef.current.style.transition= `transform calc(${tickTiming}ms) linear`; /* Make sure physics engine delta is set to the same amount. */
+
           imageRef.current.style.transform = `translate(${imageX}px, ${imageY}px)`;
+
+          tick = 0;
+
         })
 
 
