@@ -43,9 +43,6 @@ AUTOCAD, SOLIDWORKS, MATLAB, COMSOL
 
 export default function SkillsCanvas(){
 
-    //Target frames per second of the CSS element update
-    const tickRate = 18; 
-
     const scene = useRef();
     const engine = useRef(Engine.create({ 
       gravity: { y: 0 },
@@ -53,7 +50,10 @@ export default function SkillsCanvas(){
       positionIterations: 6,
       velocityIterations: 4,
     }));
-    const runner = useRef(Runner.create({}));
+    const runner = useRef(Runner.create({
+      delta: 1000/60,
+      isFixed: true
+    }));
 
     const mouse = useRef()
     const mouseConstraint = useRef()
@@ -117,15 +117,18 @@ export default function SkillsCanvas(){
         newParticle = MatterAttractor.create(newParticle,1,false);
         MatterAttractor.addToWorld(world,newParticle, {length: boundingRect.width})
 
-        // Move the image after every update
-        let tick = 0; //Run only every other tick
-        Events.on(currEngine,'afterUpdate',()=>{
+        //Set initial position of HTML element
+        //Setting HTML item relative to engine
+        const bodyPosition = newParticle.position;
+        const imageX = parseInt(bodyPosition.x,10);
+        const imageY = parseInt(bodyPosition.y,10);
 
-          // Each Runner tick is 1/60 seconds.. sooo...
-          if(tick < (60 / tickRate)){
-            tick +=1; 
-            return;
-          }
+        //Calculate how fast transition must be to reach next spot in a single tick
+        imageRef.current.style.top = `${imageY}px`;
+        imageRef.current.style.left = `${imageX}px`;
+
+        // Move the image after every update
+        Events.on(currEngine,'afterUpdate',()=>{
 
           //Setting HTML item relative to engine
           const bodyPosition = newParticle.position;
@@ -134,13 +137,9 @@ export default function SkillsCanvas(){
           const imageY = parseInt(bodyPosition.y - imageBounds.height/2,10);
 
           //Calculate how fast transition must be to reach next spot in a single tick
-          const tickTiming = 1000/tickRate;
-          imageRef.current.style.transition= `transform calc(${tickTiming}ms) linear`; /* Make sure physics engine delta is set to the same amount. */
-
+          const tickTiming = 1000/60;
+          imageRef.current.style.transition= `transform calc(${tickTiming}ms) steps(1, jump-start)`; /* Make sure physics engine delta is set to the same amount. */
           imageRef.current.style.transform = `translate(${imageX}px, ${imageY}px)`;
-
-          tick = 0;
-
         })
 
 
@@ -166,8 +165,7 @@ export default function SkillsCanvas(){
         <button className={style.test} ref={buttonRef}>Example skill here later</button>
         <a className={style.floatingCircle} href="https://google.ca" ref={imageRef}>
           <img src={image}/>
-        </a>
-        
+        </a>       
       </div>
       <MatterCanvas engine={engine.current} runner={runner.current} ref={scene} backgroundColor='transparent'/>
     </>)
