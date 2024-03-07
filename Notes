@@ -1,11 +1,10 @@
-
+/***********************************************************************************************/
+/* Example of a React canvas element that makes little balls on click */
+/***********************************************************************************************/
 import MatterCanvas from '../utilities/matter-react-utils/MatterCanvas';
 import MatterBody from '../utilities/matter-react-utils/MatterBody';
 import MatterEmitter from '../utilities/matter-react-utils/MatterEmitter';
 import MatterMouse from '../utilities/matter-react-utils/MatterMouse';
-
-import MatterOverlay from'../utilities/matter-react-utils/MatterOverlay';
-import MatterOverlayDriver from '../utilities/matter-react-utils/MatterOverlayDriver';
 
 import { useEffect, useState } from 'react';
 
@@ -16,7 +15,6 @@ export default function HeroCanvas(){
 
     const [engine, setEngine] = useState(null);
     const [mouseChildren, setMouseChildren] = useState([]);
-    const [driver, setDriver] = useState(null);
 
     const makeParticle = (event) => {
         if(!engine) {
@@ -40,8 +38,9 @@ export default function HeroCanvas(){
             }}/>
           </MatterAttractor>
         );
-        setMouseChildren([...mouseChildren, child]);
+        
 
+        setMouseChildren([...mouseChildren, child]);
         // const particleSize = 40;
         // const {x,y} = event.mouse.mousedownPosition;
         // let newParticle = Bodies.circle(x, y, particleSize, {isStatic: false, render: {fillStyle: '#000', strokeStyle: '#222', lineWidth: 2}, friction: 0, frictionAir: 0.005});
@@ -51,25 +50,10 @@ export default function HeroCanvas(){
 
     return (
       <MatterCanvas backgroundColor={'transparent'} setEngineHandler={setEngine} engineOptions={{
-        gravity: { y : 0.25 * 10}
+        gravity: { y : 0}
       }}>
-        <MatterOverlay>
-          <MatterOverlayDriver elementHTML={(<button>Example skill here later</button>)}>
-            <MatterBody 
-              bodyType='rectangle' 
-              bodyParams={{
-                scaleOnResize: false,
-                normalized:{
-                  pos: {x: 0.25, y: 0.25},
-                  width: 0.1,
-                  height: 0.1,
-                },
-                options: { isStatic: true }
-              }} 
-            />
-          </MatterOverlayDriver>
-        </MatterOverlay>
-        <MatterBody 
+        <MatterMouse mouseDownHandler={makeParticle} />
+        {/* <MatterBody 
           bodyType='rectangle' 
           bodyParams={{
             scaleOnResize: true,
@@ -79,7 +63,13 @@ export default function HeroCanvas(){
               height: 0.1,
             },
             options: { isStatic: true }
-          }}/>
+          }}
+        />
+        <MatterEmitter /> */}
+        {mouseChildren}
       </MatterCanvas>
     )
 }
+
+
+/***********************************************************************************************/

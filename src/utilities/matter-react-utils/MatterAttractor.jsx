@@ -17,16 +17,19 @@ MatterAttractor.propTypes = {
         try {  Children.only(props[propName]) } 
         catch { return new Error(`${componentName} can only take in one child element!`);}
       },
+    bodyDataHandler: PropTypes.func,
     constraintOptions: PropTypes.object
+    
 }
 
 MatterAttractor.defaultProps = {
     isMain: true,
     constraintOptions: {},
+    bodyDataHandler: ()=>{},
 }
 
 // TODO: Extract hardcoded sections and settings out into options object later on
-export default function MatterAttractor({ attractorID, isMain, constraintOptions, children}){
+export default function MatterAttractor({ attractorID, isMain, constraintOptions, bodyDataHandler, children}){
 
     const { engine } = useContext(MatterContext)
 
@@ -34,8 +37,10 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
     const [body, setBody] = useState(null);
 
     useEffect(()=>{
-        const element = Children.only(children);
-        const newElement = cloneElement(element,{ bodyDataHandler: (data) => setBody(data)})
+        const currElement = Children.only(children);
+        
+        //TODO: Need to make sure we don't overwrite the old bodyDatahandler if there is one. Instead combine the functions together.
+        const newElement = cloneElement(currElement,{ bodyDataHandler: (data) => setBody(data)}) 
         setElement(newElement)
 
     },[children, attractorID, isMain])
@@ -105,6 +110,9 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
                 engine.world, 
                 newConstraint,
             );
+
+            //Call the body handler function in case anything has a use for it
+            bodyDataHandler(body);
         });
 
         return ()=>{
@@ -114,7 +122,7 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
             })
         }
 
-    },[engine, body, element, isMain, attractorID, constraintOptions])
+    },[engine, body, element, isMain, attractorID, constraintOptions, bodyDataHandler])
 
     return(<>
         {element}
