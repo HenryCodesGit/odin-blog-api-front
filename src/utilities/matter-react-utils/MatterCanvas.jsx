@@ -1,20 +1,39 @@
-import { useEffect, useRef, forwardRef, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, createContext } from 'react';
+import MatterContext from './MatterContext'
 import PropTypes from 'prop-types';
 
 import useResizeEffect from '../react-utils/useResizeEffect'
 
 import style from './MatterCanvas.module.css';
 
-import { Engine, Runner, Render, World} from 'matter-js'
+import { Engine, Runner, Render, World, Body } from 'matter-js'
 
-const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCustomRunner, backgroundColor }, sceneRef) {
+MatterCanvas.propTypes = {
+  backgroundColor: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.arrayOf(PropTypes.object)
+  ])
+};
 
-  /* Keep state of matterJS Engine components between renders */
-  const scene = sceneRef;
+MatterCanvas.defaultProps = {
+  backgroundColor: 'transparent',
+};
+
+function MatterCanvas({ backgroundColor, children}) {
+
+  const scene = useRef();
   const render = useRef(null);
 
-  const checkPauseEngineRef = useCallback(function checkPauseEngine(){
-    const element = scene.current.getBoundingClientRect();
+  const [engine] = useState(Engine.create({ gravity: { y: 0.25 * 10}, enableSleeping: true}))
+
+  window.engine = engine;
+
+  const [runner] = useState(Runner.create());
+  const [renderRefState, setRenderRefState] = useState(null);
+
+  const checkPauseEngine = useCallback(() => {
+    const element = render.current.element.getBoundingClientRect();
     const elementTop = parseInt(element.top,10);
     const elementBot = parseInt(elementTop + element.height,10);
     const windowHeight = parseInt(window.innerHeight,10);
@@ -22,12 +41,18 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
     const isCanvasShown = !(elementTop > windowHeight || elementBot < 0)
 
     runner.enabled = isCanvasShown;
-  }, [runner, scene])
+  }, [runner])
 
   // Ensure the canvas is always the same size as its parent
   useResizeEffect(()=>{ 
-    const width = scene.current.parentNode.clientWidth;
-    const height = scene.current.parentNode.clientHeight;
+
+    //Set all bodies to not sleeping because world is different now and physics might be different too
+    engine.world.bodies.forEach((body)=>{
+      Body.set(body,'isSleeping',false)
+    })
+
+    const width = render.current.element.parentNode.clientWidth;
+    const height = render.current.element.parentNode.clientHeight;
 
     render.current.options.width = width;
     render.current.options.height = height
@@ -36,76 +61,64 @@ const MatterCanvas = forwardRef(function MatterCanvasRef({ engine, runner, useCu
     render.current.canvas.width = width;
     render.current.canvas.height = height;
     
-    Render.setPixelRatio(render.current, window.devicePixelRatio); //window.devicePixelRatio // Even though it's wrong, we must parseInt here because the Mouse module for matterJS imports incorrectly
-    checkPauseEngineRef();
-  },()=>{}, [scene, render],{debounce: 100, runInitial: true})
+    Render.setPixelRatio(render.current, window.devicePixelRatio); 
+    checkPauseEngine();
+  },()=>{'Clearing resizeEffect'}, [],{debounce: 100, runInitial: true})
 
   useEffect(() => {
-    // On initial mount, need to create the renderer (Need to do it here because scene.current.parentNode does not exist yet)
-    // TODO: Render options can be passed in?
-    render.current = Render.create({
-      element: scene.current,
-      engine: engine,
-      options: {
-      width: scene.current.parentNode.clientWidth,
-      height: scene.current.parentNode.clientHeight,
-      wireframes: false,
-      background: backgroundColor,
-      pixelRatio: window.devicePixelRatio,
-      hasBounds: true,
-    }});
 
-    // Setting shortcut references to the current mattrerJS variables
-    const currRender = render.current;
+    render.current = Render.create({
+        element: scene.current,
+        engine: engine,
+        options: {
+        width: scene.current.parentNode.clientWidth,
+        height: scene.current.parentNode.clientHeight,
+        wireframes: false,
+        background: backgroundColor,
+        pixelRatio: window.devicePixelRatio,
+        hasBounds: true,
+    }});
+    setRenderRefState(render.current);
 
     // Start the renderer
-    Render.run(currRender);
+    Render.run(render.current);
 
     //Run the Physics Engine /w matterJS default Runner
-    if(!useCustomRunner) Runner.run(runner, engine);
+    Runner.run(runner, engine);
 
     /* Add a listener to the window to pause the engine if we scroll past the canvas */
-    window.addEventListener('scroll', checkPauseEngineRef);
-    checkPauseEngineRef();
+    window.addEventListener('scroll', checkPauseEngine);
+    // checkPauseEngine();
 
     return () => {
-      Render.stop(currRender);
+      Render.stop(render.current);
       World.clear(engine.world);
-      if(!useCustomRunner) Runner.stop(runner);
+      Runner.stop(runner);
       Engine.clear(engine);
-      currRender.canvas.remove();
-      currRender.canvas = null;
-      currRender.context = null;
-      currRender.textures = {};
 
-      render.current = null;
-      window.removeEventListener('scroll', checkPauseEngineRef);
+      render.current.canvas.remove();
+      render.current.canvas = null;
+      render.current.context = null;
+      render.current.textures = {};
+      render.current = null
+      
+      window.removeEventListener('scroll', checkPauseEngine);
     }
-  }, [scene, engine, runner, useCustomRunner, backgroundColor, checkPauseEngineRef])
+  }, [scene, engine, runner, backgroundColor, checkPauseEngine])
 
-  return <div ref={sceneRef} className={style.matterCanvas}/>
-})
-
-MatterCanvas.propTypes = {
-  engine: PropTypes.object.isRequired,
-  backgroundColor: PropTypes.string,
-  useCustomRunner: PropTypes.bool,
-  runner: function(props, propName, componentName){
-    //If custom runner is used, ignore this
-    if(!props.useCustomRunner) return;
-
-    // Must have the runner property supplied, and its property must be of the type 'object'
-    if (!Object.hasOwn(props, propName) || typeof props[propName] !== 'object'){
-      return new Error(`Invalid prop '${propName}' supplied to '${componentName}'. If the 'useCustomRunner' property is false (default) then an instance of a matterJS Runner must be supplied`);
-    }
-  },
-};
-
-MatterCanvas.defaultProps = {
-  backgroundColor: 'transparent',
-  useCustomRunner: false,
-};
-
+  return(
+    <MatterContext.Provider value={
+      {
+        engine, 
+        render: renderRefState, 
+      }
+    }>
+      <div ref={scene} className={style.matterCanvas}>
+        {children}
+      </div>
+    </MatterContext.Provider>
+  )
+}
 
 /* ********************************************************** */
 

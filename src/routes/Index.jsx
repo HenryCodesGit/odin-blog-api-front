@@ -42,7 +42,7 @@ function Index() {
       <div className={styles.section}>
         <h1 className={`${styles.title} ${styles.header1}`}>Skills</h1>
         <div className={styles.container}>
-          <SkillsCanvas />
+          {/* <SkillsCanvas /> */}
         </div>
       </div>
       <div className={styles.section}>
