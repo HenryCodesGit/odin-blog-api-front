@@ -10,22 +10,34 @@ import { Engine, Runner, Render, World, Body } from 'matter-js'
 
 MatterCanvas.propTypes = {
   backgroundColor: PropTypes.string,
+  gravity: PropTypes.number,
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.arrayOf(PropTypes.object)
-  ])
+  ]),
+  setEngineHandler: PropTypes.func,
+  engineOptions: PropTypes.object
 };
 
 MatterCanvas.defaultProps = {
+  setEngineHandler: ()=>{},
   backgroundColor: 'transparent',
 };
 
-function MatterCanvas({ backgroundColor, children}) {
+const defaultEngineOptions = { 
+  gravity: { y: 0.25 * 10 }, 
+  enableSleeping: true
+}
+
+function MatterCanvas({ backgroundColor, children, setEngineHandler, engineOptions}) {
+
+  // Set engine options and over-write defaults
+  engineOptions = Object.assign({...defaultEngineOptions}, engineOptions)
 
   const scene = useRef();
   const render = useRef(null);
 
-  const [engine] = useState(Engine.create({ gravity: { y: 0.25 * 10}, enableSleeping: true}))
+  const [engine] = useState(Engine.create(engineOptions))
 
   window.engine = engine;
 
@@ -88,7 +100,12 @@ function MatterCanvas({ backgroundColor, children}) {
 
     /* Add a listener to the window to pause the engine if we scroll past the canvas */
     window.addEventListener('scroll', checkPauseEngine);
-    // checkPauseEngine();
+
+    //Pause engine if canvas is off screen
+    checkPauseEngine();
+
+    //Returns the engine for anyone that needs to use it
+    setEngineHandler(engine)
 
     return () => {
       Render.stop(render.current);
@@ -104,7 +121,7 @@ function MatterCanvas({ backgroundColor, children}) {
       
       window.removeEventListener('scroll', checkPauseEngine);
     }
-  }, [scene, engine, runner, backgroundColor, checkPauseEngine])
+  }, [scene, engine, runner, backgroundColor, checkPauseEngine, setEngineHandler])
 
   return(
     <MatterContext.Provider value={
