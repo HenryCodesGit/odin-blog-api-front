@@ -1,85 +1,38 @@
 
 import MatterCanvas from '../utilities/matter-react-utils/MatterCanvas';
 import MatterBody from '../utilities/matter-react-utils/MatterBody';
-import MatterEmitter from '../utilities/matter-react-utils/MatterEmitter';
-import MatterMouse from '../utilities/matter-react-utils/MatterMouse';
-
 import MatterOverlay from'../utilities/matter-react-utils/MatterOverlay';
 import MatterOverlayDriver from '../utilities/matter-react-utils/MatterOverlayDriver';
-
-import { useEffect, useState } from 'react';
-
-import { Bodies, Composite } from 'matter-js'
+import MatterOverlayPassenger from '../utilities/matter-react-utils/MatterOverlayPassenger';
 import MatterAttractor from '../utilities/matter-react-utils/MatterAttractor';
+import MatterEmitter from '../utilities/matter-react-utils/MatterEmitter';
 
 export default function HeroCanvas(){
 
-    const [engine, setEngine] = useState(null);
-    const [mouseChildren, setMouseChildren] = useState([]);
-    const [driver, setDriver] = useState(null);
+    const canvasParams = {
+      backgroundColor: 'transparent',
+      engineOptions: {
+        gravity: { y : 0.25 * 10}
+      }
+    }
 
-    const makeParticle = (event) => {
-        if(!engine) {
-          console.warn('Engine is not done loading or is not specified. Cancelling makeParticle function call');
-          return;
-        }
-
-        console.log(event.mouse);
-
-        // Test making and returning a react component from within here
-        const child = (
-          <MatterAttractor attractorID='111' isMain={true} constraintOptions={{render: {visible: false}}}>
-            <MatterBody bodyType='circle' bodyParams={{
-              scaleOnResize: false,
-              normalized:{
-                radius: 0.01,
-              },
-              x:event.mouse.mousedownPosition.x,
-              y:event.mouse.mousedownPosition.y,
-              options: { isStatic: false }
-            }}/>
-          </MatterAttractor>
-        );
-        setMouseChildren([...mouseChildren, child]);
-
-        // const particleSize = 40;
-        // const {x,y} = event.mouse.mousedownPosition;
-        // let newParticle = Bodies.circle(x, y, particleSize, {isStatic: false, render: {fillStyle: '#000', strokeStyle: '#222', lineWidth: 2}, friction: 0, frictionAir: 0.005});
-        // Composite.add(engine.world, newParticle, {length: particleSize * 2})
-
-    };
+    const particleParams = {
+      bodyType: 'rectangle',
+      bodyParams:{
+        scaleOnResize: true,
+        normalized:{
+          pos: {x: 0.5, y: 1.05},
+          width: 1,
+          height: 0.1,
+        },
+        options: { isStatic: true }
+      }
+    }
 
     return (
-      <MatterCanvas backgroundColor={'transparent'} setEngineHandler={setEngine} engineOptions={{
-        gravity: { y : 0.25 * 10}
-      }}>
-        <MatterOverlay>
-          <MatterOverlayDriver elementHTML={(<button>Example skill here later</button>)}>
-            <MatterBody 
-              bodyType='rectangle' 
-              bodyParams={{
-                scaleOnResize: false,
-                normalized:{
-                  pos: {x: 0.25, y: 0.25},
-                  width: 0.1,
-                  height: 0.1,
-                },
-                options: { isStatic: true }
-              }} 
-            />
-          </MatterOverlayDriver>
-        </MatterOverlay>
-        <MatterBody 
-          bodyType='rectangle' 
-          bodyParams={{
-            scaleOnResize: true,
-            normalized:{
-              pos: {x: 0.5, y: 1.05},
-              width: 1,
-              height: 0.1,
-            },
-            options: { isStatic: true }
-          }}/>
+      <MatterCanvas {...canvasParams}>
+        <MatterEmitter />
+        <MatterBody {...particleParams}/>
       </MatterCanvas>
     )
 }
