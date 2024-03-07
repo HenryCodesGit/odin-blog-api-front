@@ -26,7 +26,8 @@ MatterOverlayDriver.defaultProps = {
 //TODO: Replace isStatic and scaleonResize properties of bodies to isStatic:true and scaleOnResize: false.
 // Have them as isStatic:false and scaleonResize: true breaks functionality of this component.
 //TODO: Have a setting to set the type of polygon to create, and a setting to scale the polygon to the html element
-export default function MatterOverlayDriver({elementHTML, options, children}){
+//TODO: Scale the polygon based on the getBoundingClientRect() from html
+export default function MatterOverlayDriver({elementHTML, children}){
 
         const { render } = useContext(MatterContext);
 

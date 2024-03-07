@@ -1,19 +1,73 @@
-
 import MatterCanvas from '../utilities/matter-react-utils/MatterCanvas';
 import MatterBody from '../utilities/matter-react-utils/MatterBody';
-import MatterOverlay from'../utilities/matter-react-utils/MatterOverlay';
-import MatterOverlayDriver from '../utilities/matter-react-utils/MatterOverlayDriver';
-import MatterOverlayPassenger from '../utilities/matter-react-utils/MatterOverlayPassenger';
-import MatterAttractor from '../utilities/matter-react-utils/MatterAttractor';
 import MatterEmitter from '../utilities/matter-react-utils/MatterEmitter';
+import MatterMouse from '../utilities/matter-react-utils/MatterMouse';
+import MatterAttractor from '../utilities/matter-react-utils/MatterAttractor'
+
+import { useState } from 'react';
+
+import { Composite, Body} from 'matter-js'
 
 export default function HeroCanvas(){
+
+  const [engine, setEngine] = useState(null);
+  const [mouseChildren, setMouseChildren] = useState();
+  const [gravityWell, setGravityWell] = useState(null)
+
+  const makeGravityWell = (event) => {
+      if(!engine) {
+        console.warn('Engine is not done loading or is not specified. Cancelling makeParticle function call');
+        return;
+      }
+
+      // Test making and returning a react component from within here
+      const key = Date.now(); //TODO Use UUID Later
+      const child = (
+        <MatterAttractor key={key} attractorID='mouse' isMain={true} constraintOptions={{render: {visible: false}}} bodyDataHandler={(data)=>setGravityWell(data)}>
+          <MatterBody bodyType='circle' bodyParams={{
+            scaleOnResize: false,
+            normalized:{
+              radius: 0.01,
+            },
+            x:event.mouse.mousedownPosition.x,
+            y:event.mouse.mousedownPosition.y,
+            options: { isStatic: true, render: {fillStyle: '#252525'} }
+          }}/>
+        </MatterAttractor>
+      );
+      setMouseChildren(child);
+
+  };
+
+  const deleteGravityWell = () => {
+    if(!engine) {
+      console.warn('Engine is not done loading or is not specified. Cancelling makeParticle function call');
+      return;
+    }
+
+    //Removing all constraints
+    const toRemove = []
+    engine.world.constraints.forEach((constraint)=>{
+      if(constraint.bodyA.id === gravityWell.id || constraint.bodyB.id === gravityWell.id){ toRemove.push(constraint);}
+    })
+    Composite.remove(engine.world, toRemove)
+
+    // Test making and returning a react component from within here
+    Composite.remove(engine.world, gravityWell)
+
+    setGravityWell(null);
+  };
+
+  const moveGravityWell = (event) => {
+    if(gravityWell) Body.setPosition(gravityWell, {x: event.mouse.position.x, y: event.mouse.position.y})
+  }
 
     const canvasParams = {
       backgroundColor: 'transparent',
       engineOptions: {
         gravity: { y : 0.25 * 10}
-      }
+      },
+      setEngineHandler: setEngine
     }
 
     const particleParams = {
@@ -31,6 +85,9 @@ export default function HeroCanvas(){
 
     return (
       <MatterCanvas {...canvasParams}>
+        <MatterMouse mouseDownHandler={makeGravityWell} mouseUpHandler={deleteGravityWell} mouseMoveHandler={moveGravityWell}>
+          {mouseChildren}
+        </MatterMouse>
         <MatterEmitter />
         <MatterBody {...particleParams}/>
       </MatterCanvas>

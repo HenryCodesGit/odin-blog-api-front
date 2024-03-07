@@ -8,14 +8,18 @@ import useResizeEffect from '../react-utils/useResizeEffect';
 
 MatterMouse.propTypes = {
     mouseDownHandler: PropTypes.func,
+    mouseUpHandler: PropTypes.func,
+    mouseMovehandler: PropTypes.func,
 }
 
 MatterMouse.defaultProps = {
     mouseDownHandler: ()=>{},
+    mouseUpHandler: ()=>{},
+    mouseMoveHandler: ()=>{},
 }
 
 // Makes it possible to translate mouse interaction into the engine
-export default function MatterMouse({mouseDownHandler}){
+export default function MatterMouse({mouseDownHandler, mouseUpHandler, mouseMoveHandler, children}){
 
     const {engine, render} = useContext(MatterContext);
     const [mouse, setMouse] = useState(null);
@@ -46,6 +50,8 @@ export default function MatterMouse({mouseDownHandler}){
         const touchScroll = enableTouchScroll(canvas); // Touch scrolling
 
         Events.on(_mouseConstraint,'mousedown',mouseDownHandler);
+        Events.on(_mouseConstraint,'mouseup',mouseUpHandler);
+        Events.on(_mouseConstraint,'mousemove',mouseMoveHandler);
         
         //Settings persistent states of mouse object
         setMouse(_mouse);
@@ -55,7 +61,7 @@ export default function MatterMouse({mouseDownHandler}){
             touchScroll.cleanup();
             Composite.remove(engine.world, _mouseConstraint)
         }   
-    },[engine, render, mouseDownHandler]);
+    },[engine, render, mouseDownHandler, mouseUpHandler, mouseMoveHandler]);
 
-    return null;
+    return children;
 }

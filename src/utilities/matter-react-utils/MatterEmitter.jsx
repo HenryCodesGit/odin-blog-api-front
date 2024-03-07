@@ -45,6 +45,12 @@ export default function MatterEmitter(){
             const particle = Bodies.polygon(x,-30,particleSides,randomSize, {isStatic: false, render: {fillStyle: 'transparent', strokeStyle: COLORS.grey, lineWidth: 1,}, airFriction: 0.5, timeScale: 0.125});
             particlesActive.push(particle);
 
+            /* TEST. SEEING ATTRACTOR RELATED THING */
+            particle.attractor = {
+              id: 'mouse',
+              isMain: false,
+            }
+
             Composite.add(engine.world, particle);
             itemQueued = true;
           }

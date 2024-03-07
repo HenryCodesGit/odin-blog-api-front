@@ -28,7 +28,7 @@ function Index() {
     <main>
       <div className={`${styles.hero} ${styles.section}`}>
           <HeroCanvas />
-          <div className={styles.profile}>
+          <div className={styles.profile} style={{pointerEvents: 'none'}}>
               <p className={`${styles.title} ${styles.cornerBorderBox}`}>Henry Ma</p>
               <p className={styles.description}>MOTIVATED // DILIGENT // VERSATILE // ..ALSO LOVES DOGS</p>
           </div>

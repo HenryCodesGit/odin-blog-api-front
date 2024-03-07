@@ -24,7 +24,7 @@ MatterOverlayPassenger.defaultProps = {
 
 
 //TODO: Have a setting to scale image with respect to engine element
-
+//TODO: Scale the HTML Element based on the body.bounds property of the body.
 export default function MatterOverlayPassenger({elementHTML, children}){
 
         const { engine, render } = useContext(MatterContext);
