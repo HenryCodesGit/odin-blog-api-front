@@ -24,6 +24,8 @@ MatterAttractor.defaultProps = {
     isMain: true,
     constraintOptions: {},
 }
+
+// TODO: Extract hardcoded sections and settings out into options object later on
 export default function MatterAttractor({ attractorID, isMain, constraintOptions, children}){
 
     const { engine } = useContext(MatterContext)
