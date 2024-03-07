@@ -1,5 +1,5 @@
 import { PropTypes } from 'prop-types'
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useContext, useState, forwardRef} from 'react'
 
 import { Composite, Body, Bodies } from 'matter-js'
 import MatterContext from './MatterContext'
@@ -20,9 +20,13 @@ const CreateBody = {
 
 MatterBody.propTypes = {
     bodyType: PropTypes.oneOf(['circle','fromVertices','polygon','rectangle','trapezoid','custom']).isRequired,
-    bodyParams: PropTypes.object  // TODO: Custom validator to ensure proper shape of parameter object coming in
+    bodyParams: PropTypes.object,  // TODO: Custom validator to ensure proper shape of parameter object coming in
+    bodyDataHandler: PropTypes.func
 }
 
+MatterBody.defaultProps = {
+    bodyDataHandler: ()=>{},
+}
 /*
 *   This function also accepts custom bodyParameters as well:
 *   Definition of the MatterBody object has no reference to the scene its in, so it may be useful to provide
@@ -45,7 +49,7 @@ MatterBody.propTypes = {
     }             
 */
 
-export default function MatterBody({bodyType, bodyParams}){
+export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
     const { engine, render } = useContext(MatterContext)
     const [body, setBody] = useState(null);
     const [lastCanvasSize, setLastCanvasSize] = useState (null);
@@ -126,11 +130,14 @@ export default function MatterBody({bodyType, bodyParams}){
             height: render.element.clientHeight
         });
 
+        //Pass the body upwards and call the bodyDataHandler function if its passed as a prop
+        if(bodyDataHandler) bodyDataHandler(newBody);
+
         return ()=>{
             //Search the world for the body and delete it if the barrier still exists
             Composite.remove(engine.world, newBody)
         }
-    },[engine, render, bodyParams, bodyType]);
+    },[engine, render, bodyParams, bodyType, bodyDataHandler]);
 
     return null;
 }

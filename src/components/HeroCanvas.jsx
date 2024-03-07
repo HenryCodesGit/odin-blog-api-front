@@ -2,6 +2,7 @@
 import MatterCanvas from '../utilities/matter-react-utils/MatterCanvas';
 import MatterBody from '../utilities/matter-react-utils/MatterBody';
 import MatterEmitter from '../utilities/matter-react-utils/MatterEmitter';
+import MatterAttractor from '../utilities/matter-react-utils/MatterAttractor';
 
 export default function HeroCanvas(){
     return (
