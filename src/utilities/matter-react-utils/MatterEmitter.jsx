@@ -20,7 +20,7 @@ const COLORS = {
 // MatterBody.propTypes = {}
 
 // TODO: Pull out the hardcoded values in this function to make it more abstract later.
-
+// TODO: Give option to spawn a specific body by specifying body as the child of the Matter Emitter
 export default function MatterEmitter(){
     const { engine, render } = useContext(MatterContext);
 

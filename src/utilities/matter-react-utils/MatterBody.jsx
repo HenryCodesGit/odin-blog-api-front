@@ -80,11 +80,9 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
             // Move the body to scaled position
             if(Object.hasOwn(bodyParams.scaleOnResize, 'position')){
                 const position = {...body.position}; //Gives a vector {x, y}
-                console.log(position,scale);
                 position.x = position.x * (Object.hasOwn(bodyParams.scaleOnResize.position, 'x') ? scale.x : 1);
                 position.y = position.y * (Object.hasOwn(bodyParams.scaleOnResize.position, 'y') ? scale.y : 1);
                 Body.setPosition(body, position);
-                console.log(position,scale);
             }
         },
         ()=>{}, // No cleanup needed

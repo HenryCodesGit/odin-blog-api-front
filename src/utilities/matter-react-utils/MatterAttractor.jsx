@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Children, useEffect, useState, useContext, cloneElement} from 'react';
 
-import { Constraint, Composite } from 'matter-js'
+import { Body, Constraint, Composite } from 'matter-js'
 
 import MatterContext from './MatterContext';
 
@@ -52,19 +52,21 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
         if(!element) return console.warn('Element has not yet been instantiated, cancelling useEffect function call');
             
         //Setting the custom attractor settings for the body
-        body.attractor = { isMain, id: attractorID };
+        Body.set(body, 'attractor', { isMain, id: attractorID })
 
         //Update all existing attractors to constrain them together
         const constraints = [];
         engine.world.bodies.forEach((engineBody)=>{
             //Search conditions
+            console.log(engineBody.attractor,'|', body.attractor, engineBody.id, body.id);
             if(
                 !(Object.hasOwn(engineBody,'attractor') && 
-                engineBody.attractor.isMain && 
+                (engineBody.attractor.isMain || body.attractor.isMain) && 
                 engineBody.attractor.id === attractorID && 
                 engineBody.id !== body.id)
             ) return;
             
+            console.log('Time to make constraint');
             // Overwrites any default body options in case it was set in error
             let options = Object.assign({...constraintOptions}, { bodyA: engineBody, bodyB: body})
 
@@ -110,10 +112,10 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
                 engine.world, 
                 newConstraint,
             );
-
-            //Call the body handler function in case anything has a use for it
-            bodyDataHandler(body);
         });
+
+        //Call the body handler function in case anything has a use for it
+        bodyDataHandler(body);
 
         return ()=>{
             //Cleanup

@@ -16,12 +16,14 @@
 
 .driver {
     pointer-events: auto;
-
+    filter: drop-shadow(0px 0px 4px #FFF8) !important;
     /* Temporary */
     z-index: 99;
 }
 
-.pasenger {
+.passenger {
+    width: 150px;
+    aspect-ratio: 1;
     pointer-events: auto;
     position: absolute;
     top: 0;

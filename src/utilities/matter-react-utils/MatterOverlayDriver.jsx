@@ -22,11 +22,14 @@ MatterOverlayDriver.propTypes = {
 MatterOverlayDriver.defaultProps = {
 }
 
-export default function MatterOverlayDriver({elementHTML, children}){
+
+//TODO: Replace isStatic and scaleonResize properties of bodies to isStatic:true and scaleOnResize: false.
+// Have them as isStatic:false and scaleonResize: true breaks functionality of this component.
+//TODO: Have a setting to set the type of polygon to create, and a setting to scale the polygon to the html element
+export default function MatterOverlayDriver({elementHTML, options, children}){
 
         const { render } = useContext(MatterContext);
 
-        
         const [bodyElement, setBodyElement] = useState(null)
         const [body, setBody] = useState(null)
 
@@ -39,6 +42,7 @@ export default function MatterOverlayDriver({elementHTML, children}){
             if(!elementHTMLRef.current) return console.warn('HTML element not yet initialized or was not provided. Cancelling syncMatterBody')
 
             const canvas = render.element.querySelector('canvas');
+            
 
             //Position the body relative to the HTML element
             const sizeOverlay = canvas.getBoundingClientRect();  //Should be the same as canvas size
@@ -53,7 +57,13 @@ export default function MatterOverlayDriver({elementHTML, children}){
 
         useEffect(()=>{
             //On mount, clone the HTML element and add a reference to it
-            const newElement = cloneElement(elementHTML,{ref: elementHTMLRef});
+            const newElement = cloneElement(
+                elementHTML,
+                {
+                    ref: elementHTMLRef, 
+                    className: `${elementHTML.props.className ? elementHTML.props.className+' ' : ''}${style.driver}`
+                }
+            );
             setElementHTMLState(newElement);
 
             //Intercept the MatterBody and place a callback function on the returned body
