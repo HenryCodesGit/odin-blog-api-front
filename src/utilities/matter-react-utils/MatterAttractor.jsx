@@ -72,6 +72,8 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
 
     // Create the constraints for the bodies
     useEffect(()=>{
+        if(!body) return;
+
         const constraints = [];
         //Based on this new body that was added, constrain it to all the relevant bodies (ones with the same attractorID and type of attraction)
         engine.world.bodies.forEach((engineBody)=>{
