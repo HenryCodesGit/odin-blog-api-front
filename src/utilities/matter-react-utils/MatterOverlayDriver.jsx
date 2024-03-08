@@ -25,7 +25,8 @@ MatterOverlayDriver.defaultProps = {
 
 //TODO: Replace isStatic and scaleonResize properties of bodies to isStatic:true and scaleOnResize: false.
 // Have them as isStatic:false and scaleonResize: true breaks functionality of this component.
-//TODO: Have a setting to set the type of polygon to create, and a setting to scale the polygon to the html element
+//TODO: Have a setting to set the type of polygon to create, and a setting to scale the polygon to the html element.
+//CURRENTLY ONLY WORKS FOR RECTANGLES. (See line ~100);
 //TODO: Scale the polygon based on the getBoundingClientRect() from html
 export default function MatterOverlayDriver({elementHTML, children}){
 
@@ -40,10 +41,9 @@ export default function MatterOverlayDriver({elementHTML, children}){
         function syncMatterBody(){
             if(!body) return console.warn('Physics body not yet initialized or was not provided. Cancelling syncMatterBody')
             if(!render) return console.warn('Renderer not yet initialized or was not provided. Cancelling syncMatterBody')
-            if(!elementHTMLRef.current) return console.warn('HTML element not yet initialized or was not provided. Cancelling syncMatterBody')
+            if(!elementHTMLState) return console.warn('HTML element not yet initialized or was not provided. Cancelling syncMatterBody')
 
             const canvas = render.element.querySelector('canvas');
-            
 
             //Position the body relative to the HTML element
             const sizeOverlay = canvas.getBoundingClientRect();  //Should be the same as canvas size
@@ -56,8 +56,9 @@ export default function MatterOverlayDriver({elementHTML, children}){
             Body.setPosition(body, {x: elementX, y: elementY})
         }
 
+        //On mount, clone the HTML element and add a reference to it
         useEffect(()=>{
-            //On mount, clone the HTML element and add a reference to it
+            
             const newElement = cloneElement(
                 elementHTML,
                 {
@@ -66,18 +67,50 @@ export default function MatterOverlayDriver({elementHTML, children}){
                 }
             );
             setElementHTMLState(newElement);
-
-            //Intercept the MatterBody and place a callback function on the returned body
-            //TODO: Need to make sure we don't overwrite the old bodyDatahandler if there is one. Instead combine the functions together.
-            const newBodyElement = cloneElement(Children.only(children),{ bodyDataHandler: (data) => setBody(data)}) 
-            setBodyElement(newBodyElement)
         },[elementHTML, children])
+
+
+        //On mount, clone the body element and add reference to it. NOTE: This must occur after the HTML element is initialized,
+        //Due to it requiring elementHTMLRef to be instantiated first
+        useEffect(()=>{
+            if(!elementHTMLState) return;
+            
+            const currentBodyElement = Children.only(children);
+
+            //Over-write settings for child components if using overlay driver
+
+            //Position the body relative to the HTML element
+            // TODO: Maybe refactor because I reused it twice now.
+            const sizeOverlay = render.element.querySelector('canvas').getBoundingClientRect();  //Should be the same as canvas size
+            const sizeElement = elementHTMLRef.current.getBoundingClientRect(); //Get size of the HTML element
+
+            const elementX = sizeElement.x - sizeOverlay.x + sizeElement.width / 2;
+            const elementY = sizeElement.y - sizeOverlay.y + sizeElement.height / 2;
+
+            const addDataHandler = { bodyDataHandler: (data) => setBody(data) }
+            const addResizability = Object.assign(
+                {...currentBodyElement.props.bodyParams}, 
+                 { scaleOnResize: { //Force scaling to match the HTML element. Do not scale position because position of element may change
+                        position: false,
+                        width: true, 
+                        height: true, 
+                        reference: elementHTMLRef.current
+                    },
+                    width: sizeElement.width,
+                    height: sizeElement.height,
+                    x:  elementX,
+                    y:  elementY
+                 }
+            );
+            const newBodyElement = cloneElement(currentBodyElement,Object.assign({}, addDataHandler, { bodyParams: addResizability }))
+            setBodyElement(newBodyElement);
+        },[render, children, elementHTMLState]);
 
         //On resize, 
         useResizeEffect(
             syncMatterBody, // Callback
             ()=>{}, // No cleanup needed
-            [elementHTML, body, render], // No dependencies 
+            [elementHTMLState, body, render], // No dependencies 
             {debounce: 100, runInitial: true} // Throttle the function call
         )
 
