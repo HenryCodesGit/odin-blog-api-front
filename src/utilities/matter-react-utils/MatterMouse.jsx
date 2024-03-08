@@ -24,17 +24,24 @@ export default function MatterMouse({mouseDownHandler, mouseUpHandler, mouseMove
     const {engine, render} = useContext(MatterContext);
     const [mouse, setMouse] = useState(null);
 
-        //On resize, 
-        useResizeEffect(
-            ()=> mouse.pixelRatio = window.devicePixelRatio,
-            ()=>{},  // Cleanup
-            [mouse], // Dependency
-            {debounce: 100, runInitial: false} // Throttle the function call
-        );
+    //On resize, 
+    useResizeEffect(
+        ()=> mouse.pixelRatio = window.devicePixelRatio,
+        ()=>{},  // Cleanup
+        [mouse], // Dependency
+        {debounce: 100, runInitial: false} // Throttle the function call
+    );
+
+    useEffect(()=>{
+        if(!render) return console.warn('The renderer has not been initialized yet or is null. Cancelling initialization of MatterMouse');
+        const canvas = render.element.querySelector('canvas');
+        const touchScroll = enableTouchScroll(canvas); // Touch scrolling
+
+        return touchScroll.cleanup;
+    }, [render])
     
     useEffect(()=>{
         if(!engine || !render) return console.warn('The engine or renderer has not been initialized yet or is null. Cancelling initialization of MatterMouse');
-        console.log('MatterMouse initialized');
 
         const canvas = render.element.querySelector('canvas');
     
@@ -47,7 +54,6 @@ export default function MatterMouse({mouseDownHandler, mouseUpHandler, mouseMove
         // Creating the mouse prevents scroll events from occuring, so need to manually put it back in
         const windowScroll = (event) => window.scrollBy(event.deltaX, event.deltaY);
         canvas.addEventListener('mousewheel', windowScroll); //Mouse scroll
-        const touchScroll = enableTouchScroll(canvas); // Touch scrolling
 
         Events.on(_mouseConstraint,'mousedown',mouseDownHandler);
         Events.on(_mouseConstraint,'mouseup',mouseUpHandler);
@@ -58,7 +64,6 @@ export default function MatterMouse({mouseDownHandler, mouseUpHandler, mouseMove
         return ()=>{
             Events.off(_mouseConstraint);
             canvas.removeEventListener('mousewheel', windowScroll);
-            touchScroll.cleanup();
             Composite.remove(engine.world, _mouseConstraint)
         }   
     },[engine, render, mouseDownHandler, mouseUpHandler, mouseMoveHandler]);
