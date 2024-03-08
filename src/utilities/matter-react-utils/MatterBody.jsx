@@ -132,7 +132,18 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
 
         return ()=>{
             //Search the world for the body and delete it if the barrier still exists
-            Composite.remove(engine.world, newBody)
+            Composite.remove(engine.world, newBody, true)
+
+            //NOTE: There is a currently a bug where body deletion sometimes doesn't trigger constraint deletion.
+            //Can be replicated by re-saving MatterCanvas, with at least one MatterOverlayPassenger and MatterOVerlayDriver instantiated that have
+            //Constraints between them,
+            //For now, fixing it by deleting all constraints assocaited with a body wh en it is deleted, but is likely some other lifecycle problem.
+            if(!newBody) return;
+
+            const constraintsToRemove =  engine.world.constraints.filter((constraint)=>{
+                return (constraint.bodyA.id === newBody.id || constraint.bodyB.id === newBody.id)
+            });
+            Composite.remove(engine.world,constraintsToRemove);
         }
     },[engine, render, bodyParams, bodyType, bodyDataHandler]);
 
