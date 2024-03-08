@@ -40,7 +40,7 @@ function NavExpanding({ links, className }){
     
     // TODO: Set visibility as a toggle-able class instead of hardcoding below.
     const checkForResize = useCallback(function(){ // Callback function
-        console.log('Calling nav');
+        
         // Get total width of Nav
         const navWidth = navHTML.current.scrollWidth;
 

@@ -96,7 +96,7 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
 
     useResizeEffect(() => {
         setLastReferenceSize({ width: referenceHTML.clientWidth, height: referenceHTML.clientHeight});
-        }
+    }
     ,()=>{},[referenceHTML],{debounce: 100, runInitial: false})
 
     useEffect(()=>{

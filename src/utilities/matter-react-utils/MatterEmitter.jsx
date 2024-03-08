@@ -25,12 +25,7 @@ export default function MatterEmitter(){
     const { engine, render } = useContext(MatterContext);
 
     useEffect(()=>{
-        if(!render){ 
-            console.warn('Render argument for MatterEmitter not provided or is null. Cancelling MatterBody creation');
-            return;
-        } else {
-            console.log('Body created successfully');
-        }
+        if(!render) return console.warn('Render argument for MatterEmitter not provided or is null. Cancelling MatterBody creation');
 
         // Add falling snow effect
         const particlesActive = [];
@@ -46,6 +41,7 @@ export default function MatterEmitter(){
             particlesActive.push(particle);
 
             /* TEST. SEEING ATTRACTOR RELATED THING */
+            // TODO: Remove this once feature has been properly implemented
             particle.attractor = {
               id: 'mouse',
               isMain: false,

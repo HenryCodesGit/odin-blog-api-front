@@ -6,7 +6,7 @@ import useResizeEffect from '../react-utils/useResizeEffect'
 
 import style from './MatterCanvas.module.css';
 
-import { Engine, Runner, Render, World, Body } from 'matter-js'
+import { Engine, Runner, Render, Composite, Body } from 'matter-js'
 
 MatterCanvas.propTypes = {
   backgroundColor: PropTypes.string,
@@ -38,9 +38,6 @@ function MatterCanvas({ backgroundColor, children, setEngineHandler, engineOptio
   const render = useRef(null);
 
   const [engine] = useState(Engine.create(engineOptions))
-
-  window.engine = engine;
-
   const [runner] = useState(Runner.create());
   const [renderRefState, setRenderRefState] = useState(null);
 
@@ -78,7 +75,6 @@ function MatterCanvas({ backgroundColor, children, setEngineHandler, engineOptio
   },()=>{'Clearing resizeEffect'}, [],{debounce: 100, runInitial: true})
 
   useEffect(() => {
-
     render.current = Render.create({
         element: scene.current,
         engine: engine,
@@ -109,7 +105,7 @@ function MatterCanvas({ backgroundColor, children, setEngineHandler, engineOptio
 
     return () => {
       Render.stop(render.current);
-      World.clear(engine.world);
+      Composite.clear(engine.world);
       Runner.stop(runner);
       Engine.clear(engine);
 
