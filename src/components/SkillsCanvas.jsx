@@ -7,7 +7,8 @@ import MatterAttractor from '../utilities/matter-react-utils/MatterAttractor';
 
 import style from '../styles/components/SkillsCanvas.module.css'
 
-import image from '../assets/icons/matter-logo.svg'
+import matterLogo from '../assets/icons/matter_logo.svg';
+import htmlLogo from '../assets/icons/HTML5_Badge.svg';
 
 import { useRef } from 'react';
 
@@ -49,19 +50,11 @@ export default function SkillsCanvas(){
       }
     }
 
-    const driverParams = {
-      elementHTML: (<button>Example skill here later</button>)
-    }
-
     const driverBodyParams = {
-      bodyType: 'rectangle',
+      bodyType: 'circle',
       bodyParams: {
-        options: { isStatic: true}
+        options: { isStatic: true, render: {visible: true, fillStyle: '#444'}}
       },
-    }
-
-    const passengerParams = {
-      elementHTML: (<a className={style.floatingCircle} href="https://google.ca"><img src={image}/></a>)
     }
 
     const passengerBodyParams = {
@@ -72,24 +65,53 @@ export default function SkillsCanvas(){
           pos: {x: Math.random(), y: Math.random()},
         },
         radius: 50,
-        options: { isStatic: false, render: {visible: false}}
+        options: { isStatic: false, render: {visible: true, fillStyle: '#444'}}
       }, 
     }
 
+    const softwareSkills = (<ul className={style.flexIgnore}>
+      <MatterOverlayPassenger elementHTML={(<li className={style.listItem}><a className={style.skillCircle} href="https://google.ca"><img src={matterLogo}/></a></li>)}>
+        <MatterAttractor attractorID='1' isMain={false} constraintOptions={{render: {visible: false}}}>
+          <MatterBody {...passengerBodyParams}/>
+        </MatterAttractor>
+      </MatterOverlayPassenger>
+      <MatterOverlayPassenger elementHTML={(<li className={style.listItem}><a href="https://google.ca"><img src={htmlLogo}/></a></li>)}>
+        <MatterAttractor attractorID='1' isMain={false} constraintOptions={{render: {visible: false}}}>
+          <MatterBody {...passengerBodyParams}/>
+        </MatterAttractor>
+      </MatterOverlayPassenger>
+    </ul>)
+
+const softwareSkills2 = (<ul className={style.flexIgnore}>
+  <MatterOverlayPassenger elementHTML={(<li className={style.listItem}><a className={style.skillCircle} href="https://google.ca"><img src={matterLogo}/></a></li>)}>
+    <MatterAttractor attractorID='2' isMain={false} constraintOptions={{render: {visible: false}}}>
+      <MatterBody {...passengerBodyParams}/>
+    </MatterAttractor>
+  </MatterOverlayPassenger>
+  <MatterOverlayPassenger elementHTML={(<li className={style.listItem}><a href="https://google.ca"><img src={htmlLogo}/></a></li>)}>
+    <MatterAttractor attractorID='2' isMain={false} constraintOptions={{render: {visible: false}}}>
+      <MatterBody {...passengerBodyParams}/>
+    </MatterAttractor>
+  </MatterOverlayPassenger>
+</ul>)
+
     return (
       <MatterCanvas {...engineParams}>
-        <MatterOverlay>
-          <MatterOverlayDriver {...driverParams}>
-            <MatterAttractor attractorID='1' isMain={true}  constraintOptions={{render: {visible: true}}}>
-              <MatterBody {...driverBodyParams} />
-            </MatterAttractor>
-          </MatterOverlayDriver>
-          <MatterOverlayPassenger {...passengerParams}>
-            <MatterAttractor attractorID='1' isMain={false} constraintOptions={{render: {visible: true}}}>
-              <MatterBody {...passengerBodyParams}/>
-            </MatterAttractor>
-          </MatterOverlayPassenger>
-        </MatterOverlay>
+        <MatterOverlay className={style.overlayWhat} elementHTML={(<ul></ul>)}>{/*----------------------------------------------------------------------------- */}
+            <MatterOverlayDriver elementHTML={(<p className={style.skillHeading}>Soft</p>)}>
+              <MatterAttractor attractorID='1' isMain={true}  constraintOptions={{render: {visible: false}}}>
+                <MatterBody {...driverBodyParams} />
+              </MatterAttractor>
+            </MatterOverlayDriver>
+            {softwareSkills}
+
+            <MatterOverlayDriver elementHTML={(<p className={style.skillHeading}>Two</p>)}>
+              <MatterAttractor attractorID='2' isMain={true}  constraintOptions={{render: {visible: false}}}>
+                <MatterBody {...driverBodyParams} />
+              </MatterAttractor>
+            </MatterOverlayDriver>
+            {softwareSkills2}
+        </MatterOverlay>{/*----------------------------------------------------------------------------- */}
       </MatterCanvas>
     )
 }
