@@ -18,6 +18,7 @@ MatterAttractor.propTypes = {
         catch { return new Error(`${componentName} can only take in one child element!`);}
       },
     bodyDataHandler: PropTypes.func,
+    bodyParams: PropTypes.object,
     constraintOptions: PropTypes.object
     
 }
@@ -29,44 +30,58 @@ MatterAttractor.defaultProps = {
 }
 
 // TODO: Extract hardcoded sections and settings out into options object later on
-export default function MatterAttractor({ attractorID, isMain, constraintOptions, bodyDataHandler, children}){
+// TODO: Add 'maxDistance' option so constraints are only added up to a certain limit -> relative distance, absolute distance
+// TODO: Also add 'maxCOnstraints' to limit number of objects that can be pulled at a time
 
+
+/* 
+    bodyType, bodyParams, bodyDataHandler
+*/
+export default function MatterAttractor({ attractorID, isMain, constraintOptions, children, bodyDataHandler, bodyParams}){
     const { engine } = useContext(MatterContext)
 
     const [element, setElement] = useState(null)
     const [body, setBody] = useState(null);
 
-    useEffect(()=>{
-        const currElement = Children.only(children);
-        
-        //TODO: Need to make sure we don't overwrite the old bodyDatahandler if there is one. Instead combine the functions together.
-        const newElement = cloneElement(currElement,{ bodyDataHandler: (data) => setBody(data)}) 
-        setElement(newElement)
-
-    },[children, attractorID, isMain])
-
+    // Set the body once it is passed in properly
     useEffect(()=>{
         //when body is passed call this useEffect
         if(!body) return console.warn('Body has not yet been passsed into MatterAttractor, or is null. Cancelling useEffect function call');
-        if(!engine) return  console.warn('Engine has not yet been passsed into MatterAttractor, or is null. Cancelling useEffect function call');
-        if(!element) return console.warn('Element has not yet been instantiated, cancelling useEffect function call');
             
         //Setting the custom attractor settings for the body
         Body.set(body, 'attractor', { isMain, id: attractorID })
+    },[body, isMain, attractorID])
+    
 
-        //Update all existing attractors to constrain them together
+    useEffect(()=>{
+        const currElement = Children.only(children);
+
+        //Intercept body parameters and add on top the ones passed in, if specified
+        let newBodyParams = Object.assign({...currElement.props.bodyParams}, bodyParams)
+
+        //Specifically add more details to the dataHandler
+        const newBodyDataHandler = (data) => {
+            currElement.props.bodyDataHandler(data); //Any existing dataHandlers on the element
+            bodyDataHandler(data); //Run the bodyDataHandler that was passed in
+            setBody(data) //Used by this MatterAttractor
+        }
+
+        const newElement = cloneElement(currElement,{bodyParams: newBodyParams, bodyDataHandler: newBodyDataHandler}) 
+        setElement(newElement);
+    },[children, attractorID, isMain, bodyParams, bodyDataHandler])
+
+    // Create the constraints for the bodies
+    useEffect(()=>{
         const constraints = [];
+        //Based on this new body that was added, constrain it to all the relevant bodies (ones with the same attractorID and type of attraction)
         engine.world.bodies.forEach((engineBody)=>{
-            //Search conditions
-            console.log(engineBody.attractor,'|', body.attractor, engineBody.id, body.id);
-            if(
-                !(Object.hasOwn(engineBody,'attractor') && 
-                (engineBody.attractor.isMain || body.attractor.isMain) && 
-                engineBody.attractor.id === attractorID && 
-                engineBody.id !== body.id)
+            if( //Return if any of the following below are true
+                !Object.hasOwn(engineBody,'attractor') ||  //Not an attractor
+                !(engineBody.attractor.isMain || body.attractor.isMain) || //Both are not main attractors
+                engineBody.attractor.id !== attractorID ||  //The two bodies have different attractor types
+                engineBody.id === body.id //The two bodies are the same body.
             ) return;
-            
-            console.log('Time to make constraint');
+        
             // Overwrites any default body options in case it was set in error
             let options = Object.assign({...constraintOptions}, { bodyA: engineBody, bodyB: body})
 
@@ -104,7 +119,6 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
                 };
                 options = Object.assign(gravityConstraint, options)
             }
-
             const newConstraint = Constraint.create(options);
             constraints.push(newConstraint);
 
@@ -114,17 +128,13 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
             );
         });
 
-        //Call the body handler function in case anything has a use for it
-        bodyDataHandler(body);
+        // //Call the body handler function in case anything has a use for it
+        // bodyDataHandler(body);
 
         return ()=>{
-            //Cleanup
-            constraints.forEach((constraint)=>{
-                Composite.remove(engine.world, constraint);
-            })
+            Composite.remove(engine.world, constraints);
         }
-
-    },[engine, body, element, isMain, attractorID, constraintOptions, bodyDataHandler])
+    },[attractorID,body,constraintOptions, engine])
 
     return(<>
         {element}
