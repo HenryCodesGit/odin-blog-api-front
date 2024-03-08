@@ -19,7 +19,7 @@ MatterOverlay.defaultProps = {
 export default function MatterOverlay({className, elementHTML, children}){
 
     const name = className ? `${className} ` : '';
-    const newElement = cloneElement(elementHTML,{className:`${name}${style.overlay}`},children)
+    const newElement = cloneElement(elementHTML,{className:`${elementHTML.props.className} ${name}${style.overlay}`},children)
 
     return (
         newElement

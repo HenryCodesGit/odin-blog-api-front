@@ -3,7 +3,7 @@ import styles from '../styles/index.module.css'
 import NavExpanding from '../components/NavExpanding';
 import CardCarousel from '../components/CardCarousel';
 import HeroCanvas from '../components/HeroCanvas'
-import SkillsCanvas from '../components/SkillsCanvas';
+import SkillsCanvas from '../components/Skills/SkillsCanvas';
 
 function Index() {
 
