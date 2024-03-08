@@ -98,6 +98,7 @@ export default function MatterOverlayDriver({elementHTML, children}){
                     },
                     width: sizeElement.width,
                     height: sizeElement.height,
+                    radius: 0.5*(sizeElement.width^2 +sizeElement.height^2)^0.5, //TODO: FIX LATER. AND IMPLEMENT ACTUAL ABILITY FOR DIFF POLYGONS
                     x:  elementX,
                     y:  elementY
                  }

@@ -40,8 +40,9 @@ export default function MatterOverlayPassenger({elementHTML, children}){
 
             //Resizing the HTML item to the engine item
             //Get the width and height from the body element
-            elementHTMLRef.current.style.width = body.bounds.max.x - body.bounds.min.x
-            elementHTMLRef.current.style.height =body.bounds.max.y - body.bounds.min.y
+            //Make it slightly smaller just in case
+            elementHTMLRef.current.style.width  = 0.9 * body.bounds.max.x - body.bounds.min.x;
+            elementHTMLRef.current.style.height = 0.9 * body.bounds.max.y - body.bounds.min.y;
 
             //Setting HTML item relative to engine
             // Center the image on the body
@@ -66,10 +67,7 @@ export default function MatterOverlayPassenger({elementHTML, children}){
             const newElement = cloneElement(elementHTML,{
                     ref: elementHTMLRef, 
                     className: `${elementHTML.props.className ? elementHTML.props.className+' ' : ''}${style.passenger}`,
-                    style: {
-                        width: width,
-                        height: height,
-                    }
+                    style: { width, height}
                 }
             );
             setElementHTMLState(newElement);

@@ -6,11 +6,6 @@
     padding: 0;
     overflow: hidden;
     pointer-events: none;
-
-    /* Temporary */
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .driver {
@@ -18,8 +13,6 @@
 }
 
 .passenger {
-    width: 150px;
-    aspect-ratio: 1;
     pointer-events: auto;
     position: absolute;
     top: 0;
