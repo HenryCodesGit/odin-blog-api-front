@@ -33,26 +33,24 @@ MatterBody.defaultProps = {
 
 *   normalized: {
 *       position: {x,y}         Number [0-1] location to place in terms of fraction of total canvas width/height respectively
-*       y:                      Number [0-1] location to place in terms of fraction of total canvas height
 *       width:                  Number [0-1] width of object in terms of fraction of total canvas width
 *       height:                 Number [0-1] width of object in terms of fraction of total canvas height
         radius:                 Number [0-1] width of object in terms of fraction of total canvas width
 *       vertexSets[{x,y} ...]   Each object in the array follows x, y rules as described above
 *   }
     scaleOnResize: {
-        position:{
-            x:                  Boolean to state whether or not the object should scale to fit the canvas size on resize
-            y:                  Boolean to state whether or not the object should scale to fit the canvas size on resize
-        }
+        position:               Boolean to state whether or not the object should scale to fit the canvas size on resize
         width:                  Boolean to state whether or not the object should scale to fit the canvas size on resize
         height:                 Boolean to state whether or not the object should scale to fit the canvas size on resize
+        reference:              The reference element for scaling. By default it is the canvas, but can be anything
     }             
 */
 
 export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
     const { engine, render } = useContext(MatterContext)
     const [body, setBody] = useState(null);
-    const [lastCanvasSize, setLastCanvasSize] = useState (null);
+    const [lastReferenceSize, setLastReferenceSize] = useState (null);
+    const [referenceHTML, setReferenceHTML] = useState(null);
 
     useResizeEffect(()=> {
             if(!Object.hasOwn(bodyParams, 'scaleOnResize')) return;
@@ -60,7 +58,7 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
             // Too lazy to type check everywhere, so just change all possible options to true
             if(bodyParams.scaleOnResize === true || typeof bodyParams.scaleOnResize === 'string' && bodyParams.scaleOnResize.toLowerCase() === 'true') {
                 bodyParams.scaleOnResize = {
-                    position:{x: true, y: true},
+                    position:true,
                     width: true,
                     height: true,
                 }
@@ -68,8 +66,8 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
 
             // Get the scale of the new scene compared to old one
             const scale = {
-                x: render.element.clientWidth / lastCanvasSize.width, 
-                y: render.element.clientHeight / lastCanvasSize.height
+                x: referenceHTML.clientWidth / lastReferenceSize.width, 
+                y: referenceHTML.clientHeight / lastReferenceSize.height
             }
 
             // Scale the width/height if at least one is listed as needing scaling
@@ -78,31 +76,31 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
             }
 
             // Move the body to scaled position
-            if(Object.hasOwn(bodyParams.scaleOnResize, 'position')){
+            if(
+                Object.hasOwn(bodyParams.scaleOnResize, 'position') && 
+                (
+                    bodyParams.scaleOnResize.position === true || 
+                    typeof bodyParams.scaleOnResize.position == 'string' && bodyParams.scaleOnResize.position.toLowerCase() === 'true'
+                )
+            ){
                 const position = {...body.position}; //Gives a vector {x, y}
-                position.x = position.x * (Object.hasOwn(bodyParams.scaleOnResize.position, 'x') ? scale.x : 1);
-                position.y = position.y * (Object.hasOwn(bodyParams.scaleOnResize.position, 'y') ? scale.y : 1);
+                position.x = position.x * scale.x;
+                position.y = position.y * scale.y;
                 Body.setPosition(body, position);
             }
         },
         ()=>{}, // No cleanup needed
-        [bodyType, bodyParams, engine, render, body, lastCanvasSize],
+        [bodyType, bodyParams, engine, render, body, lastReferenceSize],
         {debounce: 100, runInitial: false} // Throttle the function call
     );
 
-    // This must be placed below the first resize effect so that it functions correctly
     useResizeEffect(() => {
-            setLastCanvasSize({ width: render.element.clientWidth, height: render.element.clientHeight});
+        setLastReferenceSize({ width: referenceHTML.clientWidth, height: referenceHTML.clientHeight});
         }
-        ,()=>{},[render],{debounce: 100, runInitial: false})
+    ,()=>{},[referenceHTML],{debounce: 100, runInitial: false})
 
     useEffect(()=>{
-        if(!render){ 
-            console.warn('Render argument for MatterBody not provided or is null. Cancelling MatterBody creation')
-            return;
-        } else {
-            console.log('Body created successfully');
-        }
+        if(!render) return console.warn('Render argument for MatterBody not provided or is null. Cancelling MatterBody creation')
 
         //Parse any custom parameters if they exist
         if(Object.hasOwn(bodyParams, 'normalized')){
@@ -123,10 +121,11 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
 
         //Set the states for others that reference it
         setBody(newBody);
-        setLastCanvasSize({
-            width: render.element.clientWidth,
-            height: render.element.clientHeight
-        });
+
+        const refHTML = (Object.hasOwn(bodyParams, 'scaleOnResize') && Object.hasOwn(bodyParams.scaleOnResize, 'reference')) ?
+        bodyParams.scaleOnResize.reference : render.element;
+        setLastReferenceSize({ width: refHTML.clientWidth, height: refHTML.clientHeight});
+        setReferenceHTML(refHTML);
 
         //Pass the body upwards and call the bodyDataHandler function if its passed as a prop
         if(bodyDataHandler) bodyDataHandler(newBody);
