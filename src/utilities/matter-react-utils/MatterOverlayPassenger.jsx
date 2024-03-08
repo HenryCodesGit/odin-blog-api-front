@@ -41,19 +41,17 @@ export default function MatterOverlayPassenger({elementHTML, children}){
             //Resizing the HTML item to the engine item
             //Get the width and height from the body element
             //Make it slightly smaller just in case
-            elementHTMLRef.current.style.width  = 0.9 * body.bounds.max.x - body.bounds.min.x;
-            elementHTMLRef.current.style.height = 0.9 * body.bounds.max.y - body.bounds.min.y;
+            elementHTMLRef.current.style.width  = body.bounds.max.x - body.bounds.min.x;
+            elementHTMLRef.current.style.height = body.bounds.max.y - body.bounds.min.y;
 
             //Setting HTML item relative to engine
             // Center the image on the body
             const bodyPosition = body.position;
             const imageBounds = elementHTMLRef.current.getBoundingClientRect();
-            const imageX = parseInt(bodyPosition.x - imageBounds.width/2,10); 
-            const imageY = parseInt(bodyPosition.y - imageBounds.height/2,10);
+            const imageX = bodyPosition.x - (imageBounds.width >> 1); //Bitshift division 
+            const imageY = bodyPosition.y - (imageBounds.height >> 1);
 
-            //Calculate how fast transition must be to reach next spot in a single tick
-            const tickTiming = 1000/60;
-            elementHTMLRef.current.style.transition= `transform calc(${tickTiming}ms) steps(1, jump-start)`; 
+            // Update body position
             elementHTMLRef.current.style.transform = `translate(${imageX}px, ${imageY}px)`;
         },[body]);
 

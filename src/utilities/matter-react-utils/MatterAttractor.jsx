@@ -99,22 +99,37 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
             
                         /* Ignoring mass because will be implementing constant mass between objects */
                         // Baking it in to the gravitational constant
-                        const r = ((posX[0] - posX[1])^2 + (posY[0] - posY[1])^2)*0.5;
-            
-                        const MIN = 0;
-                        const MAX = 0.0005;
-                        const springConstant = Math.max(
-                            MIN,
-                            Math.min(
-                                Math.abs(this._G / (r^3)),
-                                MAX
-                            )
-                        );
+                        let r = Math.sqrt((posX[0] - posX[1]) ** 2 + (posY[0] - posY[1]) ** 2);
+                        
+                        //Don't allow 0 r because then infinite forse
+                        r = Math.max(1, r);
+                        const springConstant = this._G / (r ** 3)
+                        
                         
                         return springConstant;
                     }, 
-                    set stiffness(name){ this._G = (this._G) ? name : 0.005; },
-                    length: 0,
+                    set stiffness(name){ this._G = (this._G) ? name : 2000; },
+                    get length(){ 
+                        if(this._length) return this._length;   //If length is provided
+                        if(!this.bodyA || !this.bodyB) return 0; //Fallback length
+
+                        //Default length is the average of the width and height of the largest body
+                        const boundsA = this.bodyA.bounds;
+                        const widthA = boundsA.max.x - boundsA.min.x;
+                        const heightA = boundsA.max.y - boundsA.min.y;
+                        const areaA = widthA * heightA;
+
+                        const boundsB = this.bodyB.bounds;
+                        const widthB = boundsB.max.x - boundsB.min.x;
+                        const heightB = boundsB.max.y - boundsB.min.y;
+                        const areaB = widthB * heightB;
+
+                        if(areaA > areaB) return (widthA + heightA) >> 1
+                        else return (widthB + heightB) >> 1;
+                    },
+                    set length(value){
+                        this._length = value;
+                    },
                     render: {
                         visible: true,
                     }

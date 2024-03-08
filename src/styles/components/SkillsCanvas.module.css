@@ -49,13 +49,24 @@
     -ms-user-select: none;
     user-select: none;
 
-    > * {
+    a {
         flex: 1;
+        max-width: 100%;
         height: inherit;
-        padding: 1.25rem;
-        text-align: center;
-        
+        border-radius: 50%;
+
+        display: flex;
+        justify-content: center;
+        padding: 0.5rem;
+
         /* border: 1px solid red;
         img { border: 1px solid blue; } */
     }
+}
+
+.listItem:hover{
+    border:2px solid var(--grey);
+    filter: drop-shadow(0px 0px 5px #FFFF) !important;
+    background-color: #FFF1;
+
 }

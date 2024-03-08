@@ -9,7 +9,7 @@ SkillCircle.propTypes = {
         PropTypes.string,
         PropTypes.number,
         ]).isRequired,
-    link: PropTypes.bool,
+    link: PropTypes.string,
     imageSRC: PropTypes.string,
     MatterBodyParams: PropTypes.object.isRequired,
     className: PropTypes.string
