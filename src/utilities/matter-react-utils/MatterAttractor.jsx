@@ -91,7 +91,7 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
             // Overwrite other properties in gravityConstraint with constraintOptions, though
             if(!Object.hasOwn(options, 'stiffness')) {
                 const gravityConstraint = {
-                    damping: 0,
+                    damping: 0.01,
                     get stiffness(){ 
                         /* Custom getter, force will depend on distance between the two particles, like gravity */
                         const posX = [this.bodyA.position.x, this.bodyB.position.x];
@@ -103,8 +103,9 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
                         
                         //Don't allow 0 r because then infinite forse
                         r = Math.max(1, r);
-                        const springConstant = this._G / (r ** 3)
-                        
+
+                        //Minimum force to prevent attracted bodies from not moving if they're too far away
+                        const springConstant = Math.max(this._G / (r ** 3), 0.000025)
                         
                         return springConstant;
                     }, 

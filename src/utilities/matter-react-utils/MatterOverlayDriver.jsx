@@ -49,8 +49,8 @@ export default function MatterOverlayDriver({elementHTML, children}){
             const sizeOverlay = canvas.getBoundingClientRect();  //Should be the same as canvas size
             const sizeElement = elementHTMLRef.current.getBoundingClientRect(); //Get size of the HTML element
 
-            const elementX = sizeElement.x - sizeOverlay.x + sizeElement.width / 2;
-            const elementY = sizeElement.y - sizeOverlay.y + sizeElement.height / 2;
+            const elementX = sizeElement.x - sizeOverlay.x + (sizeElement.width >> 1);
+            const elementY = sizeElement.y - sizeOverlay.y + (sizeElement.height >> 1);
 
             //Position the body relative to the world
             Body.setPosition(body, {x: elementX, y: elementY})
@@ -98,7 +98,7 @@ export default function MatterOverlayDriver({elementHTML, children}){
                     },
                     width: sizeElement.width,
                     height: sizeElement.height,
-                    radius: 0.5*(sizeElement.width^2 +sizeElement.height^2)^0.5, //TODO: FIX LATER. AND IMPLEMENT ACTUAL ABILITY FOR DIFF POLYGONS
+                    radius: Math.sqrt(sizeElement.width ** 2 + sizeElement.height ** 2) >> 1, //TODO: FIX LATER. AND IMPLEMENT ACTUAL ABILITY FOR DIFF POLYGONS
                     x:  elementX,
                     y:  elementY
                  }

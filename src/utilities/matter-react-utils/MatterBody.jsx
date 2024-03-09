@@ -119,6 +119,11 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
         //Add the body to the world
         Composite.add(engine.world, newBody);
 
+        //If the params contains mass, set it
+        if(Object.hasOwn(bodyParams,'mass')){
+            Body.setMass(newBody, bodyParams.mass);
+        }
+
         //Set the states for others that reference it
         setBody(newBody);
 

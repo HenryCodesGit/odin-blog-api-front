@@ -1,24 +1,30 @@
 @import url('../fonts.module.css');
 @import url('../colors.module.css');
 
-.listReset{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.overlayWhat{
+.overlay{
     display: flex;
     justify-content: space-around;
     align-items:center;
 }
 
+.overlayList{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: space-around;
+}
+
+.overlayItem{
+    padding: 0 15%;
+}
+
 .skillHeading{
     composes: fontMono;
 
-    padding: 1rem;
-    margin: 0;
-    border: 3px solid var(--lightGrey);
+    padding: 0.25rem;
     color: var(--lightGrey);
     filter: drop-shadow(0px 0px 4px #FFF8) !important;
 }

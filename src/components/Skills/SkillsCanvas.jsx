@@ -73,7 +73,7 @@ export default function SkillsCanvas(){
     const driverBodyParams = {
       bodyType: 'circle',
       bodyParams: {
-        options: { isStatic: true, render: {visible: true, fillStyle: '#444', }}
+        options: { isStatic: true, render: {visible: true, fillStyle: '#444' }, frictionAir: 0.01, friction: 0}
       },
     }
 
@@ -88,14 +88,14 @@ export default function SkillsCanvas(){
           },
         },
         radius: 25,
-        options: { isStatic: false, render: {visible: true, fillStyle: '#444'}}
+        options: { isStatic: false, render: {visible: true, fillStyle: '#444'}, frictionAir: 0.01, friction: 0}
       }, 
     }
 
     return (
       <MatterCanvas {...engineParams}>
-        <MatterOverlay className={style.overlayWhat} elementHTML={(<ul className={style.listReset}></ul>)}>{/*----------------------------------------------------------------------------- */}
-            <li>
+        <MatterOverlay className={style.overlay} elementHTML={(<ul className={style.overlayList}></ul>)}>{/*----------------------------------------------------------------------------- */}
+            <li className={style.overlayItem}>
               <SkillHeader text='/dev/' attractorID='1' className={style.skillHeading} matterBodyParams={driverBodyParams} />
               <ul className={style.flexIgnore}>
               <SkillCircle link='https://developer.mozilla.org/en-US/docs/Web/HTML' imageSRC={htmlLogo} attractorID='1' MatterBodyParams={passengerBodyParams} className={style.listItem} />
@@ -106,7 +106,7 @@ export default function SkillsCanvas(){
               <SkillCircle link='https://www.postgresql.org/' imageSRC={postgresLogo} attractorID='1' MatterBodyParams={passengerBodyParams} className={style.listItem} />
               </ul>
             </li>
-            <li>
+            <li className={style.overlayItem}>
               <SkillHeader text='/eng/' attractorID='2' className={style.skillHeading} matterBodyParams={driverBodyParams} />
               <ul className={style.flexIgnore}>
               <SkillCircle link='https://www.autodesk.com/products/autocad/' imageSRC={autocadLogo} attractorID='2' MatterBodyParams={passengerBodyParams} className={style.listItem} />
@@ -115,14 +115,14 @@ export default function SkillsCanvas(){
               <SkillCircle link='https://www.solidworks.com/' imageSRC={solidworksLogo} attractorID='2' MatterBodyParams={passengerBodyParams} className={style.listItem} />
               </ul>
             </li>
-            <li>
+            <li className={style.overlayItem}>
               <SkillHeader text='/game/' attractorID='3' className={style.skillHeading} matterBodyParams={driverBodyParams} />
               <ul className={style.flexIgnore}>
               <SkillCircle link='https://unity.com/' imageSRC={unityLogo} attractorID='3' MatterBodyParams={passengerBodyParams} className={style.listItem} />
               <SkillCircle link='https://brm.io/matter-js/' imageSRC={matterLogo} attractorID='3' MatterBodyParams={passengerBodyParams} className={style.listItem} />
               </ul>
             </li>
-            <li>
+            <li className={style.overlayItem}>
               <SkillHeader text='/etc/' attractorID='4' className={style.skillHeading} matterBodyParams={driverBodyParams} />
               <ul className={style.flexIgnore}>
               <SkillCircle imageSRC={solderLogo} attractorID='4' MatterBodyParams={passengerBodyParams} className={style.listItem} />
