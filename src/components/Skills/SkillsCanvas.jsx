@@ -83,8 +83,8 @@ export default function SkillsCanvas(){
         scaleOnResize: false,
         normalized:{
           pos: {
-            get x(){ return Math.random() },
-            get y(){ return Math.random() }
+            x: 0.5,
+            y: 0.5
           },
         },
         radius: 25,

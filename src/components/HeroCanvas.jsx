@@ -23,9 +23,7 @@ export default function HeroCanvas(){
       <MatterAttractor key={key} attractorID='mouse' isMain={true} constraintOptions={{render: {visible: false}}} bodyDataHandler={(data)=>setGravityWell(data)}>
         <MatterBody bodyType='circle' bodyParams={{
           scaleOnResize: false,
-          normalized:{
-            radius: 0.01,
-          },
+          radius: 15,
           x:event.mouse.mousedownPosition.x,
           y:event.mouse.mousedownPosition.y,
           options: { isStatic: true, render: {fillStyle: '#252525'} }

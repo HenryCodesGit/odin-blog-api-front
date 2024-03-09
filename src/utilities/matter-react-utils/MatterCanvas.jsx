@@ -89,8 +89,7 @@ function MatterCanvas({ backgroundColor, children, setEngineHandler, engineOptio
     setRenderRefState(render.current);
 
     // Start the renderer
-    Render.run(render.current);
-    window.render = render;
+    Render.run(render.current);    
 
     //Run the Physics Engine /w matterJS default Runner
     Runner.run(runner, engine);
