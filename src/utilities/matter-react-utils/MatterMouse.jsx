@@ -53,7 +53,7 @@ export default function MatterMouse({mouseDownHandler, mouseUpHandler, mouseMove
     
         // Creating the mouse prevents scroll events from occuring, so need to manually put it back in
         const windowScroll = (event) => window.scrollBy(event.deltaX, event.deltaY);
-        canvas.addEventListener('mousewheel', windowScroll); //Mouse scroll
+        canvas.addEventListener('wheel', windowScroll); //Mouse scroll
 
         Events.on(_mouseConstraint,'mousedown',mouseDownHandler);
         Events.on(_mouseConstraint,'mouseup',mouseUpHandler);
@@ -63,7 +63,7 @@ export default function MatterMouse({mouseDownHandler, mouseUpHandler, mouseMove
         setMouse(_mouse);
         return ()=>{
             Events.off(_mouseConstraint);
-            canvas.removeEventListener('mousewheel', windowScroll);
+            canvas.removeEventListener('wheel', windowScroll);
             Composite.remove(engine.world, _mouseConstraint)
         }   
     },[engine, render, mouseDownHandler, mouseUpHandler, mouseMoveHandler]);

@@ -14,6 +14,7 @@ export default function HeroCanvas(){
   const [mouseChildren, setMouseChildren] = useState();
   const [gravityWell, setGravityWell] = useState(null)
 
+  //TODO: DOesn't work on firefox dev tools on touch screen mode?
   const makeGravityWell = useCallback((event) => {
     if(!engine) return console.warn('Engine is not done loading or is not specified. Cancelling makeParticle function call');
     // Test making and returning a react component from within here
