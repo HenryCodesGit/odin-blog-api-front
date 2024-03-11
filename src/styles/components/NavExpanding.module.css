@@ -1,4 +1,6 @@
-@import url('../fonts.module.css');
+@import url('../variables/fonts.module.css');
+@import url('../variables/colors.module.css');
+
 
 .nav {
     composes: fontMono;
@@ -9,9 +11,9 @@
     
     & a {
         text-decoration: none;
-        color: var(--white);
+        color: var(--darkGrey);
     }
-    overflow: hidden;
+    overflow: visible;
 }
 
 .ul {
@@ -22,8 +24,6 @@
     display: flex;
     justify-content: end;
     align-items: center;
-/* 
-    background-color: var(--green); */
 }
 
 .li {
@@ -31,15 +31,15 @@
     text-decoration: underline;
     text-align: end;
     text-wrap: nowrap;
-    color: var(--white);
+    color: var(--darkGrey);
 
     & a {
-        color: var(--lightGrey);
+        color: var(--darkGrey);
     }
 }
 
 .li:hover {
-    background-color: #DDD;
+    background-color: var(--grey);
     color: var(--darkGrey);
 
     & a {
@@ -48,9 +48,9 @@
 }
 
 .li:active{
-    background-color: var(--green);
+    background-color: var(--black);
     color: var(--white);
     & a {
-        color: var(--lightGrey);
+        color: var(--white);
     }
 }

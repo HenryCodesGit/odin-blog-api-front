@@ -88,7 +88,7 @@ function NavExpanding({ links, className }){
         checkForResize,
         ()=>{}, // Cleanup
         [links], // Additional Dependencies
-        {debounce: 1000, runInitial: false} // Options
+        {debounce: 50, runInitial: false} // Options
     );
 
     useEffect(()=>{
