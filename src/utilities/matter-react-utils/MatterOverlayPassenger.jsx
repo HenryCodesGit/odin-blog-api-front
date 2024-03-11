@@ -7,7 +7,6 @@ import { Body, Events } from 'matter-js';
 import style from './MatterOverlay.module.css'
 
 import MatterContext from "./MatterContext";
-import useResizeEffect from '../react-utils/useResizeEffect';
 
 MatterOverlayPassenger.propTypes = {
     elementHTML: PropTypes.element, //Matterbody is the physics component to be associated with the HTML element
@@ -20,6 +19,7 @@ MatterOverlayPassenger.propTypes = {
 }
 
 MatterOverlayPassenger.defaultProps = {
+    
 }
 
 
@@ -38,40 +38,41 @@ export default function MatterOverlayPassenger({elementHTML, children}){
         const syncHTML = useCallback(()=>{
             if(!elementHTMLRef.current) return console.warn('HTML element not yet initialized or was not provided. Cancelling syncMatterBody')
 
-            //Resizing the HTML item to the engine item
-            //Get the width and height from the body element
-            //Make it slightly smaller just in case
-            elementHTMLRef.current.style.width  = body.bounds.max.x - body.bounds.min.x;
-            elementHTMLRef.current.style.height = body.bounds.max.y - body.bounds.min.y;
+            //Get the last size of the body and the border thickness
+            const {width, height} = body.getBounds();
+            const borderThickness = getComputedStyle(elementHTMLRef.current).getPropertyValue("border-width");
 
-            //Setting HTML item relative to engine
-            // Center the image on the body
-            const bodyPosition = body.position;
-            const imageBounds = elementHTMLRef.current.getBoundingClientRect();
-            const imageX = bodyPosition.x - (imageBounds.width >> 1); //Bitshift division 
-            const imageY = bodyPosition.y - (imageBounds.height >> 1);
+            // Set the image size if it changed
+            if(!(elementHTMLRef.current.style.width === width && elementHTMLRef.current.style.height === height)){
+                elementHTMLRef.current.style.width = `calc(${width}px + 2 * ${borderThickness})`;
+                elementHTMLRef.current.style.height = `calc(${height}px + 2 * ${borderThickness})`;
+            }
 
-            // Update body position
-            elementHTMLRef.current.style.transform = `translate(${imageX}px, ${imageY}px)`;
+            // Update body position and rotation
+            elementHTMLRef.current.style.transformOrigin = 'top left';
+            elementHTMLRef.current.style.transform = `translate(${body.position.x}px, ${body.position.y}px) rotate(${body.angle}rad) translate(-50%, -50%)`;
         },[body]);
 
         // On mount, clone the HTML element and add OverlayPassenger specific properties
         useEffect(()=>{
             if(!body) return console.warn('Physics body not yet initialized or was not provided. Cancelling HTML Element update')
-            //Get the width and height from the body element
-            const width = body.bounds.max.x - body.bounds.min.x;
-            const height = body.bounds.max.y - body.bounds.min.y;
 
-            const newElement = cloneElement(elementHTML,{
+            // const newElement = (
+            //     <div ref={elementHTMLRef} className={style.passenger}>
+            //         {elementHTML}
+            //     </div>
+            // )
+            const newElement = cloneElement(
+                elementHTML,
+                {
                     ref: elementHTMLRef, 
                     className: `${elementHTML.props.className ? elementHTML.props.className+' ' : ''}${style.passenger}`,
-                    style: { width, height}
                 }
             );
             setElementHTMLState(newElement);
         },[elementHTML, body])
 
-        //Intercept the MatterBody and place a callback function on the returned body
+        // Intercept the MatterBody and place a callback function on the returned body
         useEffect(()=>{
             const currChild = Children.only(children);
             const newBodyDataHandler = (data)=>{
@@ -82,30 +83,25 @@ export default function MatterOverlayPassenger({elementHTML, children}){
             setBodyElement(newBodyElement)
         },[children])
         
-        // Set the update loop
+        // Initialize the coupling
         useEffect(()=>{
             if(!body) return console.warn('Physics body not yet initialized or was not provided. Cancelling syncMatterBody')
             if(!engine) return console.warn('Engine not yet initialized or was not provided. Cancelling syncMatterBody')
             if(!elementHTMLRef.current) return console.warn('HTML element not yet initialized or was not provided. Cancelling syncMatterBody')
 
-            //First position of the element will be set as 0px, 0px (at the origin) so the translate property works 
-            elementHTMLRef.current.style.top = '0px' //`${imageY}px`;
-            elementHTMLRef.current.left = '0px' //`${imageX}px`;
+            // Set the initial size of the element
+            
+            const {width, height} = body.getBounds();
 
-            // Center the image on the body
-            const bodyPosition = body.position;
-            const imageBounds = elementHTMLRef.current.getBoundingClientRect();
-            const imageX = parseInt(bodyPosition.x - imageBounds.width/2,10); 
-            const imageY = parseInt(bodyPosition.y - imageBounds.height/2,10);
-            elementHTMLRef.current.style.transition= `transform 0ms steps(1, jump-start)`; 
-            elementHTMLRef.current.style.transform = `translate(${imageX}px, ${imageY}px)`;
+            elementHTMLRef.current.style.width = `${width}px`;
+            elementHTMLRef.current.style.height = `${height}px`;
 
-            // Move the image after every update
-            Events.on(engine,'afterUpdate', syncHTML)
+            // Transform the image and match position before every update
+            Events.on(engine,'beforeUpdate', syncHTML)
 
             // Cleanup
             return ()=>{
-                Events.off(engine,'afterUpdate', syncHTML)
+                Events.off(engine,'beforeUpdate', syncHTML)
             }
         },[body, engine, elementHTMLState, syncHTML])
 

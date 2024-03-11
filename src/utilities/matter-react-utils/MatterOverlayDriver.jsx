@@ -52,13 +52,12 @@ export default function MatterOverlayDriver({elementHTML, children}){
             const elementX = sizeElement.x - sizeOverlay.x + (sizeElement.width >> 1);
             const elementY = sizeElement.y - sizeOverlay.y + (sizeElement.height >> 1);
 
-            //Position the body relative to the world
+            //Position the body in the appropriate location in the world
             Body.setPosition(body, {x: elementX, y: elementY})
         }
 
         //On mount, clone the HTML element and add a reference to it
         useEffect(()=>{
-            
             const newElement = cloneElement(
                 elementHTML,
                 {
@@ -79,8 +78,7 @@ export default function MatterOverlayDriver({elementHTML, children}){
 
             //Over-write settings for child components if using overlay driver
 
-            //Position the body relative to the HTML element
-            // TODO: Maybe refactor because I reused it twice now.
+            //Position the body relative to the HTML element.
             const sizeOverlay = render.element.querySelector('canvas').getBoundingClientRect();  //Should be the same as canvas size
             const sizeElement = elementHTMLRef.current.getBoundingClientRect(); //Get size of the HTML element
 
@@ -90,10 +88,8 @@ export default function MatterOverlayDriver({elementHTML, children}){
             const addDataHandler = { bodyDataHandler: (data) => setBody(data) }
             const addResizability = Object.assign(
                 {...currentBodyElement.props.bodyParams}, 
-                 { scaleOnResize: { //Force scaling to match the HTML element. Do not scale position because position of element may change
-                        position: false,
-                        width: true, 
-                        height: true, 
+                 { syncToHTML: { //Force scaling to match the HTML element. Do not scale position because position of element may change
+                        size: true,
                         reference: elementHTMLRef.current
                     },
                     width: sizeElement.width,
