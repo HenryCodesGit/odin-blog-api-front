@@ -1,4 +1,4 @@
-import { useRef, useEffect, cloneElement} from 'react';
+import { cloneElement } from 'react';
 import PropTypes from 'prop-types';
 
 import useResizeEffect from '../react-utils/useResizeEffect';
@@ -17,11 +17,9 @@ MatterOverlay.defaultProps = {
 
 // Only function is to be a wrapper of its children for styling
 export default function MatterOverlay({className, elementHTML, children}){
-
     const name = className ? `${className} ` : '';
-    const newElement = cloneElement(elementHTML,{className:`${elementHTML.props.className} ${name}${style.overlay}`},children)
-
+    const oldClass = (elementHTML.props.className) ? (elementHTML.props.className + ' ') : ''
     return (
-        newElement
+        cloneElement(elementHTML,{className:`${oldClass}${name}${style.overlay}`},children)
     )
 }
