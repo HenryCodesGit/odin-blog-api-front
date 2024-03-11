@@ -37,7 +37,7 @@ export default function MatterEmitter(){
             const [x] = normalizedPosition(render.element, Math.random(),Math.random())
             const randomSize = Math.random()*10+2;
             const particleSides = Math.random()*3+3;
-            const particle = Bodies.polygon(x,-30,particleSides,randomSize, {isStatic: false, render: {fillStyle: 'transparent', strokeStyle: COLORS.grey, lineWidth: 1,}, airFriction: 0.5, timeScale: 0.125});
+            const particle = Bodies.polygon(x,-30,particleSides,randomSize, {isStatic: false, render: {fillStyle: 'transparent', strokeStyle: COLORS.grey, lineWidth: 1.5,}, sleepThreshold: 240});
             particlesActive.push(particle);
 
             /* TEST. SEEING ATTRACTOR RELATED THING */
@@ -68,6 +68,7 @@ export default function MatterEmitter(){
         Events.on(engine, 'afterUpdate',emitParticles);
 
         return ()=>{
+          console.log('Cleaning up emitter');
             Events.off(engine, 'afterUpdate',emitParticles);
 
             //Search the world for the body and delete all particles

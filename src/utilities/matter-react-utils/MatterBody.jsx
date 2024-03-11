@@ -5,7 +5,6 @@ import { Composite, Body, Bodies, Sleeping, Events} from 'matter-js'
 import MatterContext from './MatterContext'
 import { normalizedPosition, normalizedWidth, normalizedHeight, normalizedVertices } from './MatterCanvasUtils'
 import useResizeEffect from '../react-utils/useResizeEffect'
-import { width } from '@mui/system'
 
 //Wrapping the functions into a single 'CreateBody' with new syntax
 const CreateBody = {
@@ -43,7 +42,7 @@ MatterBody.defaultProps = {
         position:               Boolean to state whether or not the object should scale to fit the canvas size on resize
         size:                   Boolean to state whether or not the object should scale to fit the canvas size on resize
         reference:              The reference element for scaling. By default it is the canvas, but can be anything
-    }
+    }             
     keepRelativeWorldDims:{          
         position,               Boolean to state whether or not the obejct should retain its relative position in space if the window moves
                                 This option is mutually exclusive with syncToHTML.position, with syncToHTML taking priority
