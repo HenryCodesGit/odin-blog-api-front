@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { Children, useEffect, useState, useContext, cloneElement} from 'react';
 
-import { Body, Constraint, Composite } from 'matter-js'
+import { Body, Composite, Events, Constraint} from 'matter-js'
+
+import Constraints from '../matter-react-utils/Constraints'
 
 import MatterContext from './MatterContext';
 
@@ -11,6 +13,7 @@ MatterAttractor.propTypes = {
         PropTypes.number,
         ]).isRequired,
     isMain: PropTypes.bool,
+    maxLength: PropTypes.number,
     children: function(props, propName, componentName) {
         if(Children.count(props[propName]) < 1) return new Error(`${componentName} must have a child element`)
 
@@ -19,44 +22,31 @@ MatterAttractor.propTypes = {
       },
     bodyDataHandler: PropTypes.func,
     bodyParams: PropTypes.object,
+    constraintCallback: PropTypes.func,
     constraintOptions: PropTypes.object
     
 }
 
 MatterAttractor.defaultProps = {
+    maxLength: null,
     isMain: true,
-    constraintOptions: {},
+    constraintCallback: Constraints.gravity,
     bodyDataHandler: ()=>{},
 }
 
-// TODO: Extract hardcoded sections and settings out into options object later on
 // TODO: Add 'maxDistance' option so constraints are only added up to a certain limit -> relative distance, absolute distance
-// TODO: Also add 'maxCOnstraints' to limit number of objects that can be pulled at a time
-
-
-/* 
-    bodyType, bodyParams, bodyDataHandler
-*/
-export default function MatterAttractor({ attractorID, isMain, constraintOptions, children, bodyDataHandler, bodyParams}){
+// TODO: Also add 'maxConstraints' to limit number of objects that can be pulled at a time
+export default function MatterAttractor({ attractorID, isMain, maxLength, constraintCallback, constraintOptions, children, bodyDataHandler, bodyParams}){
     const { engine } = useContext(MatterContext)
 
     const [element, setElement] = useState(null)
     const [body, setBody] = useState(null);
 
-    // Set the body once it is passed in properly
-    useEffect(()=>{
-        //when body is passed call this useEffect
-        if(!body) return console.warn('Body has not yet been passsed into MatterAttractor, or is null. Cancelling useEffect function call');
-            
-        //Setting the custom attractor settings for the body
-        Body.set(body, 'attractor', { isMain, id: attractorID })
-    },[body, isMain, attractorID])
-    
-
+    // Intercept the input element and clone it with custom props. Then, it will set the body state
     useEffect(()=>{
         const currElement = Children.only(children);
 
-        //Intercept body parameters and add on top the ones passed in, if specified
+        // Intercept body parameters and add on top the ones passed in, if specified
         let newBodyParams = Object.assign({...currElement.props.bodyParams}, bodyParams)
 
         //Specifically add more details to the dataHandler
@@ -70,89 +60,63 @@ export default function MatterAttractor({ attractorID, isMain, constraintOptions
         setElement(newElement);
     },[children, attractorID, isMain, bodyParams, bodyDataHandler])
 
-    // Create the constraints for the bodies
+    // Once body state has been set, add attractor parameters
+    useEffect(()=>{
+        if(!body) return console.warn('Body has not yet been passsed into MatterAttractor, or is null. Cancelling useEffect function call');
+        Body.set(body, 'attractor', { isMain, id: attractorID })
+    },[body, isMain, attractorID])
+
+    // Create the constraints for all bodies in the world that adhere to the same attractor ID
     useEffect(()=>{
         if(!body) return;
 
         const constraints = [];
+        const callbacks = [];
         //Based on this new body that was added, constrain it to all the relevant bodies (ones with the same attractorID and type of attraction)
-        engine.world.bodies.forEach((engineBody)=>{
-            if( //Return if any of the following below are true
-                !Object.hasOwn(engineBody,'attractor') ||  //Not an attractor
-                !(engineBody.attractor.isMain || body.attractor.isMain) || //Both are not main attractors
-                engineBody.attractor.id !== attractorID ||  //The two bodies have different attractor types
-                engineBody.id === body.id //The two bodies are the same body.
-            ) return;
-        
-            // Overwrites any default body options in case it was set in error
-            let options = Object.assign({...constraintOptions}, { bodyA: engineBody, bodyB: body})
-
-            // By default will use gravitational model unless it is over-written with a specific stiffness property in the options
-            // Overwrite other properties in gravityConstraint with constraintOptions, though
-            if(!Object.hasOwn(options, 'stiffness')) {
-                const gravityConstraint = {
-                    damping: 0.01,
-                    get stiffness(){ 
-                        /* Custom getter, force will depend on distance between the two particles, like gravity */
-                        const posX = [this.bodyA.position.x, this.bodyB.position.x];
-                        const posY = [this.bodyA.position.y, this.bodyB.position.y];
+        engine.world.bodies.forEach(constrainWorldBody);
+        function constrainWorldBody(worldBody){
+                if( //Return if any of the following below are true
+                    !Object.hasOwn(worldBody,'attractor') ||  //Not an attractor
+                    !(worldBody.attractor.isMain || body.attractor.isMain) || //Both are not main attractors
+                    worldBody.attractor.id !== attractorID ||  //The two bodies have different attractor types
+                    worldBody.id === body.id //The two bodies are the same body.
+                ) return;
             
-                        /* Ignoring mass because will be implementing constant mass between objects */
-                        // Baking it in to the gravitational constant
-                        let r = Math.sqrt((posX[0] - posX[1]) ** 2 + (posY[0] - posY[1]) ** 2);
-                        
-                        //Don't allow 0 r because then infinite forse
-                        r = Math.max(1, r);
+                // set body options between the body and the body existing in the world that was found
+                let options = Object.assign({...constraintOptions}, { bodyA: worldBody, bodyB: body})
+                const constraint = constraintCallback.bind(this)(options);
+                constraints.push(constraint);
+                Composite.add(
+                    engine.world, 
+                    constraint,
+                );
 
-                        //Minimum force to prevent attracted bodies from not moving if they're too far away
-                        const springConstant = Math.max(this._G / (r ** 3), 0.000025)
-                        
-                        return springConstant;
-                    }, 
-                    set stiffness(name){ this._G = (this._G) ? name : 2000; },
-                    get length(){ 
-                        if(this._length) return this._length;   //If length is provided
-                        if(!this.bodyA || !this.bodyB) return 0; //Fallback length
+                //If max length property is applied..;
+                if(maxLength == null) return;
 
-                        //Default length is the average of the width and height of the largest body
-                        const boundsA = this.bodyA.bounds;
-                        const widthA = boundsA.max.x - boundsA.min.x;
-                        const heightA = boundsA.max.y - boundsA.min.y;
-                        const areaA = widthA * heightA;
+                //Define callback to check its length every update and delete the constraint if long enough
+                const callback = ()=>{
+                    const {x: aX, y: aY} = Constraint.pointAWorld(constraint);
+                    const {x: bX, y: bY} = Constraint.pointBWorld(constraint);
+                    const len = Math.sqrt((aX-bX) **2 + (aY-bY) **2);
+                    
+                    if(len <= maxLength) return;
+                    Composite.remove(engine.world,constraint);
+                    Events.off(engine, 'afterUpdate', callback)
+                }
+                callbacks.push(callback);
 
-                        const boundsB = this.bodyB.bounds;
-                        const widthB = boundsB.max.x - boundsB.min.x;
-                        const heightB = boundsB.max.y - boundsB.min.y;
-                        const areaB = widthB * heightB;
-
-                        if(areaA > areaB) return (widthA + heightA) >> 1
-                        else return (widthB + heightB) >> 1;
-                    },
-                    set length(value){
-                        this._length = value;
-                    },
-                    render: {
-                        visible: true,
-                    }
-                };
-                options = Object.assign(gravityConstraint, options)
-            }
-            const newConstraint = Constraint.create(options);
-            constraints.push(newConstraint);
-
-            Composite.add(
-                engine.world, 
-                newConstraint,
-            );
-        });
-
-        // //Call the body handler function in case anything has a use for it
-        // bodyDataHandler(body);
-
-        return ()=>{
-            Composite.remove(engine.world, constraints);
+                //Set listener to delete constraints
+                Events.on(engine, 'afterUpdate', callback);
         }
-    },[attractorID,body,constraintOptions, engine])
+
+        return ()=> {
+            Composite.remove(engine.world, constraints)
+            if(callbacks) callbacks.forEach((callback)=>{
+                Events.off(engine,'afterUpdate', callback)
+            })
+        }
+    },[attractorID,body,constraintOptions, constraintCallback, engine, maxLength])
 
     return(<>
         {element}
