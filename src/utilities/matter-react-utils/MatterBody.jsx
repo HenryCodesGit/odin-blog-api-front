@@ -49,6 +49,7 @@ MatterBody.defaultProps = {
         size                    Boolean to state whether or not the obejct should retain its relative size in space if the window moves
                                 This option is mutually exlusive with syncToHTML.size, with syncToHTML taking priority
     }
+    lockRotation:              Boolean to state whether or not the body can rotate
 */
 
 export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
@@ -254,6 +255,21 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
         }
         //Set up sync scale every engine update
     },[engine, render, body, bodyParams, lastCanvasSize])
+
+    useEffect(()=>{
+        if (!(Object.hasOwn(bodyParams, 'lockRotation') && bodyParams.lockRotation)) return;
+
+        function lockRotation(){
+            if(!body) return;
+            Body.setAngle(body, 0);
+        }
+
+        Events.on(engine, 'afterUpdate', lockRotation)
+
+        return ()=>{
+            Events.off(engine, 'afterUpdate', lockRotation)
+        }
+    },[engine, body, bodyParams])
 
     return null;
 }
