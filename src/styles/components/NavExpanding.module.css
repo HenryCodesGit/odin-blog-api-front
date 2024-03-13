@@ -7,7 +7,7 @@
     font-style: italic;
 
     padding: 0.5rem;
-    font-weight: 400;
+    font-weight: 500;
     
     & a {
         text-decoration: none;
@@ -32,6 +32,7 @@
     text-align: end;
     text-wrap: nowrap;
     color: var(--darkGrey);
+    background-color: var(--beige);
 
     & a {
         color: var(--darkGrey);

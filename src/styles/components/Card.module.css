@@ -1,5 +1,5 @@
-@import url('../fonts.module.css');
-@import url('../colors.module.css');
+@import url('../variables/colors.module.css');
+@import url('../variables/fonts.module.css');
 
 .card {
     position: relative;
@@ -8,8 +8,8 @@
     width: max(15rem, 25svw);
     aspect-ratio: 1;
 
-    --b: max(0.25rem, 0.25vw);   /* thickness of the border */
-    --c: var(--lightGrey);   /* color of the border */
+    --b: 2px;   /* thickness of the border */
+    --c: var(--black);   /* color of the border */
     --w: max(3rem, 7vw);;  /* width of border */
     
     border: var(--b) solid #0000; /* space for the border */
