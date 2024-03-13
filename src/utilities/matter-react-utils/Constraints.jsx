@@ -17,15 +17,16 @@ function gravity(options){
             let r = Math.sqrt((posX[0] - posX[1]) ** 2 + (posY[0] - posY[1]) ** 2);
             
             //Don't allow 0 r because then infinite force
-            r = Math.max(5, r);
+            r = Math.max(10, r);
 
             //If Max length property exists
             let brokenMultiplier = 1;
             if(Object.hasOwn(options,'maxLength') && r > options.maxLength) brokenMultiplier = 0;
 
             //Minimum force to prevent attracted bodies from not moving if they're too far away
+            //Maximum force to prevent crazy issues when bodies are really close
                 /* Ignoring mass. Just adjust gravitational constant instead */
-            const springConstant = brokenMultiplier * Math.max(this._G / (r ** 3), 0.0001)
+            const springConstant = brokenMultiplier * Math.max(this._G / (r ** 3), 0.0001);
             
 
             return springConstant;

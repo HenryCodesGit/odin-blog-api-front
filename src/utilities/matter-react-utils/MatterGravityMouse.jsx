@@ -10,9 +10,10 @@ import MatterContext from './MatterContext';
 
 MatterGravityMouse.defaultProps = {
   attractorID: 'mouse',
+  isSensor: true,
 }
 
-export default function MatterGravityMouse({attractorID}){
+export default function MatterGravityMouse({attractorID, isSensor}){
 
     const { engine } = useContext(MatterContext)
 
