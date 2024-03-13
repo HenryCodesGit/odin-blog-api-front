@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 
 // Routes
 import App from "./routes/App";
@@ -11,7 +11,7 @@ import Portfolio from './routes/Portfolio';
 import Blog from './routes/Blog';
 import Contact from './routes/Contact';
 
-
+import ErrorPage from "./routes/ErrorPage";
 
 
 const router = createBrowserRouter([
@@ -23,8 +23,10 @@ const router = createBrowserRouter([
       {path: "about", element: <About />},
       {path: "portfolio", element: <Portfolio />},
       {path: "blog", element: <Blog />},
-      {path: "contact", element: <Contact />}
-    ]
+      {path: "contact", element: <Contact />},
+      {path: "error", element: <ErrorPage />}
+    ],
+    errorElement: <Navigate to="/error" />
   },
 ])
 
