@@ -1,14 +1,14 @@
 // React
 import { useEffect, useRef, useState, useContext } from "react";
 // Matter-React Utils
-import MatterBody from '../utilities/matter-react-utils/MatterBody';
-import MatterAttractor from '../utilities/matter-react-utils/MatterAttractor'
-import MatterOverlayPassenger from '../utilities/matter-react-utils/MatterOverlayPassenger'
-import MatterContext from "../utilities/matter-react-utils/MatterContext";
+import MatterBody from '../../utilities/matter-react-utils/MatterBody';
+import MatterAttractor from '../../utilities/matter-react-utils/MatterAttractor'
+import MatterOverlayPassenger from '../../utilities/matter-react-utils/MatterOverlayPassenger'
+import MatterContext from "../../utilities/matter-react-utils/MatterContext";
 //MatterJS
 import { Events, Constraint, Body } from 'matter-js'
 // Styling
-import style from '../styles/components/HomeSign.module.css'
+import style from '../../styles/components/HomeSign.module.css'
 
 
 export default function HomeSign(){
@@ -65,6 +65,9 @@ export default function HomeSign(){
                       syncToHTML: {
                         size: true,
                         reference: nameRef,
+                      },
+                      keepRelativeWorldDims:{
+                        position: true,
                       },
                       normalized:{
                         position: {x: 0.5, y: 0.5},
