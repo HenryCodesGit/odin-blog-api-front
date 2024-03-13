@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Children, useEffect, useState, useContext, cloneElement} from 'react';
+import { Children, useEffect, useState, useContext, useMemo, cloneElement} from 'react';
 
 import { Body, Composite, Events, Constraint} from 'matter-js'
 
@@ -11,6 +11,7 @@ MatterAttractor.propTypes = {
     attractorID: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
+        PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string,PropTypes.number]))
         ]).isRequired,
     isMain: PropTypes.bool,
     maxLength: PropTypes.number,
@@ -41,6 +42,10 @@ export default function MatterAttractor({ attractorID, isMain, maxLength, constr
 
     const [element, setElement] = useState(null)
     const [body, setBody] = useState(null);
+    const attractorIDSet = useMemo(()=>{
+        let newID = (typeof attractorID === 'string' || typeof attractorID === 'number') ? [attractorID] : attractorID;
+        return new Set(newID);
+    },[attractorID]);
 
     // Intercept the input element and clone it with custom props. Then, it will set the body state
     useEffect(()=>{
@@ -58,13 +63,14 @@ export default function MatterAttractor({ attractorID, isMain, maxLength, constr
 
         const newElement = cloneElement(currElement,{bodyParams: newBodyParams, bodyDataHandler: newBodyDataHandler}) 
         setElement(newElement);
-    },[children, attractorID, isMain, bodyParams, bodyDataHandler])
+    },[children, bodyParams, bodyDataHandler]) //  attractorID, isMain, 
 
     // Once body state has been set, add attractor parameters
     useEffect(()=>{
         if(!body) return console.warn('Body has not yet been passsed into MatterAttractor, or is null. Cancelling useEffect function call');
-        Body.set(body, 'attractor', { isMain, id: attractorID })
-    },[body, isMain, attractorID])
+        
+        Body.set(body, 'attractor', { isMain, id: attractorIDSet })
+    },[body, isMain, attractorIDSet])
 
     // Create the constraints for all bodies in the world that adhere to the same attractor ID
     useEffect(()=>{
@@ -78,10 +84,14 @@ export default function MatterAttractor({ attractorID, isMain, maxLength, constr
                 if( //Return if any of the following below are true
                     !Object.hasOwn(worldBody,'attractor') ||  //Not an attractor
                     !(worldBody.attractor.isMain || body.attractor.isMain) || //Both are not main attractors
-                    worldBody.attractor.id !== attractorID ||  //The two bodies have different attractor types
+                    worldBody.attractor.id.intersection(attractorIDSet).size == 0 ||  //The two bodies have dissimilar attractors
                     worldBody.id === body.id //The two bodies are the same body.
-                ) return;
-            
+                ){ 
+                    return;
+                };
+                
+                console.log('Constraining between', worldBody.id, body.id)
+
                 // set body options between the body and the body existing in the world that was found
                 let options = Object.assign({...constraintOptions}, { bodyA: worldBody, bodyB: body})
                 const constraint = constraintCallback.bind(this)(options);
@@ -116,7 +126,7 @@ export default function MatterAttractor({ attractorID, isMain, maxLength, constr
                 Events.off(engine,'afterUpdate', callback)
             })
         }
-    },[attractorID,body,constraintOptions, constraintCallback, engine, maxLength])
+    },[engine, body, attractorIDSet, constraintOptions, constraintCallback, maxLength])
 
     return(<>
         {element}

@@ -1,10 +1,9 @@
 import { Constraint } from 'matter-js'
 
 function gravity(options){
-
     const bodyA = options.bodyA;
     const bodyB = options.bodyB;
-    
+
     // Overwrite other properties in gravityConstraint with constraintOptions, though
     const gravityConstraint = {
         damping: 0.01,
@@ -26,32 +25,29 @@ function gravity(options){
 
             //Minimum force to prevent attracted bodies from not moving if they're too far away
                 /* Ignoring mass. Just adjust gravitational constant instead */
-            const springConstant = brokenMultiplier * Math.max(this._G / (r ** 3), 0.000025)
+            const springConstant = brokenMultiplier * Math.max(this._G / (r ** 3), 0.0001)
             
 
             return springConstant;
         }, 
         set stiffness(name){ this._G = (this._G) ? name : 2000; },
         get length(){ 
-            if(this._length) return this._length;   //If length is provided
+            // if(this._length) return this._length;
             if(!bodyA || !bodyB) return 0; //Fallback length
 
             //Default length is the average of the width and height of the largest body
-            const boundsA = bodyA.bounds;
-            const widthA = boundsA.max.x - boundsA.min.x;
-            const heightA = boundsA.max.y - boundsA.min.y;
-            const areaA = widthA * heightA;
+            // Need to use fallback in case someone initiates this without using MatterBody
+            const A = Object.hasOwn(bodyA,'getBounds') ? bodyA.getBounds() : {width: bodyA.bounds.max.x - bodyA.bounds.min.x, height: bodyA.bounds.max.y - bodyA.bounds.min.y}
+            const areaA = A.width * A.height;
 
-            const boundsB = bodyB.bounds;
-            const widthB = boundsB.max.x - boundsB.min.x;
-            const heightB = boundsB.max.y - boundsB.min.y;
-            const areaB = widthB * heightB;
+            const B = Object.hasOwn(bodyB,'getBounds') ? bodyB.getBounds() : {width: bodyB.bounds.max.x - bodyB.bounds.min.x, height: bodyB.bounds.max.y - bodyB.bounds.min.y}
+            const areaB = B.width * B.height;
 
-            if(areaA > areaB) return (widthA + heightA) >> 1
-            else return (widthB + heightB) >> 1;
+            if(areaA > areaB) return ((A.width + A.height) >> 1)
+            else return ((B.width + B.height) >> 1)
         },
         set length(value){
-            this._length = value;
+            // this._length = value;
         },
     };
     
