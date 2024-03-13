@@ -22,6 +22,7 @@
       conic-gradient(from -90deg at bottom var(--b) right var(--b),var(--_g)) 100% 100% / var(--_p);
 
     text-align: center;
+    
 }
 
 .backgroundVignette{
@@ -66,7 +67,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, calc(-50% - max(1.5rem, 1.5vw)));
-    z-index: 1;
+
 
     transition: color .75s, filter .75s;
 }
