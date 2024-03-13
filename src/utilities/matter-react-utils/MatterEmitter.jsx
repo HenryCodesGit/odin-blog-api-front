@@ -37,13 +37,13 @@ export default function MatterEmitter(){
             const [x] = normalizedPosition(render.element, Math.random(),Math.random())
             const randomSize = Math.random()*10+2;
             const particleSides = Math.random()*3+3;
-            const particle = Bodies.polygon(x,-30,particleSides,randomSize, {isStatic: false, render: {fillStyle: 'transparent', strokeStyle: COLORS.grey, lineWidth: 1.5,}, sleepThreshold: 240});
+            const particle = Bodies.polygon(x,-1*render.element.clientHeight,particleSides,randomSize, {isStatic: false, render: {fillStyle: 'transparent', strokeStyle: COLORS.grey, lineWidth: 1.5,}, sleepThreshold: 240});
             particlesActive.push(particle);
 
             /* TEST. SEEING ATTRACTOR RELATED THING */
             // TODO: Remove this once feature has been properly implemented
             particle.attractor = {
-              id: 'mouse',
+              id: new Set(['mouse']),
               isMain: false,
             }
 
