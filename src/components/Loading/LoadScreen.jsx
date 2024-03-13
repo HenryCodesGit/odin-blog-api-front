@@ -26,7 +26,7 @@ export default function LoadScreen({isLoaded, delay, children}){
     return (
         <>
             {visible ? null : <div className={`${style.container} ${visible ? style.hidden : ''}`}>
-                <h1 className={style.description}>Loading</h1>
+                <h1 className={style.description}>LOADING</h1>
                 <div className={style.spinner}></div>
             </div>}
             <div className={`${style.container} ${visible ? '' : style.hidden}`}>

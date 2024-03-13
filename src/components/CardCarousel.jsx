@@ -17,10 +17,10 @@ Carousel.defaultProps = {
 function Carousel(){
 
     return(<ul className={style.container}>
-        <Card imgURL={melona} description='MY DOG, MELONA'/>
-        <Card imgURL={lia} description="MARK'S CAT, LIA"/>
-        <Card imgURL={aslan} description="JENNY'S CAT, ASLAN"/>
-        <Card imgURL={chester} description="DENZEL'S RABBIT, CHESTER"/>
+        <Card imgURL={melona} description='My dog, melona'/>
+        <Card imgURL={lia} description="Mark's cat, Lia"/>
+        <Card imgURL={aslan} description="Jenny's cat, Aslan"/>
+        <Card imgURL={chester} description="Denzel's rabbit, Chester"/>
         <Card/>
         <Card/>
         <Card/>

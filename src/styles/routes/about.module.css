@@ -1,3 +1,7 @@
+@import url('../variables/fonts.module.css');
+@import url('../variables/colors.module.css');
+
+
 .button{
     position: relative;
     top: 1rem;
