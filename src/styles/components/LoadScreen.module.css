@@ -1,0 +1,78 @@
+@import url('../variables/fonts.module.css');
+
+.container{
+    position:absolute;
+    top:0;
+    left:0;
+
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    height: max(3rem, 10%);
+    animation: rotate 1.5s ease-in-out infinite; /* 2s duration, linear timing function, infinite loop */
+}
+
+.description {
+    composes: fontRobotoCondensed;
+    font-weight: 400;
+    animation: bounce 1.5s ease infinite;
+    margin-bottom: 1rem;
+    /* 1s duration, cubic-bezier timing function, infinite loop */
+}
+
+.hidden{
+  position:absolute;
+  top:0;
+  left:0;
+
+  height: 100%;
+  width: 100%;
+
+  visibility: hidden;
+}
+
+@keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes bounce{
+  0% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-30px);
+  }
+  40% {
+    transform: translateY(0);
+  }
+  50%{
+    transform: translateY(-30px);
+  }
+  60%{
+    transform: translateY(0);
+  }
+  70% {
+    transform: translateY(-30px);
+  }
+  80% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
