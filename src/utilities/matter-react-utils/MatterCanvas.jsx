@@ -72,7 +72,7 @@ function MatterCanvas({ backgroundColor, children, setEngineHandler, engineOptio
     
     Render.setPixelRatio(render.current, window.devicePixelRatio); 
     checkPauseEngine();
-  },()=>{'Clearing resizeEffect'}, [],{debounce: 30, runInitial: true})
+  },()=>{'Clearing resizeEffect'}, [],{debounce: 15, runInitial: true})
 
   useEffect(() => {
     render.current = Render.create({
