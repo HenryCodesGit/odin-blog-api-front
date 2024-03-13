@@ -7,6 +7,8 @@ import { Constraint } from 'matter-js'
 // React
 import { Children, useRef, useState, cloneElement, useEffect} from "react"
 import PropTypes from 'prop-types'
+// Other components
+import ImageLoader from '../Loading/ImageLoader';
 // Styling
 import style from '/src/styles/components/SkillItem.module.css'
 import Constraints from '../../utilities/matter-react-utils/Constraints';
@@ -18,7 +20,7 @@ export default function SkillItem({link, imageSRC, attractorID}){
     const [passenger, setPassenger] = useState();
 
     useEffect(()=>{
-        const child = (<div><a href={link} className={style.item}><img src={imageSRC} /></a></div>)
+        const child = (<div><a href={link} className={style.item}><ImageLoader src={imageSRC} /></a></div>)
         
         const template = cloneElement(child, {className: style.template, ref:nameRef, 'aria-hidden': true})
         const passenger = cloneElement(child,{className: style.passenger})
