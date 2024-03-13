@@ -8,17 +8,23 @@ import MatterAttractor from './MatterAttractor'
 import MatterMouse from './MatterMouse'
 import MatterContext from './MatterContext';
 
-export default function MatterGravityMouse(){
+MatterGravityMouse.defaultProps = {
+  attractorID: 'mouse',
+}
+
+export default function MatterGravityMouse({attractorID}){
 
     const { engine } = useContext(MatterContext)
 
     const [mouseChildren, setMouseChildren] = useState();
     const [gravityWell, setGravityWell] = useState(null)
 
+    const newID = (typeof attractorID === 'string' || typeof attractorID === 'number') ? [attractorID] : attractorID
+
     const makeGravityWell = useCallback((event) => {
         //TODO: DOesn't work on firefox dev tools on touch screen mode?
         const child = (
-          <MatterAttractor attractorID='mouse' isMain={true} constraintOptions={{render: {visible: false}}} bodyDataHandler={(data)=>setGravityWell(data)}>
+          <MatterAttractor attractorID={newID} isMain={true} constraintOptions={{render: {visible: false}}} bodyDataHandler={(data)=>setGravityWell(data)}>
             <MatterBody bodyType='circle' bodyParams={{
               radius: 15,
               x:event.mouse.mousedownPosition.x,

@@ -27,7 +27,7 @@ export default function LoadScreen({isLoaded, delay, children}){
         <>
             {visible ? null : <div className={`${style.container} ${visible ? style.hidden : ''}`}>
                 <h1 className={style.description}>Loading</h1>
-                <img className={style.icon} src={loading}></img>
+                <div className={style.spinner}></div>
             </div>}
             <div className={`${style.container} ${visible ? '' : style.hidden}`}>
                     {children}

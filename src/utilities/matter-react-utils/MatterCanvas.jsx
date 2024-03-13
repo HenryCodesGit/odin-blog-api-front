@@ -16,12 +16,14 @@ MatterCanvas.propTypes = {
     PropTypes.arrayOf(PropTypes.object)
   ]),
   setEngineHandler: PropTypes.func,
-  engineOptions: PropTypes.object
+  engineOptions: PropTypes.object,
+  onLoadHandler: PropTypes.func,
 };
 
 MatterCanvas.defaultProps = {
   setEngineHandler: ()=>{},
   backgroundColor: 'transparent',
+  onLoadHandler: ()=>{},
 };
 
 const defaultEngineOptions = { 
@@ -29,7 +31,7 @@ const defaultEngineOptions = {
   enableSleeping: true
 }
 
-function MatterCanvas({ backgroundColor, children, setEngineHandler, engineOptions}) {
+function MatterCanvas({ backgroundColor, children, setEngineHandler, engineOptions, onLoadHandler}) {
 
   // Set engine options and over-write defaults
   engineOptions = Object.assign({...defaultEngineOptions}, engineOptions)
@@ -118,6 +120,10 @@ function MatterCanvas({ backgroundColor, children, setEngineHandler, engineOptio
       window.removeEventListener('scroll', checkPauseEngine);
     }
   }, [scene, engine, runner, backgroundColor, checkPauseEngine, setEngineHandler])
+
+  useEffect(()=>{
+    if(scene && engine && runner) onLoadHandler()
+  },[scene, engine, runner, onLoadHandler])
 
   return(
     <MatterContext.Provider value={

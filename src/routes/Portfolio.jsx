@@ -1,7 +1,7 @@
 import style from '../styles/routes/portfolio.module.css'
 import CardCarousel from '../components/CardCarousel'
 
-import Loader from '../components/Loading/Loader'
+import Loader from '../components/OLD/Loading/Loader'
 import LoadScreen from '../components/Loading/LoadScreen'
 
 import { useState } from 'react'
@@ -13,11 +13,9 @@ export default function Portfolio(){
 
     return (
         <LoadScreen isLoaded={loaded}>
-            <Loader id='loader' onLoadHandler={()=>setLoaded(true)}>
                 <div className={style.container}>
                     <CardCarousel />
                 </div>
-            </Loader>
         </LoadScreen>
     )
 }
