@@ -48,7 +48,8 @@ export default function About(){
     return (
     <>
     <LoadScreen isLoaded={loaded}>
-        <MatterCanvas {...canvasParams} onLoadHandler={()=>setLoaded(true)}>
+      <Loader onLoadHandler={()=>setLoaded(true)}>
+        <MatterCanvas {...canvasParams}>
             <MatterGravityMouse attractorID={['dev','eng','fun','etc']}/>
             <MatterOverlay className={style.overlay} elementHTML={<div></div>}>
             <ul className={style.skill}>
@@ -90,6 +91,7 @@ export default function About(){
             </ul>
             </MatterOverlay>
         </MatterCanvas>
+      </Loader>
     </ LoadScreen>
     </>);
 }

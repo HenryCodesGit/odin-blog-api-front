@@ -14,7 +14,7 @@ import MatterEmitter from '../utilities/matter-react-utils/MatterEmitter'
 // Component
 import HomeSign from '../components/Home/HomeSign';
 import LoadScreen from '../components/Loading/LoadScreen';
-import Loader from '../components/OLD/Loading/Loader';
+import Loader from '../components/Loading/Loader';
 
 function Home() {
 
@@ -63,7 +63,8 @@ function Home() {
   return (
     <>
       <LoadScreen isLoaded={loaded}>
-          <MatterCanvas {...canvasParams} onLoadHandler={()=>setLoaded(true)}>
+        <Loader onLoadHandler={()=>setLoaded(true)}>
+          <MatterCanvas {...canvasParams}>
             <MatterGravityMouse />
             <MatterEmitter />
             <MatterBody {...groundPlane}/>
@@ -71,6 +72,7 @@ function Home() {
                 <HomeSign/>
             </MatterOverlay>
           </MatterCanvas>
+        </Loader>
       </LoadScreen>
     </>
   );
