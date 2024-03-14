@@ -23,14 +23,14 @@ export default function HomeSign(){
         const profileHTML = (
             <div className={`${style.profile}`} style={{pointerEvents: 'none'}}>
             <p className={`${style.title}`}>Henry Ma</p>
-            <p className={style.description}>MOTIVATED // DILIGENT // VERSATILE // ..ALSO LOVES DOGS</p>
+            <p className={style.description}>MOTIVATED / DILIGENT / VERSATILE</p>
             </div>
         );
     
         const profileName = (
             <div className={`${style.profile}`} style={{pointerEvents: 'none', visibility: 'hidden', ariaHidden: 'true'}} ref={nameRef}>
             <p className={`${style.title}`}>Henry Ma</p>
-            <p className={style.description}>MOTIVATED // DILIGENT // VERSATILE // ..ALSO LOVES DOGS</p>
+            <p className={style.description}>MOTIVATED / DILIGENT / VERSATILE</p>
             </div>
         )
 

@@ -1,8 +1,8 @@
 import { PropTypes } from 'prop-types'
 
-import MatterOverlayPassenger from "../../utilities/matter-react-utils/MatterOverlayPassenger";
-import MatterAttractor from "../../utilities/matter-react-utils/MatterAttractor";
-import MatterBody from "../../utilities/matter-react-utils/MatterBody";
+import MatterOverlayPassenger from "../../../utilities/matter-react-utils/MatterOverlayPassenger";
+import MatterAttractor from "../../../utilities/matter-react-utils/MatterAttractor";
+import MatterBody from "../../../utilities/matter-react-utils/MatterBody";
 
 SkillCircle.propTypes = {
     attractorID: PropTypes.oneOfType([
