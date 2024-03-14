@@ -81,16 +81,17 @@ export default function MatterAttractor({ attractorID, isMain, maxLength, constr
         //Based on this new body that was added, constrain it to all the relevant bodies (ones with the same attractorID and type of attraction)
         engine.world.bodies.forEach(constrainWorldBody);
         function constrainWorldBody(worldBody){
+
                 if( //Return if any of the following below are true
                     !Object.hasOwn(worldBody,'attractor') ||  //Not an attractor
+                    // !(Object.hasOwn(worldBody.attractor, 'isMain')) || // Attractor not yet initialized?
+                    // !(Object.hasOwn(worldBody.attractor, 'id')) || // Attractor not yet initialized?
                     !(worldBody.attractor.isMain || body.attractor.isMain) || //Both are not main attractors
-                    worldBody.attractor.id.intersection(attractorIDSet).size == 0 ||  //The two bodies have dissimilar attractors
+                    new Set([...worldBody.attractor.id].filter(x=>attractorIDSet.has(x))).size == 0 ||  //The two bodies have dissimilar attractors (not using built in Set.intserction because incompatibility)
                     worldBody.id === body.id //The two bodies are the same body.
                 ){ 
                     return;
                 };
-                
-                console.log('Constraining between', worldBody.id, body.id)
 
                 // set body options between the body and the body existing in the world that was found
                 let options = Object.assign({...constraintOptions}, { bodyA: worldBody, bodyB: body})
