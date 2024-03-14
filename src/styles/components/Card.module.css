@@ -1,6 +1,4 @@
-@import url('../variables/colors.module.css');
 @import url('../variables/fonts.module.css');
-
 .card {
     position: relative;
     

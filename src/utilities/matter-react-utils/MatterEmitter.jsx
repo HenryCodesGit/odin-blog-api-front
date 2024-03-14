@@ -7,16 +7,6 @@ import { Composite, Bodies, Events } from 'matter-js'
 import MatterContext from './MatterContext'
 import { normalizedPosition } from './MatterCanvasUtils'
 
-const COLORS = {
-    black: '#14110F',
-    darkGrey: '#333333',
-    grey: '#7E7F83',
-    lightGrey: '#DDD',
-    beige: '#D9C5B2',
-    white: '#F3F3F4',
-    green: '#3B6D45',
-  }
-
 // MatterBody.propTypes = {}
 
 // TODO: Pull out the hardcoded values in this function to make it more abstract later.
@@ -37,7 +27,7 @@ export default function MatterEmitter(){
             const [x] = normalizedPosition(render.element, Math.random(),Math.random())
             const randomSize = Math.random()*10+2;
             const particleSides = Math.random()*3+3;
-            const particle = Bodies.polygon(x,-1*render.element.clientHeight,particleSides,randomSize, {isStatic: false, render: {fillStyle: 'transparent', strokeStyle: COLORS.grey, lineWidth: 1.5,}, sleepThreshold: 240});
+            const particle = Bodies.polygon(x,-1*render.element.clientHeight,particleSides,randomSize, {isStatic: false, render: {fillStyle: '#e3d5ca', strokeStyle: '#7E7F83', lineWidth: 4,}, sleepThreshold: 240});
             particlesActive.push(particle);
 
             /* TEST. SEEING ATTRACTOR RELATED THING */

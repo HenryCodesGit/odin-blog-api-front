@@ -1,9 +1,6 @@
 @import url('../variables/fonts.module.css');
-@import url('../variables/colors.module.css');
-
-
 .nav {
-    composes: fontMono;
+    font-family: 'Courier New', Courier, monospace;
     font-style: italic;
 
     padding: 0.5rem;

@@ -1,7 +1,4 @@
 @import url('../variables/fonts.module.css');
-@import url('../variables/colors.module.css');
-
-
 /******************************************************/
 
 .section {
@@ -16,39 +13,43 @@
 .profile {
     margin: auto;
     width: fit-content;
+    min-height: fit-content;
     max-width: 85%;
     color: var(--black);
     text-align: center;
     align-self: center;
-    padding: 3rem;
     outline: 2px solid black;
     outline-offset: -2px;
     background-color: var(--beige);
   }
   
   .title{
-    composes: fontQuicksand;
+    font-family: 'Times New Roman', Times, serif;
 
     position: static;
   
     /* composes: fontFrederickaTheGreat; */
     /* font-family: 'Times New Roman', serif; */
     
-    text-wrap: pretty;
-    font-size: max(3.5rem, 7vw);
-    margin: 0;
+    text-wrap: nowrap;
+    white-space: nowrap;
+
+    font-size: max(5rem, 7vw);
+    margin: max(1rem, 2vw) max(1rem, 2vw) 0 max(1rem, 2vw);
   }
   
   .description{
-    composes: fontMono;
-    
+    font-family: 'Courier New', Courier, monospace;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
     font-size: max(1.5rem, 1.5vw);
     line-height: 1.25;
     font-weight: 500;
     font-style: italic;
     text-wrap: pretty;
-    margin: auto;
-    max-width: 75%;
+    margin: 0 0 max(0.5rem, 1vw) 0;
+    max-width: 70%;
   }
 
   /* Copied from stackoverflow to generate a border only at corners */

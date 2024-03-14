@@ -1,6 +1,4 @@
-@import url('./variables/fonts.module.css');
-@import url('./variables/colors.module.css');
-
+@import url('../variables/fonts.module.css');
 /* ***************************** */
 
 /* Copied from stackoverflow to generate a border only at corners */

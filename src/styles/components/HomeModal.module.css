@@ -1,6 +1,4 @@
-@import url('../variables/colors.module.css');
 @import url('../variables/fonts.module.css');
-
 .dialogContainer{
     position: fixed;
     margin: 0;
@@ -39,11 +37,11 @@
 }
  
 .modal{
-    composes: fontFrederickaTheGreat;
+    composes: fontQuicksand;
     font-weight: 900;
 
     position: fixed;
-    top: 50%;
+    top: 33%;
     left: 50%;
     transform: translate(-50%,-50%);
     background-color: var(--white);

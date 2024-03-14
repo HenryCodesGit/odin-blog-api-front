@@ -1,6 +1,4 @@
-@import url('../fonts.module.css');
-@import url('../colors.module.css');
-
+@import url('../variables/fonts.module.css');
 .overlay{
     display: flex;
     justify-content: space-around;

@@ -1,8 +1,6 @@
 @import url('../variables/fonts.module.css');
-@import url('../variables/colors.module.css');
-
 .container{
-    border: 1px solid red;
+
     position: absolute;
     top: 0;
     left: 0;

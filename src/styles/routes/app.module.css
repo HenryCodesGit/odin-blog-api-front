@@ -1,6 +1,4 @@
 @import url('../variables/fonts.module.css');
-@import url('../variables/colors.module.css');
-
 .container{
     height: 100svh;
     width: 100svw;
@@ -27,8 +25,8 @@
     
     background-size: 40px 40px;
     background-image:
-        linear-gradient(to right, #1111 1px, transparent 1px),
-        linear-gradient(to bottom, #1111 1px, transparent 1px);
+        linear-gradient(to right, #4A90E240 1px, transparent 1px),
+        linear-gradient(to bottom, #4A90E240 1px, transparent 1px);
 }
 .header{
     width: auto;
