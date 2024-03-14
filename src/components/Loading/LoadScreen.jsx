@@ -6,22 +6,27 @@ import PropTypes from 'prop-types'
 
 LoadScreen.propTypes = {
     isLoaded: PropTypes.bool,
+    afterLoadHandler: PropTypes.func,
     delay: PropTypes.number,
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)])
 }
 LoadScreen.defaultProps = {
+    afterLoadHandler: ()=>{},
     isLoaded: false,
     delay: 1500,
 }
-export default function LoadScreen({isLoaded, delay, children}){
+export default function LoadScreen({isLoaded, afterLoadHandler, delay, children}){
 
     const [visible, setVisible] = useState(false)
 
     useEffect(()=>{
         if(isLoaded){
-            setTimeout(()=>{setVisible(true)},delay)
+            setTimeout(()=>{
+                setVisible(true);
+                afterLoadHandler();
+            },delay)
         }
-    },[isLoaded, delay])
+    },[isLoaded, afterLoadHandler, delay])
 
     return (
         <>

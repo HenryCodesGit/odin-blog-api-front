@@ -1,0 +1,66 @@
+@import url('../variables/colors.module.css');
+@import url('../variables/fonts.module.css');
+
+.dialogContainer{
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    background-color: transparent;
+    border: none;
+
+    display: flex;
+    transition: opacity 0.5s linear;
+    opacity: 0;
+
+    z-index: 1;
+
+    pointer-events: none;
+}
+
+.dialogContainer[open]{
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.dialogContainer::backdrop{ display: none;}
+
+.interactableBackdrop{
+    position: fixed;
+    top:0;
+    left:0;
+    height: 100%;
+    width: 100%;
+
+    background-color: rgba(0,0,0,0.9);
+}
+ 
+.modal{
+    composes: fontFrederickaTheGreat;
+    font-weight: 900;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: var(--white);
+    border: 4px solid var(--black);
+    color: var(--black);
+
+    filter: drop-shadow(0px 0px 16px var(--TBD));
+
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+}
+
+.closeText{
+    composes: fontQuicksand;
+    font-weight: 500;
+    font-size: 1.5rem;
+    margin: 0.5rem;
+}

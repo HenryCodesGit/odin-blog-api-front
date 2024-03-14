@@ -20,7 +20,13 @@ export default function SkillItem({link, imageSRC, attractorID}){
     const [passenger, setPassenger] = useState();
 
     useEffect(()=>{
-        const child = (<div><a href={link} className={style.item}><ImageLoader src={imageSRC} /></a></div>)
+        const child = (
+            <div>
+                <a href={link} className={style.item}>
+                    <ImageLoader src={imageSRC} />
+                </a>
+            </div>
+        )
         
         const template = cloneElement(child, {className: style.template, ref:nameRef, 'aria-hidden': true})
         const passenger = cloneElement(child,{className: style.passenger})

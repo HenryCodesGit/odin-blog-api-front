@@ -12,6 +12,7 @@ import MatterBody from '../utilities/matter-react-utils/MatterBody';
 import MatterOverlay from '../utilities/matter-react-utils/MatterOverlay'
 import MatterEmitter from '../utilities/matter-react-utils/MatterEmitter'
 // Component
+import HomeModal from '../components/Home/HomeModal';
 import HomeSign from '../components/Home/HomeSign';
 import LoadScreen from '../components/Loading/LoadScreen';
 import Loader from '../components/Loading/Loader';
@@ -21,6 +22,8 @@ function Home() {
   const [loaded, setLoaded] = useState(false);
 
   const [engine,setEngine] = useState(null);
+
+  const [modalState, setModalState] = useState(false);
 
   const canvasParams = {
     backgroundColor: 'transparent',
@@ -53,7 +56,7 @@ function Home() {
     //On spawn, fastforward the engine by 30 seconds 
     console.log('fast forwarding');
     let tick = 0;
-    while (tick < 5000){
+    while (tick < 2000){
       Engine.update(engine, 15)
       tick+=15;
     }
@@ -62,8 +65,13 @@ function Home() {
 
   return (
     <>
-      <LoadScreen isLoaded={loaded}>
-        <Loader onLoadHandler={()=>setLoaded(true)}>
+      <LoadScreen isLoaded={loaded} afterLoadHandler={()=>{
+        setModalState(true);
+      }}>
+        <Loader onLoadHandler={()=>{
+          setLoaded(true);
+        }}>
+          <HomeModal modalVisible={modalState} text='helloooooo' />
           <MatterCanvas {...canvasParams}>
             <MatterGravityMouse />
             <MatterEmitter />

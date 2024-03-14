@@ -1,5 +1,6 @@
 import Loader from "../components/Loading/Loader"
 import LoadScreen from "../components/Loading/LoadScreen"
+import SkillModal from "../components/About/SkillModal";
 
 import { useState } from "react"
 
@@ -8,7 +9,7 @@ export default function Blog(){
     return (
         <LoadScreen isLoaded={loaded}>
             <Loader onLoadHandler={()=>{setLoaded(true)}}>
-                <div> TBD </div>
+                <SkillModal />
             </Loader>
         </LoadScreen>
     )
