@@ -9,7 +9,7 @@ export default function Blog(){
     return (
         <LoadScreen isLoaded={loaded}>
             <Loader onLoadHandler={()=>{setLoaded(true)}}>
-                <SkillModal />
+                THere's nothing here yet
             </Loader>
         </LoadScreen>
     )

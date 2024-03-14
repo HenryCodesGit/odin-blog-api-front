@@ -50,7 +50,7 @@
     border: 4px solid var(--black);
     color: var(--black);
 
-    filter: drop-shadow(0px 0px 16px var(--TBD));
+    filter: drop-shadow(0px 0px 16px var(--dividerBlue));
 
     font-size: 1.5rem;
     text-align: center;

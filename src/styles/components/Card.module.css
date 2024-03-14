@@ -52,7 +52,7 @@
 }
 
 .description{
-    composes: fontQuicksand;
+    composes: fontMono;
     font-style: italic;
     font-weight: 800;
 
@@ -64,7 +64,7 @@
     pointer-events: none;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, calc(-50% - max(1.5rem, 1.5vw)));
+    transform: translate(-50%, -50%);
 
 
     transition: color .75s, filter .75s;
