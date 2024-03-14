@@ -37,6 +37,13 @@
     font-size: max(5rem, 7vw);
     margin: max(1rem, 2vw) max(1rem, 2vw) 0 max(1rem, 2vw);
   }
+
+  @media (max-width: 480px){
+    .title{
+      text-wrap: wrap;
+      white-space: wrap;
+    }
+  }
   
   .description{
     font-family: 'Courier New', Courier, monospace;

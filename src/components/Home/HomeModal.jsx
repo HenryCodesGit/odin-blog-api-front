@@ -5,14 +5,12 @@ import style from '../../styles/components/HomeModal.module.css'
 
 HomeModal.propTypes = {
     modalVisible: PropTypes.bool,
-    text: PropTypes.string
 }
 
 HomeModal.defaultProps = {
     modalVisible: false,
-    text: ''
 }
-export default function HomeModal({text, modalVisible}){
+export default function HomeModal({modalVisible}){
     const modalRef = useRef();
     const backdropRef = useRef();
 
