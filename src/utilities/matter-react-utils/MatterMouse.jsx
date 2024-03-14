@@ -60,12 +60,12 @@ export default function MatterMouse({mouseDownHandler, mouseUpHandler, mouseMove
 
         //On Mouse up should be on the window, not the mouse constraint
         window.addEventListener('mouseup', mouseUpHandler);
-        //Events.on(_mouseConstraint,'mouseup',mouseUpHandler);
+        Events.on(_mouseConstraint,'mouseup',mouseUpHandler);
         
         //Settings persistent states of mouse object
         setMouse(_mouse);
         return ()=>{
-            //Events.off(_mouseConstraint);
+            Events.off(_mouseConstraint);
             window.addEventListener('mouseup', mouseUpHandler);
             canvas.removeEventListener('wheel', windowScroll);
             Composite.remove(engine.world, _mouseConstraint)
