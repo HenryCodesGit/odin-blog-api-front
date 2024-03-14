@@ -20,10 +20,12 @@ export default function MatterGravityMouse({attractorID, isSensor}){
     const [mouseChildren, setMouseChildren] = useState();
     const [gravityWell, setGravityWell] = useState(null)
 
-    const newID = (typeof attractorID === 'string' || typeof attractorID === 'number') ? [attractorID] : attractorID
+
 
     const makeGravityWell = useCallback((event) => {
         //TODO: DOesn't work on firefox dev tools on touch screen mode?
+
+        const newID = (typeof attractorID === 'string' || typeof attractorID === 'number') ? [attractorID] : attractorID
         const child = (
           <MatterAttractor attractorID={newID} isMain={true} constraintOptions={{render: {visible: false}}} bodyDataHandler={(data)=>setGravityWell(data)}>
             <MatterBody bodyType='circle' bodyParams={{
@@ -35,7 +37,7 @@ export default function MatterGravityMouse({attractorID, isSensor}){
           </MatterAttractor>
         );
         setMouseChildren(child);
-      },[]);
+      },[attractorID]);
     
       const deleteGravityWell = useCallback(() => {
         if(!engine) return console.warn('Engine is not done loading or is not specified. Cancelling makeParticle function call');
