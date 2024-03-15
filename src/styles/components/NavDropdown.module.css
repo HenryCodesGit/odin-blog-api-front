@@ -41,7 +41,7 @@
     padding: 0;
     margin: 0;
     position: absolute;
-    background-color: var(--beige);
+    background-color: var(--lightGrey);
     transform: translateY(var(--buttonHeight));
 
     max-height: 80svh;
@@ -52,7 +52,7 @@
         margin: .25rem;
         text-decoration: underline;
         text-align: end;
-        color: var(----darkGrey);
+        color: var(--darkGrey);
 
         text-wrap:pretty;
         white-space: nowrap;
@@ -63,13 +63,21 @@
     }
 
     & li:hover {
-        background-color: var(--grey);
-        color: var(--darkGrey)
+        background-color: var(--dividerBlue);
+        color: var(--darkGrey);
+
+        & a {
+            color: var(--darkGrey);
+        }
     }
 
     & li:active {
-        background-color: var(--green);
-        color: var(--darkGrey);
+        background-color: var(--grey);
+        color: var(--white);
+
+        & a {
+            color: var(--white);
+        }
     }
 }
 
@@ -81,7 +89,7 @@
 
 /* Behaviour on interaction */
 .button:hover {
-    background: var(--grey);
+    background: var(--dividerBlue);
     color: var(--darkGrey);
 }
 
@@ -92,7 +100,7 @@
 
 .button:active {
     transform: scale(0.95);
-    background: var(--black);
+    background: var(--grey);
     color: var(--lightGrey);
 }
 

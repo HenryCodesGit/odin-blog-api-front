@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import '../styles/globals.css'; // Global CSS File between the routes
 import style from '../styles/routes/app.module.css' // Module specific CSS file
 // Component
-import NavExpanding from '../components/NavExpanding';
+import NavExpanding from '../components/Home/NavExpanding';
 
 function App() {
 

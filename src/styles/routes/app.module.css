@@ -3,7 +3,7 @@
     height: 100svh;
     width: 100svw;
 
-    background-color: #e3d5ca; 
+    background-color: var(--lightGrey); /*#e3d5ca*/ 
 }
 
 /* .border {

@@ -40,7 +40,7 @@
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: max(0.6rem, 2vh) solid black;
+  border: max(0.6rem, 2vh) solid var(--darkGrey);
   animation: prixClipFix 1.5s linear infinite ;
 }
 
@@ -58,6 +58,7 @@
 
 .description {
     font-family: 'Courier New', Courier, monospace;
+    color: var(--darkGrey);
     font-weight: 900;
     animation: bounce 1.5s ease infinite;
     margin-bottom: 1rem;

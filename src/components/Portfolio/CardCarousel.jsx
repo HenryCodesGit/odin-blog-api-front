@@ -1,11 +1,11 @@
-import style from '../styles/components/CardCarousel.module.css'
+import style from '/src/styles/components/CardCarousel.module.css'
 
-import melona from '../assets/img/pets/melona.png'
-import aslan from '../assets/img/pets/aslan.png'
-import lia from '../assets/img/pets/lia.png'
-import chester from '../assets/img/pets/chester.png'
+import melona from '/src/assets/img/pets/melona.png'
+import aslan from '/src/assets/img/pets/aslan.png'
+import lia from '/src/assets/img/pets/lia.png'
+import chester from '/src/assets/img/pets/chester.png'
 
-import Card from '../components/Card'
+import Card from '/src/components/Portfolio/Card'
 
 Carousel.propTypes = {
 };

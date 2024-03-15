@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-import style from '../styles/components/NavExpanding.module.css'
+import style from '/src/styles/components/NavExpanding.module.css'
 
-import NavDropdown from '../components/NavDropdown'
+import NavDropdown from './NavDropdown'
 
-import useResizeEffect from '../utilities/react-utils/useResizeEffect';
+import useResizeEffect from '/src/utilities/react-utils/useResizeEffect';
 
 // TODO: Nav bar currently requires serial ids starting from 1.
 // Refactor with object reference instead of array reference for listItemsHTML and iterate through collection

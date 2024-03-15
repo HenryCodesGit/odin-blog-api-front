@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useState, forwardRef, useEffect, useRef } from 'react';
 
-import style from '../styles/components/NavDropdown.module.css'
+import style from '/src/styles/components/NavDropdown.module.css'
 
 // Requires  Install material icons 
 // npm install @mui/icons-material @mui/material @emotion/styled @emotion/react

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 
-import style from '../styles/components/Card.module.css'
+import style from '/src/styles/components/Card.module.css'
 
 Card.propTypes = {
     imgURL: PropTypes.string,

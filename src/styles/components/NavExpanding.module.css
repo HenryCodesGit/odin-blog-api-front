@@ -29,7 +29,7 @@
     text-align: end;
     text-wrap: nowrap;
     color: var(--darkGrey);
-    background-color: var(--beige);
+    background-color: var(--lightGrey);
 
     & a {
         color: var(--darkGrey);
@@ -37,7 +37,7 @@
 }
 
 .li:hover {
-    background-color: var(--grey);
+    background-color: var(--dividerBlue);
     color: var(--darkGrey);
 
     & a {
@@ -46,7 +46,7 @@
 }
 
 .li:active{
-    background-color: var(--black);
+    background-color: var(--grey);
     color: var(--white);
     & a {
         color: var(--white);

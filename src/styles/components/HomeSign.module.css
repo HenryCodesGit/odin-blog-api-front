@@ -8,21 +8,39 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    user-select: none;
 }
 
-.profile {
+/* .profile {
     margin: auto;
     width: fit-content;
     min-height: fit-content;
     max-width: 85%;
-    color: var(--black);
+    color: var(--darkGrey);
     text-align: center;
     align-self: center;
     outline: 2px solid black;
     outline-offset: -2px;
-    background-color: var(--beige);
+    background-color: #a4aaad;
     filter: drop-shadow(0px 0px 4px #222A);
+    user-select: none;
+  } */
+
+  .profile {
+    margin: auto;
+    width: fit-content;
+    min-height: fit-content;
+    max-width: 85%;
+    color: var(--dividerBlue);
+    text-align: center;
+    align-self: center;
+    outline: 2px solid var(--dividerBlue);
+    outline-offset: -2px;
+    background-color: var(--white);
+    filter: drop-shadow(0px 0px 4px #222A);
+    user-select: none;
   }
+
 
   .profile:hover{
 
@@ -36,6 +54,7 @@
     /* composes: fontFrederickaTheGreat; */
     /* font-family: 'Times New Roman', serif; */
     
+    user-select: none;
     text-wrap: nowrap;
     white-space: nowrap;
 
@@ -62,6 +81,7 @@
     text-wrap: pretty;
     margin: 0 0 max(0.5rem, 1vw) 0;
     max-width: 70%;
+    user-select: none;
   }
 
   /* Copied from stackoverflow to generate a border only at corners */

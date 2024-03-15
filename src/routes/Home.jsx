@@ -65,12 +65,8 @@ function Home() {
 
   return (
     <>
-      <LoadScreen isLoaded={loaded} afterLoadHandler={()=>{
-        setModalState(true);
-      }}>
-        <Loader onLoadHandler={()=>{
-          setLoaded(true);
-        }}>
+      <LoadScreen isLoaded={loaded} afterLoadHandler={()=>{setModalState(true);}}>
+        <Loader onLoadHandler={()=>{setLoaded(true);}}>
           <HomeModal modalVisible={modalState} text='helloooooo' />
           <MatterCanvas {...canvasParams}>
             <MatterGravityMouse />

@@ -27,7 +27,7 @@ export default function MatterEmitter(){
             const [x] = normalizedPosition(render.element, Math.random(),Math.random())
             const randomSize = Math.random()*10+2;
             const particleSides = Math.random()*3+3;
-            const particle = Bodies.polygon(x,-1*render.element.clientHeight,particleSides,randomSize, {isStatic: false, render: {fillStyle: '#e3d5ca', strokeStyle: '#7E7F83', lineWidth: 4,}, sleepThreshold: 240});
+            const particle = Bodies.polygon(x,-1*render.element.clientHeight,particleSides,randomSize, {isStatic: false, render: {fillStyle: '#DDD', strokeStyle: '#7E7F83', lineWidth: 4,}, sleepThreshold: 240});
             particlesActive.push(particle);
 
             /* TEST. SEEING ATTRACTOR RELATED THING */
