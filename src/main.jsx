@@ -12,6 +12,7 @@ import Contact from './routes/Contact';
 
 import Blog from './routes/Blog';
 import PostContainer from "./components/Blog/PostContainer";
+import Post from "./components/Blog/Post";
 
 import ErrorPage from "./routes/ErrorPage";
 
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
         children: [
           {index: true, element: <PostContainer />},
           {path: 'posts', element: <PostContainer />},
-          {path: 'post/:pid', element: <PostContainer />}
+          {path: 'post/:pid', element: <Post />}
         ]
       },
       {path: "contact", element: <Contact />},

@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from 'prop-types';
 
-import LoadScreen from '/src/components/Loading/LoadScreen'
-import Loader from '/src/components/Loading/Loader'
-
 import blogAPI from './blogAPI';
 
 import style from '/src/styles/components/PostContainer.module.css'

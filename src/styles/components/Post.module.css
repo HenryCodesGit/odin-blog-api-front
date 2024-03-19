@@ -1,0 +1,131 @@
+@import url('/src/styles/variables/fonts.module.css');
+
+*:has(>.paper){
+    flex: 1;
+    position:relative;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    padding: 2rem;
+    overflow: auto;
+}
+
+.paper{
+    flex: 1;
+    height: fit-content;
+    max-width: 1000px;
+    width: 100%;
+    background-color: var(--white);
+    border: 4px solid var(--dividerBlue);
+
+    list-style: none;
+
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    padding: 2rem 4rem;
+}
+
+@media (max-width: 540px){
+    .paper {
+        padding: 1rem 2rem;
+    }
+}
+
+.title {
+    margin: 1rem 0 0 0;
+    color: black;
+    font-size: 2rem;
+}
+
+.date {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.content {
+    composes: fontQuicksand;
+    text-wrap: wrap;
+
+    /* Styles for Markdown */
+
+    /* Headers */
+    & h1 {
+        margin: 1rem 0;
+        color: black;
+        font-size: 2rem;
+        
+    }
+
+    & h2 {
+        margin: 0.833rem 0;
+        color: var(--darkGrey);
+        font-size: 1.66rem;
+    }
+
+    & h3 {
+        margin: 0.66rem 0;
+        color: var(--grey);
+        font-size: 1.33rem;
+    }
+
+    & h4 {
+        margin: 0.5rem 0;
+        color: grey;
+        font-size: 1rem;
+    }
+
+    /* Paragraphs */
+    & p {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    /* Lists */
+    & ul, & ol {
+        margin-left: 1.5rem;
+    }
+
+    /* Code */
+    & pre {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        overflow: auto;
+    }
+
+    & code {
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    /* Blockquote */
+    & blockquote {
+        border-left: 4px solid #ccc;
+        margin: 0;
+        padding-left: 10px;
+    }
+
+    /* Images */
+    & img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Horizontal Rule */
+    & hr {
+        border: none;
+        border-top: 1px solid var(--dividerBlue);
+        margin: 20px 0;
+    }
+
+    /* Line Break */
+    & br {
+        display: none;
+    }
+
+}
