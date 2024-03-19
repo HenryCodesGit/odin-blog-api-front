@@ -3,7 +3,10 @@
     height: 100svh;
     width: 100svw;
 
+    display: flex;
+    flex-direction: column;
     background-color: var(--lightGrey); /*#e3d5ca*/ 
+    overflow: hidden;
 }
 
 /* .border {

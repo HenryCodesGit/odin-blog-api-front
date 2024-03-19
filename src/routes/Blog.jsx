@@ -1,6 +1,6 @@
 import Loader from "../components/Loading/Loader"
 import LoadScreen from "../components/Loading/LoadScreen"
-import SkillModal from "../components/About/SkillModal";
+import { Outlet } from "react-router-dom";
 
 import { useState } from "react"
 
@@ -9,7 +9,7 @@ export default function Blog(){
     return (
         <LoadScreen isLoaded={loaded}>
             <Loader onLoadHandler={()=>{setLoaded(true)}}>
-                THere's nothing here yet
+                <Outlet />
             </Loader>
         </LoadScreen>
     )
