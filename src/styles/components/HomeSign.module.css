@@ -31,28 +31,28 @@
     width: fit-content;
     min-height: fit-content;
     max-width: 85%;
-    color: var(--dividerBlue);
+    color: var(--black);
     text-align: center;
     align-self: center;
-    outline: 2px solid var(--dividerBlue);
+    outline: 2px solid var(--black);
     outline-offset: -2px;
     background-color: var(--white);
     filter: drop-shadow(0px 0px 4px #222A);
     user-select: none;
+
+    transition: color 0.2s ease, outline 0.2s ease; 
   }
 
 
   .profile:hover{
-
+    color: var(--dividerBlue);
+    outline: 2px solid var(--dividerBlue);
   }
   
   .title{
+    pointer-events: none;
     font-family: 'Times New Roman', Times, serif;
-
     position: static;
-  
-    /* composes: fontFrederickaTheGreat; */
-    /* font-family: 'Times New Roman', serif; */
     
     user-select: none;
     text-wrap: nowrap;
@@ -70,6 +70,7 @@
   }
   
   .description{
+    pointer-events: none;
     font-family: 'Courier New', Courier, monospace;
     position: relative;
     left: 50%;

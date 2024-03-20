@@ -13,36 +13,52 @@
 }
 
 .paper{
+    composes: fontQuicksand;
     flex: 1;
     height: fit-content;
     max-width: 1000px;
     width: 100%;
     background-color: var(--white);
-    border: 4px solid var(--dividerBlue);
+    border: 4px solid var(--black);
 
     list-style: none;
 
     display: flex;
     justify-content: start;
     flex-direction: column;
-    padding: 2rem 4rem;
+    padding: min(4rem,10%) min(4rem,12.5%);
 }
 
 @media (max-width: 540px){
-    .paper {
-        padding: 1rem 2rem;
+    *:has(>.paper){
+        padding: 0.25rem;
+    }
+
+    .paper{
+        border: 2px solid var(--black);
     }
 }
 
 .title {
     margin: 1rem 0 0 0;
     color: black;
-    font-size: 2rem;
+    font-size: 2.5rem;
 }
 
 .date {
     font-size: 1rem;
-    margin-bottom: 1rem;
+    margin: 1rem 0rem;
+}
+
+@media (max-width: 540px){
+    /* 20% smaller */
+    .title{
+        font-size: 2rem;
+    }
+
+    .date{
+        font-size: 0.8rem;
+    }
 }
 
 .content {
@@ -74,24 +90,25 @@
     & h4 {
         margin: 0.5rem 0;
         color: grey;
-        font-size: 1rem;
+        font-size: 1.25rem;
     }
 
     /* Paragraphs */
     & p {
-        font-size: 1rem;
+        font-size: 1.25rem;
         line-height: 1.5;
     }
 
     /* Lists */
     & ul, & ol {
         margin-left: 1.5rem;
+        font-size: 1.25rem;
     }
 
     /* Code */
     & pre {
         font-family: 'Courier New', Courier, monospace;
-        background-color: #f4f4f4;
+        background-color: #f4f4f400;
         padding: 10px;
         border-radius: 5px;
         overflow: auto;
@@ -125,7 +142,7 @@
 
     /* Line Break */
     & br {
-        display: none;
+        display: hidden;
     }
 
 }

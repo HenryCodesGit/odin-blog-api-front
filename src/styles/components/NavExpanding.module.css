@@ -3,9 +3,12 @@
     font-family: 'Courier New', Courier, monospace;
     font-style: italic;
 
-    padding: 0.5rem;
+    padding: 0rem;
     font-weight: 500;
     
+    border-bottom: 4px solid var(--darkGrey);
+    background-color: var(--darkGrey);
+
     & a {
         text-decoration: none;
         color: var(--darkGrey);
@@ -16,6 +19,7 @@
 .ul {
     list-style-type: none;
     padding: 0;
+    padding-right: 0.125rem;
     margin: 0;
     
     display: flex;
@@ -24,7 +28,8 @@
 }
 
 .li {
-    margin: .5rem;
+    margin: .25rem 0.125rem;
+    padding: 0.25rem 0.5rem;
     text-decoration: underline;
     text-align: end;
     text-wrap: nowrap;

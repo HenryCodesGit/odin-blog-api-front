@@ -19,12 +19,13 @@
 /* ************************************* */
 
 * {
-    --buttonHeight: max(2.5rem, 2.5vh);
+    --buttonHeight: max(2.2rem, 2.5vh);
 }
 
 .button > svg{
     /* Size of the menu icon */
     font-size: var(--buttonHeight); 
+    background-color: var(--lightGrey);
 }
 
 .nav {
@@ -32,10 +33,11 @@
     flex-direction: column;
     align-items: end;
     height: inherit;
+    margin: 0;
 }
 
 .ul {
-    outline: 1px solid var(--darkGrey);
+    outline: 2px solid var(--darkGrey);
     outline-offset: -1px;
     list-style-type: none;
     padding: 0;
@@ -88,15 +90,10 @@
 }
 
 /* Behaviour on interaction */
-.button:hover {
-    background: var(--dividerBlue);
-    color: var(--darkGrey);
+svg:hover {
+    background-color: var(--dividerBlue);
 }
 
-.button:focus {
-    outline: 1px solid var(--lightGrey);
-    outline-offset: -2px;
-}
 
 .button:active {
     transform: scale(0.95);

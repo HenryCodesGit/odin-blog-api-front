@@ -11,10 +11,10 @@ function App() {
   const makeLink = (id, title, url) => {return {id, title, url}};
   const linkArray = [
     makeLink(1,'HOME','/'),
-    makeLink(2,'ABOUT','/about'),
-    makeLink(3,'PORTFOLIO','/portfolio'),
-    makeLink(4,'BLOG','/blog'),
-    makeLink(5,'CONTACT','/contact'),
+    // makeLink(3,'PORTFOLIO','/portfolio'),
+    makeLink(2,'BLOG','/blog'),
+    makeLink(3,'ABOUT','/about'),
+    makeLink(4,'CONTACT','/contact'),
   ];
 
   return (

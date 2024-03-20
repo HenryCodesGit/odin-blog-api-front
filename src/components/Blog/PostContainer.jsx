@@ -76,7 +76,7 @@ export default function PostContainer({limit}){
     }
 
     return (<ul className={style.carousel} ref={carouselRef}>
-            <h1 className={style.heading}>/posts/</h1>
+            <h1 className={style.heading}>Posts</h1>
             { mapPosts() }
             <nav className={style.pageNav}>
             <button
