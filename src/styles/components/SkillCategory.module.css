@@ -1,7 +1,7 @@
 @import url('../variables/fonts.module.css');
 .template{
-    width: clamp(70px, 10vw, 150px);
-    height: clamp(70px, 10vw ,150px);
+    width: clamp(60px, 9vw, 120px);
+    height: clamp(60px, 9vw ,120px);
     margin: auto;
     border: 2px solid grey;
     background-color: #0003;
