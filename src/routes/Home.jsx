@@ -29,7 +29,7 @@ function Home() {
     backgroundColor: 'transparent',
     engineOptions: {
       gravity: { y : 0.1 },
-      enableSleeping: true
+      enableSleeping: false
     },
     setEngineHandler: setEngine
   }

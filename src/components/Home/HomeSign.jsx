@@ -58,7 +58,7 @@ export default function HomeSign(){
                   </MatterAttractor>
               </div>
               <MatterOverlayPassenger elementHTML={profileHTML}>
-                <MatterAttractor attractorID='profile' isMain={false} maxLength={3} constraintCallback={Constraint.create} constraintOptions={{angularStiffness: 1, stiffness: 0.04,length: 1, render:{visible: false}}}>
+                <MatterAttractor attractorID='profile' isMain={false} maxLength={10} constraintCallback={Constraint.create} constraintOptions={{angularStiffness: 1, stiffness: 0.04,length: 1, render:{visible: false}}}>
                   <MatterBody {...{
                     bodyType: 'rectangle',
                     bodyParams:{
