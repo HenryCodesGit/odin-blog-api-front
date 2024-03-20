@@ -57,3 +57,13 @@
         color: var(--white);
     }
 }
+
+@media (min-width: 3000px){
+    .ul {
+        justify-content: center;
+    }
+
+    .li {
+        margin: .5rem 0.25rem;
+    }
+}
