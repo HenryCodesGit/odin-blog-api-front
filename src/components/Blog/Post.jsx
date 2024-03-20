@@ -7,6 +7,8 @@ import blogAPI from './blogAPI';
 
 import style from '/src/styles/components/Post.module.css'
 
+import paper from '/src/assets/tool/noise.svg'
+
 export default function Post(){
 
     const { pid } = useParams();
@@ -43,7 +45,7 @@ export default function Post(){
     // TODO: Temporary screen when loading
     if(!post) return null;
     return (
-        <article className={style.paper}>
+        <article className={style.paper} style={{backgroundImage: `url('${paper}')`}}>
             <h1 className={style.title}>{post.title}</h1>
             <p className={style.date}>Posted: {new Date(post.created_at).toDateString()}{ (new Date(post.created_at).toDateString() !== new Date(post.updated_at).toDateString()) ? (<>{' // '}Last edit: {new Date(post.updated_at).toDateString()}</>) : null}</p>
             <section className={style.content}>
