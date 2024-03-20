@@ -34,7 +34,7 @@
     text-align: end;
     text-wrap: nowrap;
     color: var(--darkGrey);
-    background-color: var(--lightGrey);
+    background-color: var(--white);
 
     & a {
         color: var(--darkGrey);

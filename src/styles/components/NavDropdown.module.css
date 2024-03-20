@@ -19,13 +19,15 @@
 /* ************************************* */
 
 * {
-    --buttonHeight: max(2.2rem, 2.5vh);
+    --buttonHeight: max(2.125rem, 2.5vh);
 }
 
 .button > svg{
     /* Size of the menu icon */
+    box-sizing: border-box;
+    height: 2.1875rem;
     font-size: var(--buttonHeight); 
-    background-color: var(--lightGrey);
+    background-color: var(--white);
 }
 
 .nav {
@@ -43,7 +45,7 @@
     padding: 0;
     margin: 0;
     position: absolute;
-    background-color: var(--lightGrey);
+    background-color: var(--white);
     transform: translateY(var(--buttonHeight));
 
     max-height: 80svh;
@@ -51,7 +53,8 @@
     overflow-x: hidden;
 
     & li {
-        margin: .25rem;
+        margin: .25rem 0.125rem;
+        padding: 0.25rem 0.5rem;
         text-decoration: underline;
         text-align: end;
         color: var(--darkGrey);
@@ -84,6 +87,7 @@
 }
 
 .button {
+    box-sizing: border-box;
     color: var(--darkGrey);
     display: flex;
     align-items: center;
