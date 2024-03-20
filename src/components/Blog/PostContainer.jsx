@@ -5,6 +5,8 @@ import blogAPI from './blogAPI';
 
 import style from '/src/styles/components/PostContainer.module.css'
 
+import paper from '/src/assets/tool/noise.svg'
+
 PostContainer.defaultProps={ 
     limit: 10,
 }
@@ -75,7 +77,7 @@ export default function PostContainer({limit}){
         return output;
     }
 
-    return (<ul className={style.carousel} ref={carouselRef}>
+    return (<ul className={style.carousel} ref={carouselRef} style={{backgroundImage: `url('${paper}')`}}>
             <h1 className={style.heading}>Posts</h1>
             { mapPosts() }
             <nav className={style.pageNav}>
