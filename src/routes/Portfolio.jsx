@@ -16,7 +16,7 @@ export default function Portfolio(){
     return (
         <LoadScreen isLoaded={loaded} afterLoadHandler={()=>{setModalState(true)}}>
             <Loader onLoadHandler={()=>setLoaded(true)}>
-                <PortfolioModal modalVisible={modalState}/>
+                {/* <PortfolioModal modalVisible={modalState}/> */}
                 <div className={style.container}>
                     <CardCarousel />
                 </div>

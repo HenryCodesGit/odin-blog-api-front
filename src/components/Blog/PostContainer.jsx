@@ -14,6 +14,7 @@ PostContainer.propTypes = {
 }
 
 // TODO: Loading spinner when fetching posts. 
+// TODO: Set the start as the actual pid instead of a random integer. It's causing issues right now because post numbers are not always sequentially increasing. (Sometimes it skips by 1 if a post was deleted in between);
 export default function PostContainer({limit}){
 
     const [posts, setPosts] = useState(null)

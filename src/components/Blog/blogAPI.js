@@ -1,13 +1,14 @@
+// TODO: Make into its own package later
+
 import cancellablePromise from '/src/utilities/cancellablePromise'
 
 const BLOG_URL = import.meta.env.VITE_BLOG_URL;
-const BLOG_USERNAME = import.meta.env.VITE_BLOG_USERNAME;
-const BLOG_PASSWORD = import.meta.env.VITE_BLOG_PASSWORD;
 
 // Logging in and stuff 
-
-function login(){ return cancellablePromise(
-    fetch(`${BLOG_URL}/dashboard/login`, { method:'POST', credentials: 'include', body: JSON.stringify({username: BLOG_USERNAME, password: BLOG_PASSWORD}), headers: {'Content-type': 'application/json'}})
+function login(username, password){ 
+    
+    return cancellablePromise(
+    fetch(`${BLOG_URL}/dashboard/login`, { method:'POST', mode: 'cors', credentials: 'include', body: JSON.stringify({username, password}), headers: {'Content-type': 'application/json'}})
     .then(res=> {
         if(res.ok) return res;
         return Promise.reject({status: res.status, statusText: res.statusText});
@@ -16,7 +17,7 @@ function login(){ return cancellablePromise(
 )}
 
 function logout(){ return cancellablePromise(
-    fetch(`${BLOG_URL}/dashboard/logout`, { method: 'POST', credentials: 'include'})
+    fetch(`${BLOG_URL}/dashboard/logout`, { method: 'POST', mode: 'cors', credentials: 'include'})
     .then(res=> {
         if(res.ok) return true;
         return Promise.reject({status: res.status, statusText: res.statusText});
@@ -25,20 +26,20 @@ function logout(){ return cancellablePromise(
 )}
 
 function checkLogin(){return cancellablePromise(
-    fetch(`${BLOG_URL}/dashboard/`, { method: 'GET', credentials: 'include'})
+    fetch(`${BLOG_URL}/dashboard/`, { method: 'GET', mode: 'cors', credentials: 'include'})
     .then(res=> {
         if(res.ok) return true;
-        return Promise.reject({status: res.status, statusText: res.statusText});
+        if(res.status === 401) return false;
+        return Promise.reject({status: res.status, statusText: res.statusText})
     })
     .catch(err=> Promise.reject({status: err.status, statusText: err.statusText}))
 )}
-
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // CRUD for posts 
 
 function makePost({title, details}){return cancellablePromise(
-    fetch(`${BLOG_URL}/blog/post`, { method:'POST', credentials: 'include', body: JSON.stringify({title, details}), headers: {'Content-type': 'application/json'}})
+    fetch(`${BLOG_URL}/blog/post`, { method:'POST', mode: 'cors', credentials: 'include', body: JSON.stringify({title, details}), headers: {'Content-type': 'application/json'}})
     .then(res=> {
         if(res.ok) return true;
         return Promise.reject({status: res.status, statusText: res.statusText});
@@ -56,8 +57,8 @@ function getPost(pid){
     .catch(err=>Promise.reject({status: err.status, statusText: err.statusText}))
 )}
 
-function updatePost({pid, title, details}){return cancellablePromise(
-    fetch(`${BLOG_URL}/blog/post/${pid}`, { method:'PUT', credentials: 'include', body: JSON.stringify({title, details}), headers: {'Content-type': 'application/json'}})
+function updatePost({pid, title, details, ispublished}){return cancellablePromise(
+    fetch(`${BLOG_URL}/blog/post/${pid}`, { method:'PUT', mode: 'cors', credentials: 'include', body: JSON.stringify({title, details, ispublished}), headers: {'Content-type': 'application/json'}})
     .then(res=> {
         if(res.ok) return true;
         return Promise.reject({status: res.status, statusText: res.statusText});
@@ -66,7 +67,7 @@ function updatePost({pid, title, details}){return cancellablePromise(
 )}
 
 function deletePost(pid){return cancellablePromise(
-    fetch(`${BLOG_URL}/blog/post/${pid}`, { method:'DELETE', credentials: 'include'})
+    fetch(`${BLOG_URL}/blog/post/${pid}`, { method:'DELETE', mode: 'cors', credentials: 'include'})
     .then(res=> {
         if(res.ok) return true;
         return Promise.reject({status: res.status, statusText: res.statusText});
@@ -77,7 +78,7 @@ function deletePost(pid){return cancellablePromise(
 function getPosts({start = 0, limit = 10} = {}){
     console.log(BLOG_URL);
     return cancellablePromise(
-    fetch(`${BLOG_URL}/blog/posts?start=${start}&limit=${limit}`)
+    fetch(`${BLOG_URL}/blog/posts?start=${start}&limit=${limit}`, { method:'GET', credentials: 'include'})
     .then(res=> res.json())
     .catch(err=>Promise.reject({status: err.status, statusText: err.statusText}))
 )}
@@ -102,7 +103,7 @@ function getComment({pid, cid}){
 )}
 
 function deleteComment({pid,cid}){return cancellablePromise(
-    fetch(`${BLOG_URL}/blog/post/${pid}/comment/${cid}`, { method:'DELETE', credentials: 'include'})
+    fetch(`${BLOG_URL}/blog/post/${pid}/comment/${cid}`, { method:'DELETE', mode: 'cors', credentials: 'include'})
     .then(res=> {
         if(res.ok) return true;
         return Promise.reject({status: res.status, statusText: res.statusText});
@@ -111,7 +112,7 @@ function deleteComment({pid,cid}){return cancellablePromise(
 )}
 
 function makeComment({pid, details}){return cancellablePromise(
-    fetch(`${BLOG_URL}/blog/post/${pid}/comment`, { method:'POST', body: JSON.stringify({details}), headers: {'Content-type': 'application/json'}})
+    fetch(`${BLOG_URL}/blog/post/${pid}/comment`, { method:'POST', mode: 'cors', body: JSON.stringify({details}), headers: {'Content-type': 'application/json'}})
     .then(res=> {
         if(res.ok) return true;
         return Promise.reject({status: res.status, statusText: res.statusText});
