@@ -36,8 +36,7 @@ export default function MatterOverlayPassenger({elementHTML, children}){
         const elementHTMLRef = useRef(null);
 
         const syncHTML = useCallback(()=>{
-            if(!elementHTMLRef.current) return console.warn('HTML element not yet initialized or was not provided. Cancelling syncMatterBody')
-
+            if(!elementHTMLRef.current) return;
             //Get the last size of the body and the border thickness
             const {width, height} = body.getBounds();
             const borderThickness = getComputedStyle(elementHTMLRef.current).getPropertyValue("border-width");
@@ -55,7 +54,7 @@ export default function MatterOverlayPassenger({elementHTML, children}){
 
         // On mount, clone the HTML element and add OverlayPassenger specific properties
         useEffect(()=>{
-            if(!body) return console.warn('Physics body not yet initialized or was not provided. Cancelling HTML Element update')
+            if(!body) return;
 
             // const newElement = (
             //     <div ref={elementHTMLRef} className={style.passenger}>
@@ -85,9 +84,9 @@ export default function MatterOverlayPassenger({elementHTML, children}){
         
         // Initialize the coupling
         useEffect(()=>{
-            if(!body) return console.warn('Physics body not yet initialized or was not provided. Cancelling syncMatterBody')
-            if(!engine) return console.warn('Engine not yet initialized or was not provided. Cancelling syncMatterBody')
-            if(!elementHTMLRef.current) return console.warn('HTML element not yet initialized or was not provided. Cancelling syncMatterBody')
+            if(!body) return;
+            if(!engine) return;
+            if(!elementHTMLRef.current) return;
 
             // Set the initial size of the element
             

@@ -16,7 +16,7 @@ export default function HeroCanvas(){
 
   //TODO: DOesn't work on firefox dev tools on touch screen mode?
   const makeGravityWell = useCallback((event) => {
-    if(!engine) return console.warn('Engine is not done loading or is not specified. Cancelling makeParticle function call');
+    if(!engine) return;
     // Test making and returning a react component from within here
     const key = Date.now(); //TODO Use UUID Later
     const child = (
@@ -35,7 +35,7 @@ export default function HeroCanvas(){
 },[engine]);
 
   const deleteGravityWell = useCallback(() => {
-    if(!engine) return console.warn('Engine is not done loading or is not specified. Cancelling makeParticle function call');
+    if(!engine) return;
 
     //Removing all constraints
     const toRemove = []

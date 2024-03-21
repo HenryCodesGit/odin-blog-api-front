@@ -33,7 +33,7 @@ export default function MatterMouse({mouseDownHandler, mouseUpHandler, mouseMove
     );
 
     useEffect(()=>{
-        if(!render) return console.warn('The renderer has not been initialized yet or is null. Cancelling initialization of MatterMouse');
+        if(!render) return;
         const canvas = render.element.querySelector('canvas');
         const touchScroll = enableTouchScroll(canvas); // Touch scrolling
 
@@ -41,7 +41,7 @@ export default function MatterMouse({mouseDownHandler, mouseUpHandler, mouseMove
     }, [render])
     
     useEffect(()=>{
-        if(!engine || !render) return console.warn('The engine or renderer has not been initialized yet or is null. Cancelling initialization of MatterMouse');
+        if(!engine || !render) return;
 
         const canvas = render.element.querySelector('canvas');
     

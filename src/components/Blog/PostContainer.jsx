@@ -47,12 +47,6 @@ export default function PostContainer({limit}){
         }
     },[start, limit])
 
-    // Do stuff when new posts are captured
-    useEffect(()=>{
-        if(!posts) return;
-        console.log(posts);
-    },[posts])
-
     function mapPosts(){
         const output = [];
         if(posts && posts.length){

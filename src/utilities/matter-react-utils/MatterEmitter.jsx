@@ -15,7 +15,7 @@ export default function MatterEmitter(){
     const { engine, render } = useContext(MatterContext);
 
     useEffect(()=>{
-        if(!render) return console.warn('Render argument for MatterEmitter not provided or is null. Cancelling MatterBody creation');
+        if(!render) return;
 
         // Add falling snow effect
         const particlesActive = [];
@@ -58,7 +58,6 @@ export default function MatterEmitter(){
         Events.on(engine, 'afterUpdate',emitParticles);
 
         return ()=>{
-          console.log('Cleaning up emitter');
             Events.off(engine, 'afterUpdate',emitParticles);
 
             //Search the world for the body and delete all particles

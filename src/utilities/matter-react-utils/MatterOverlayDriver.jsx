@@ -39,9 +39,9 @@ export default function MatterOverlayDriver({elementHTML, children}){
         const elementHTMLRef = useRef(null);
 
         function syncMatterBody(){
-            if(!body) return console.warn('Physics body not yet initialized or was not provided. Cancelling syncMatterBody')
-            if(!render) return console.warn('Renderer not yet initialized or was not provided. Cancelling syncMatterBody')
-            if(!elementHTMLState) return console.warn('HTML element not yet initialized or was not provided. Cancelling syncMatterBody')
+            if(!body) return;
+            if(!render) return;
+            if(!elementHTMLState) return;
 
             const canvas = render.element.querySelector('canvas');
 

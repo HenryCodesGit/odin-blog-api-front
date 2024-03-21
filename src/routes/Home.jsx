@@ -54,7 +54,6 @@ function Home() {
     if(!engine) return;
 
     //On spawn, fastforward the engine by 30 seconds 
-    console.log('fast forwarding');
     let tick = 0;
     while (tick < 2000){
       Engine.update(engine, 15)

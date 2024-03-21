@@ -168,6 +168,7 @@
     overflow: hidden;
 }
 
+
 .titleComments{
     display: flex;
     justify-content: space-between;
@@ -227,6 +228,16 @@
 
 }
 
+@media (max-width: 540px){
+    .titleComments{
+        flex-direction: column;
+
+        & h1{
+            text-align: center;
+        }
+    }
+}
+
 /************************************************/
 
 .modal {
@@ -239,6 +250,7 @@
     max-width: 480px;
     height: fit-content;
 }
+
 
 .form {
     border: 3px solid var(--black);
@@ -267,6 +279,22 @@
     border: 1px solid black;
     border-radius: 0.25rem;
     padding-left: 0.5rem;
+}
+
+@media (max-width: 540px){
+    .label{
+        flex-direction: column;
+    }
+
+    .formTitle {
+        width: 100%;
+        text-align: center;
+    }
+
+    .input{
+        flex: initial;
+        height: 2rem;
+    }
 }
 
 .buttonContainer {

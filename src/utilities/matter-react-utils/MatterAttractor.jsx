@@ -67,7 +67,7 @@ export default function MatterAttractor({ attractorID, isMain, maxLength, constr
 
     // Once body state has been set, add attractor parameters
     useEffect(()=>{
-        if(!body) return console.warn('Body has not yet been passsed into MatterAttractor, or is null. Cancelling useEffect function call');
+        if(!body) return;
         
         Body.set(body, 'attractor', { isMain, id: attractorIDSet })
     },[body, isMain, attractorIDSet])

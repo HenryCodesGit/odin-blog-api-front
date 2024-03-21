@@ -40,8 +40,8 @@ export default function MatterGravityMouse({attractorID, isSensor}){
       },[attractorID]);
     
       const deleteGravityWell = useCallback(() => {
-        if(!engine) return console.warn('Engine is not done loading or is not specified. Cancelling makeParticle function call');
-        if(!gravityWell)  return console.warn('Gravity well does not exit, ignoring deletion');
+        if(!engine) return;
+        if(!gravityWell)  return;
 
         //Removing all constraints
         const constraintsToRemove = []

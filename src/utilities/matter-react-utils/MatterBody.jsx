@@ -102,7 +102,7 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
     // );
 
     useEffect(()=>{
-        if(!render) return console.warn('Render argument for MatterBody not provided or is null. Cancelling MatterBody creation')
+        if(!render) return;
 
         //Parse any custom parameters if they exist
         if(Object.hasOwn(bodyParams, 'normalized')){
@@ -168,19 +168,18 @@ export default function MatterBody({bodyType, bodyParams, bodyDataHandler}){
 
     useEffect(()=>{
         if(!Object.hasOwn(bodyParams, 'syncToHTML')) return;
-        if(!render) return console.warn('Render not yet set up. Cancelling')
-
+        if(!render) return;
         function syncToHTML(){
             if(!body) return;
            //Assuming it is a useRef that is passed in or an HTML element. TODO: Put it in the proptypes too
            let ref = bodyParams.syncToHTML.reference;
            if(!ref){
                 ref = render.element.querySelector('canvas');
-                if(!ref) return console.warn('Body trying to sync with non-existent HTML element, cancelling');
+                if(!ref) return;
            }
 
            let element = (ref instanceof Node) ? ref : ref.current;
-           if(element === null) return console.warn('Body trying to sync with non-existent HTML element, cancelling');
+           if(element === null) return;
 
            //Getting the size of the body
            const {width, height} = body.getBounds();

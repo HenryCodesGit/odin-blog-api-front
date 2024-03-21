@@ -64,13 +64,6 @@ export default function Post(){
         }
     },[pid])
 
-    useEffect(()=>{
-        if(!comments) return;
-
-        console.log(comments);
-        
-    },[comments])
-
     function showForm(){
         modalRef.current.showModal();
     }
@@ -141,8 +134,8 @@ export default function Post(){
                         <input ref={commentRef} className={`${style.input}`} type="text" name="details" id="details" required={true}/>
                     </label>
                     <div className={style.buttonContainer}>
-                        <button type="button" className={`${style.formButton} ${style.cancel}`} onClick={closeFormAndClear}>Cancel</button>
                         <button type="submit" className={`${style.formButton} ${style.submit}`}>Submit</button>
+                        <button type="button" className={`${style.formButton} ${style.cancel}`} onClick={closeFormAndClear}>Cancel</button>
                     </div>
                 </form>
             </dialog>
