@@ -6,7 +6,6 @@
     padding: 0rem;
     font-weight: 500;
     
-    border-bottom: 4px solid var(--darkGrey);
     background-color: var(--darkGrey);
 
     & a {
