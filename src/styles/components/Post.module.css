@@ -1,6 +1,6 @@
 @import url('/src/styles/variables/fonts.module.css');
 
-*:has(>.paper){
+*:has(>.container){
     flex: 1;
     position:relative;
     
@@ -8,11 +8,23 @@
     flex-direction: row;
     justify-content: center;
     align-items: start;
-    padding: 2rem;
+    padding: 0rem;
     overflow: auto;
 }
 
-.paper{
+.container{
+    flex: 1;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 2rem;
+    overflow: visible;
+}
+
+.paper, .comments{
     composes: fontQuicksand;
     flex: 1;
     height: fit-content;
@@ -145,4 +157,137 @@
         display: hidden;
     }
 
+}
+
+/************************************************/
+
+.comments {
+    list-style: none;
+    margin-top: 1rem;
+    max-height: 480px;
+    overflow: hidden;
+}
+
+.titleComments{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.commentButton{
+    composes: fontQuicksand;
+    font-size: 1.25rem;
+    padding: 0.25rem 0.5rem;
+    border: 2px solid black;
+
+    transition: all 0.1s ease;
+}
+
+.commentButton:hover{
+    border-color: var(--dividerBlue);
+    color: var(--dividerBlue);
+}
+
+.commentButton:active{
+    background-color: var(--dividerBlue);
+    border-color: var(--dividerBlue);
+    color: var(--white);
+}
+
+.commentScroll {
+    overflow: auto;
+}
+
+.comment {
+    display: flex;
+    align-items: center;
+    margin: 0.75rem 0;
+}
+
+@media (max-width: 540px){
+    .comment {
+        flex-direction: column;
+    }
+}
+
+.comment:hover {
+    background-color: #e8e8e8;
+}
+
+.commenter {
+    margin-right: 0.25rem;
+    text-align: center;
+    word-break: break-all;
+    min-width: 120px;
+}
+
+.message {
+    text-wrap: wrap;
+    word-break: break-all;
+
+}
+
+/************************************************/
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border: none;
+    width: 80%;
+    max-width: 480px;
+    height: fit-content;
+}
+
+.form {
+    border: 3px solid var(--black);
+    padding: 1rem 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+
+}
+
+.label {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.25rem 0;
+}
+
+.formTitle {
+    width: max(115px, 10%);
+    text-align: right;
+}
+
+.input {
+    flex: 1;
+    margin-left: 0.25rem;
+    border: 1px solid black;
+    border-radius: 0.25rem;
+    padding-left: 0.5rem;
+}
+
+.buttonContainer {
+    align-self: end;
+    margin-top: 0.5rem;
+}
+
+.formButton {
+    padding: 0.25rem 0.5rem;
+    margin-left: 0.5rem;
+    border: 2px solid var(--black);
+}
+
+.cancel:hover, .submit:hover {
+    border-color: var(--dividerBlue);
+    color: var(--dividerBlue);
+}
+
+
+.cancel:active, .submit:active {
+    border-color: var(--dividerBlue);
+    background-color: var(--dividerBlue);
+    color: var(--white);
 }
