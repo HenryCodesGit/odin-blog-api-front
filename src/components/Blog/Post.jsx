@@ -101,12 +101,13 @@ export default function Post(){
         response
             .then((data)=>{
                 // If there was no error, then we know that the post succeeded. Thus update the local array to fake the commment information
-                const newComments = [...comments];
+                const newComments = (comments) ? [...comments] : [];
                 newComments.push(data.details)
                 setComments(newComments);
                 closeFormAndClear();
             })
             .catch((err)=>{
+                console.log(err);
                 return alert('There was an issue submitting the comment.') //Return and allow user to try again?
             })
     }
