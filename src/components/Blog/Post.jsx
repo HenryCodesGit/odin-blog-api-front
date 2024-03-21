@@ -111,6 +111,7 @@ export default function Post(){
             })
     }
 
+    //Note that I am using dangerouslySetInnerHTML but my backend already sanitizes data, so its fine.
     const commentComponent = (!comments || !comments.length) ? 
         (<li className={`${style.content} ${style.comment}`}>
                 <p className={style.commenter}>Henry Ma</p>
@@ -119,7 +120,7 @@ export default function Post(){
             return (
                 <li key={comment.cid} className={`${style.content} ${style.comment}`}>
                     <p className={style.commenter}>{comment.name}</p>
-                    <blockquote className={style.message}>{comment.details}</blockquote>
+                    <blockquote className={style.message} dangerouslySetInnerHTML={{__html: comment.details}}></blockquote>
                 </li>
             )
         });
@@ -145,7 +146,7 @@ export default function Post(){
                 </form>
             </dialog>
             <article className={style.paper} style={{backgroundImage: `url('${paper}')`}}>
-                <h1 className={style.title}>{post.title}</h1>
+                <h1 className={style.title} dangerouslySetInnerHTML={{__html: post.title}}></h1>
                 <p className={style.date}>Posted: {new Date(post.created_at).toDateString()}{ (new Date(post.created_at).toDateString() !== new Date(post.updated_at).toDateString()) ? (<>{' // '}Last edit: {new Date(post.updated_at).toDateString()}</>) : null}</p>
                 <section className={style.content}>
                     <Markdown>
