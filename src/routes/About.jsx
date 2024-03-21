@@ -6,7 +6,7 @@ import MatterOverlay from '../utilities/matter-react-utils/MatterOverlay';
 import MatterGravityMouse from '../utilities/matter-react-utils/MatterGravityMouse'
 // Components
 import LoadScreen from '../components/Loading/LoadScreen';
-import Loader from '../components/OLD/Loading/Loader';
+import Loader from '../components/Loading/Loader';
 import SkillCategory from '../components/About/SkillCategory'
 import SkillItem from '../components/About/SkillItem'
 import SkillModal from '../components/About/SkillModal';
@@ -286,6 +286,21 @@ export default function About(){
                                             length: 'since 2014', 
                                             description: (<>Learned through professional work experience, Master{`'`}s thesis work, co-op work placements, and personal projects</>),
                                             link: 'https://en.wikipedia.org/wiki/3D_printing'
+                                        }
+                                    }
+                                    onClickHandler={(data)=>modalRef.current.showModal(data)}
+                                />
+                            </li>
+                            <li className={style.skillItem}>
+                                <SkillItem 
+                                    imageSRC={instrumentLogo} 
+                                    attractorID='etc' 
+                                    skillInfo={
+                                        {
+                                            title: 'Scientific instrumentation', 
+                                            length: 'since 2011', 
+                                            description: (<>Learned through professional work experience, Master{`'`}s research, co-op work placements, and personal projects. <br></br><br></br>Examples: Computed Tomography Xray Scanners, Scanning Electron Microscope, Optical Microscope, Tensile Testers, 3D Scanners, Hardness Testers</>),
+                                            link: ''
                                         }
                                     }
                                     onClickHandler={(data)=>modalRef.current.showModal(data)}
